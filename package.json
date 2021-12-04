@@ -1,0 +1,19 @@
+{
+  "name": "root",
+  "private": false,
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "commands": {
+    "publish": {
+      "ignoreChanges": [
+        "**/*.md",
+        "**/example/**",
+        "**/*.test.ts"
+      ]
+    }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
