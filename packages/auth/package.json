@@ -1,0 +1,35 @@
+{
+  "name": "@exobase/auth",
+  "version": "0.0.1",
+  "description": "TODO",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "author": "rayepps",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --coverage",
+    "check": "yarn lint && yarn test && yarn build",
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/jest": "^27.0.1",
+    "@types/jsonwebtoken": "^8.5.6",
+    "chai": "^4.3.4",
+    "jest": "^27.1.0",
+    "ts-jest": "^27.0.5",
+    "tslint": "^6.0.0",
+    "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "@exobase/core": "^0.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "radash": "^1.1.0",
+    "yup": "^0.32.11"
+  }
+}
