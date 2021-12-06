@@ -8,7 +8,6 @@
     "dist/**/*"
   ],
   "author": "rayepps",
-  "private": false,
   "license": "MIT",
   "scripts": {
     "test": "jest --coverage",
