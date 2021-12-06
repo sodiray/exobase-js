@@ -1,6 +1,6 @@
 {
   "name": "@exobase/hooks",
-  "version": "1.0.3-alpha.0",
+  "version": "0.0.0",
   "description": "TODO",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
