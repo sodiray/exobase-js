@@ -29,5 +29,6 @@
     "@exobase/core": "^1.0.0-alpha.0",
     "radash": "^1.1.0",
     "yup": "^0.32.11"
-  }
+  },
+  "gitHead": "6e023bd802378741987358af7eb96fdd9f643da5"
 }
