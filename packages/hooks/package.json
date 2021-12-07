@@ -25,7 +25,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@exobase/core": "0.0.2",
+    "@exobase/core": "^0.0.3",
     "radash": "^1.1.0",
     "yup": "^0.32.11"
   },
