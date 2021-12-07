@@ -13,9 +13,11 @@ async function vercelHandler(
   const rid = `r.id.${uuid.v4().substr(0, 7)}`
   const props: exo.Props = exo.initProps(makeReq(req))
 
+  console.debug({ message: 'Exo:Vercel Incoming request props', props })
+
   const [error, result] = await _.tryit<any>(func)(props)
 
-  const respond = _.partial(setResponse, res, rid)
+  console.debug({ message: 'Exo:Vercel Function result', result })
 
   if (error) {
     console.error(error)
@@ -25,7 +27,9 @@ async function vercelHandler(
     ? exo.responseFromError(error)
     : exo.responseFromResult(result)
 
-  respond(response)
+  console.debug({ message: 'Exo:Vercel Generated response', response })
+
+  setResponse(res, rid, response)
 }
 
 export const useVercel = () => (func: exo.ApiFunction) => _.partial(vercelHandler, func)
