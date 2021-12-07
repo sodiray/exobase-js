@@ -2,7 +2,7 @@ import * as jwt from 'jsonwebtoken'
 import { Permission } from './permission'
 
 
-export type Token = {
+export type Token <ExtraData = any> = {
   exp: number
   sub: string
   iss: string
@@ -11,38 +11,38 @@ export type Token = {
   ttl: number
   permissions: string[]
   scopes: string[]
-  entity: string
-  provider: 'lune' | 'google'
-  atok?: string
+  entity?: string
+  provider?: string
+  extra?: ExtraData
 }
 
-export const create = ({
+export const create = <ExtraData = {}> ({
   sub,
   type,
   aud,
   iss,
-  entity,
   tokenSignatureSecret,
+  entity,
   ttl = 60,
   permissions = [],
   scopes = [],
-  provider = 'lune',
-  extra = {}
+  extra,
+  provider
 }: {
-  tokenSignatureSecret: string
-  entity: string
   sub: string
-  iss: string
   type: 'id' | 'access'
   aud: string
+  iss: string
+  tokenSignatureSecret: string
+  entity?: string
   ttl?: number
   permissions?: Permission[]
   scopes?: string[]
-  provider?: 'lune' | 'google',
-  extra?: any
+  extra?: ExtraData,
+  provider?: string
 }): string => {
 
-  const payload: Token = {
+  const payload: Token<ExtraData> = {
     // (now in milliseconds / 1000) = seconds then + 60 seconds 
     // 60 times ==> 60 minutes from now
     exp: Math.floor((Date.now() / 1000) + (60 * ttl)),
@@ -55,15 +55,9 @@ export const create = ({
     ttl,
     entity,
     provider,
-    ...extra
+    extra: extra ?? {} as ExtraData
   }
 
   return jwt.sign(payload, tokenSignatureSecret)
 
-}
-
-export type OneTimeUseToken = {
-  sub: string
-  exp: number
-  iat: number
 }

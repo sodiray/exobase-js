@@ -12,7 +12,7 @@ export async function withApiKey(func: exo.ApiFunction, keyFunc: string | PropsG
     if (!header) {
         throw exo.errors.unauthorized({
             details: 'This function requires an api key',
-            key: 'l.err.core.auth.canes-venarias'
+            key: 'exo.err.core.auth.canes-venarias'
         })
     }
 
@@ -21,7 +21,7 @@ export async function withApiKey(func: exo.ApiFunction, keyFunc: string | PropsG
     if (!key || !providedKey || providedKey !== key) {
         throw exo.errors.unauthorized({
             details: 'Invalid api key',
-            key: 'l.err.core.auth.balefeign'
+            key: 'exo.err.core.auth.balefeign'
         })
     }
 

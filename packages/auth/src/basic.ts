@@ -7,7 +7,7 @@ export async function requireBasicToken (func: exo.ApiFunction, props: exo.Props
   if (!header) {
     throw exo.errors.unauthorized({
       details: 'This function requires authentication via a token', 
-      key: 'l.err.access.token.canes-venatici'
+      key: 'exo.err.access.token.canes-venatici'
     })
   }
   
@@ -15,7 +15,7 @@ export async function requireBasicToken (func: exo.ApiFunction, props: exo.Props
   if (!basicToken) {
     throw exo.errors.unauthorized({
       details: 'This function requires authentication via a token', 
-      key: 'l.err.access.token.noramusine'
+      key: 'exo.err.access.token.noramusine'
     })
   }
   
@@ -23,7 +23,7 @@ export async function requireBasicToken (func: exo.ApiFunction, props: exo.Props
   if (!clientId || !clientSecret) {
     throw exo.errors.unauthorized({
       details: 'Cannot call this function without a valid authentication token', 
-      key: 'l.err.access.token.canis-major'
+      key: 'exo.err.access.token.canis-major'
     })
   }  
 

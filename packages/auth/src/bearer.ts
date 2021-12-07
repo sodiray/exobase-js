@@ -20,7 +20,7 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
         if (!decoded.permissions || !decoded.permissions.includes(permission.key)) {
             throw exo.errors.forbidden({
                 details: 'Given token does not have required permissions',
-                key: 'l.err.core.auth.capricornus'
+                key: 'exo.err.core.auth.capricornus'
             })
         }
     }
@@ -29,7 +29,7 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
         if (!decoded.scopes || !decoded.scopes.includes(scope)) {
             throw exo.errors.forbidden({
                 details: 'Given token does not have required scope',
-                key: 'l.err.core.auth.caprinaught'
+                key: 'exo.err.core.auth.caprinaught'
             })
         }
     }
@@ -38,7 +38,7 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
         if (!decoded.type || decoded.type !== type) {
             throw exo.errors.forbidden({
                 details: 'Given token does not have required type',
-                key: 'l.err.core.auth.caprorilous'
+                key: 'exo.err.core.auth.caprorilous'
             })
         }
     }
@@ -47,7 +47,7 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
         if (!decoded.iss || decoded.iss !== iss) {
             throw exo.errors.forbidden({
                 details: 'Given token does not have required issuer',
-                key: 'l.err.core.auth.caprisaur'
+                key: 'exo.err.core.auth.caprisaur'
             })
         }
     }
@@ -56,7 +56,7 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
         if (decoded[key] !== value) {
             throw exo.errors.forbidden({
                 details: `Given token does not have required ${key}`,
-                key: 'l.err.core.auth.extraterra'
+                key: 'exo.err.core.auth.extraterra'
             })
         }
     }
@@ -75,14 +75,14 @@ export async function requireAuthorizedToken(func: exo.ApiFunction, options: JWT
     if (!header) {
         throw exo.errors.unauthorized({
             details: 'This function requires authentication via a token',
-            key: 'l.err.core.auth.canes-venatici'
+            key: 'exo.err.core.auth.canes-venatici'
         })
     }
 
     if (!header.startsWith('Bearer ')) {
         throw exo.errors.unauthorized({
             details: 'This function requires an authentication via a token',
-            key: 'l.err.core.auth.canes-veeticar'
+            key: 'exo.err.core.auth.canes-veeticar'
         })
     }
 
@@ -94,7 +94,7 @@ export async function requireAuthorizedToken(func: exo.ApiFunction, options: JWT
         console.error('Inavlid token', { err }, 'r.log.core.auth.beiyn')
         throw exo.errors.forbidden({
             details: 'Cannot call this function without a valid authentication token',
-            key: 'l.err.core.auth.canis-major'
+            key: 'exo.err.core.auth.canis-major'
         })
     }
 
