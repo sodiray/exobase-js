@@ -36,6 +36,6 @@ export const useValidation = <TArgs = any>(getData: (props: exo.Props) => any, s
     return _.partial(withShapeValidation, func, model, getData)
 }
 
-export const useJsonArgs = _.partial(useValidation, (props: exo.Props) => props.req.body) as <TArgs = any>(getData: (props: exo.Props) => any, shapeMaker: (yup: Yup) => KeyOfType<TArgs, any>) => (func: exo.ApiFunction) => exo.ApiFunction
-export const useQueryArgs = _.partial(useValidation, (props: exo.Props) => props.req.query) as <TArgs = any>(getData: (props: exo.Props) => any, shapeMaker: (yup: Yup) => KeyOfType<TArgs, any>) => (func: exo.ApiFunction) => exo.ApiFunction
-export const useHeaderArgs = _.partial(useValidation, (props: exo.Props) => props.req.headers) as <TArgs = any>(getData: (props: exo.Props) => any, shapeMaker: (yup: Yup) => KeyOfType<TArgs, any>) => (func: exo.ApiFunction) => exo.ApiFunction
+export const useJsonArgs = _.partial(useValidation, (props: exo.Props) => props.req.body) as <TArgs = any>(shapeMaker: (yup: Yup) => KeyOfType<TArgs, any>) => (func: exo.ApiFunction) => exo.ApiFunction
+export const useQueryArgs = _.partial(useValidation, (props: exo.Props) => props.req.query) as <TArgs = any>(shapeMaker: (yup: Yup) => KeyOfType<TArgs, any>) => (func: exo.ApiFunction) => exo.ApiFunction
+export const useHeaderArgs = _.partial(useValidation, (props: exo.Props) => props.req.headers) as <TArgs = any>(shapeMaker: (yup: Yup) => KeyOfType<TArgs, any>) => (func: exo.ApiFunction) => exo.ApiFunction
