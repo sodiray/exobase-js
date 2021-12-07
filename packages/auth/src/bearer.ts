@@ -109,8 +109,8 @@ export async function requireAuthorizedToken(func: exo.ApiFunction, options: JWT
     })
 }
 
-export type TokenAuth = {
-    token: Token
+export type TokenAuth<ExtraData = any> = {
+    token: Token<ExtraData>
 }
 
 export const useTokenAuthentication = (options: JWTAuthOptions) => (func: exo.ApiFunction) => {
