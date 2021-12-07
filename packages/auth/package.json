@@ -1,7 +1,7 @@
 {
   "name": "@exobase/auth",
   "version": "0.0.4",
-  "description": "TODO",
+  "description": "Exobase authentication hooks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
