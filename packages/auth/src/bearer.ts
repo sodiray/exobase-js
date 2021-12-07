@@ -7,7 +7,7 @@ import { Token } from './token'
 
 export interface JWTAuthOptions {
     type?: 'id' | 'access'
-    iss?: 'lune.api'
+    iss?: string
     permission?: Permission
     scope?: string
     extra?: Record<string, string | number | symbol>,
