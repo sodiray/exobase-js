@@ -37,6 +37,11 @@ export async function requireBasicToken (func: exo.ApiFunction, props: exo.Props
   })
 }
 
+export type BasicAuth = {
+  clientId: string
+  clientSecret: string
+}
+
 export const useBasicAuthentication = () => (func: exo.ApiFunction) => {
   return _.partial(requireBasicToken, func)
 }

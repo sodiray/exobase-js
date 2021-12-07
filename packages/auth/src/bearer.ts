@@ -109,6 +109,9 @@ export async function requireAuthorizedToken(func: exo.ApiFunction, options: JWT
     })
 }
 
+export type TokenAuth = {
+    token: Token
+}
 
 export const useTokenAuthentication = (options: JWTAuthOptions) => (func: exo.ApiFunction) => {
     return _.partial(requireAuthorizedToken, func, options)

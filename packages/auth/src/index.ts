@@ -12,7 +12,9 @@ export type { Permission } from './permission'
 export { create as createToken } from './token'
 export { create as createPermission } from './permission'
 export { useBasicAuthentication } from './basic'
+export type { BasicAuth } from './basic'
 export { useTokenAuthentication } from './bearer'
+export type { TokenAuth } from './bearer'
 export { useApiKeyAuthentication } from './key'
 
 export default {
