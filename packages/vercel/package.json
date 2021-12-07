@@ -1,6 +1,6 @@
 {
   "name": "@exobase/vercel",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Exobase root hook to handle function running on Vercel",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
