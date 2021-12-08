@@ -23,7 +23,7 @@ export const create = <ExtraData = {}> ({
   iss,
   tokenSignatureSecret,
   entity,
-  ttl = 60,
+  ttl = 1200,
   permissions = [],
   scopes = [],
   extra,
@@ -35,6 +35,10 @@ export const create = <ExtraData = {}> ({
   iss: string
   tokenSignatureSecret: string
   entity?: string
+  /**
+   * Number of seconds from now the token should be considered
+   * valid. Defaults to 1200 seconds (20 minutes)
+   */
   ttl?: number
   permissions?: Permission[]
   scopes?: string[]
@@ -43,9 +47,7 @@ export const create = <ExtraData = {}> ({
 }): string => {
 
   const payload: Token<ExtraData> = {
-    // (now in milliseconds / 1000) = seconds then + 60 seconds 
-    // 60 times ==> 60 minutes from now
-    exp: Math.floor((Date.now() / 1000) + (60 * ttl)),
+    exp: Math.floor(Date.now() + (ttl * 1000)),
     sub,
     iss,
     type,
