@@ -19,17 +19,17 @@ type ExpressMiddlewareFunc = (req: Request, res: Response, next: NextFunction) =
 type InvertedMiddlewareFunc = (req: Request, res: Response) => Promise<Request>
 
 export type ExpressFunctionOptions = {
-  json?: boolean
-  compression?: boolean
+  skipJson?: boolean
+  skipCompression?: boolean
 }
 
 const applyJson = invertMiddleware(makeJsonMiddleware())
 const applyCompression = invertMiddleware(makeCompressionMiddleware())
 
 const makeMiddleware = (options: ExpressFunctionOptions) => {
-  if (options.compression && options.json) return [applyJson, applyCompression]
-  if (options.json) return [applyJson]
-  if (options.compression) return [applyCompression]
+  if (!options.skipCompression && !options.skipJson) return [applyJson, applyCompression]
+  if (!options.skipJson) return [applyJson]
+  if (!options.skipCompression) return [applyCompression]
 }
 
 async function createExpressHandler(
@@ -63,7 +63,7 @@ async function createExpressHandler(
   setResponse(res, response)
 }
 
-export const useExpress = (options: ExpressFunctionOptions) => (func: ApiFunction) => _.partial(createExpressHandler, func, options)
+export const useExpress = (options: ExpressFunctionOptions = {}) => (func: ApiFunction) => _.partial(createExpressHandler, func, options)
 
 export function setResponse(
   res: Response,
@@ -98,7 +98,6 @@ const makeMeta = (req: Request): ExoRequest => ({
  * just modify the request. These help us process that
  * and then combine them.
  */
-
 function invertMiddleware(middleware: ExpressMiddlewareFunc): InvertedMiddlewareFunc {
   return async (req, res) => {
     return await new Promise((resolve, reject) => {
