@@ -15,7 +15,10 @@ type Args = {
 type ModuleFunction = {
   function: string
   module: string
-  path: string
+  paths: {
+    import: string
+    file: string
+  }
 }
 
 export default async function run({
@@ -36,7 +39,7 @@ export default async function run({
   // Add each endpoint to the local running 
   // express app
   for (const f of getFunctionMap()) {
-    const { default: func } = require(f.path)
+    const { default: func } = require(f.paths.import)
     api.all(`/${f.module}/${f.function}`, localized(func))
   }
 
@@ -61,11 +64,17 @@ function getFunctionMap(): ModuleFunction[] {
       return fs.readdirSync(`./src/modules/${m.name}`, { withFileTypes: true })
         .filter(item => !item.isDirectory())
         .filter(item => item.name.endsWith('.ts'))
-        .map(tsFile => ({
-          function: tsFile.name.replace(/\.ts^/, ''),
-          module: m.name,
-          path: `./src/modules/${m.name}/${tsFile.name}`
-        })) as ModuleFunction[]
+        .map(tsFile => {
+          const funcName = tsFile.name.replace(/\.ts^/, '')
+          return {
+            function: funcName,
+            module: m.name,
+            paths: {
+              file: `./src/modules/${m.name}/${tsFile.name}`,
+              import: `./src/modules/${m.name}/${funcName}`
+            }
+          }
+        }) as ModuleFunction[]
     })
   return _.flat(modules)
 }
