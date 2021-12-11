@@ -8,6 +8,7 @@ import { Token } from './token'
 export interface JWTAuthOptions {
     type?: 'id' | 'access'
     iss?: string
+    aud?: string
     permission?: Permission
     scope?: string
     extra?: Record<string, string | number | symbol>,
@@ -15,7 +16,7 @@ export interface JWTAuthOptions {
 }
 
 const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
-    const { type, iss, permission, scope, extra = {} } = options
+    const { type, iss, aud, permission, scope, extra = {} } = options
     if (permission) {
         if (!decoded.permissions || !decoded.permissions.includes(permission.key)) {
             throw exo.errors.forbidden({
@@ -51,6 +52,16 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
             })
         }
     }
+
+    if (aud) {
+        if (!decoded.aud || decoded.aud !== aud) {
+            throw exo.errors.forbidden({
+                details: 'Given token does not have required audience',
+                key: 'exo.err.core.auth.halliphace'
+            })
+        }
+    }
+
     if (!extra) return
     for (const [key, value] of Object.entries(extra)) {
         if (decoded[key] !== value) {
