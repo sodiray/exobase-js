@@ -2987,9 +2987,9 @@ find-up@^4.0.0, find-up@^4.1.0:
     path-exists "^4.0.0"
 
 follow-redirects@^1.14.4:
-  version "1.14.5"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.5.tgz#f09a5848981d3c772b5392309778523f8d85c381"
-  integrity sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA==
+  version "1.14.6"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.6.tgz#8cfb281bbc035b3c067d6cd975b0f6ade6e855cd"
+  integrity sha512-fhUl5EwSJbbl8AR+uYL2KQDxLkdSjZGR36xy46AO7cOMTrCMON6Sa28FmAnC2tRTDbd/Uuzz3aJBv7EBN7JH8A==
 
 forever-agent@~0.6.1:
   version "0.6.1"
@@ -5458,6 +5458,11 @@ radash@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/radash/-/radash-1.1.0.tgz#a239d3eedf9b71ff7094d3ef9d576f4c0ef60eae"
   integrity sha512-RJXzJ4RnHtrg4/DHGV6aLmKZ2B5Pgyl0g7y+Lwv0J5emyXvihxhru4g8I3Zxi5hs8zKPXucZ7CUZAmdBEfu9+g==
+
+radash@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/radash/-/radash-1.2.0.tgz#80fe32c2355fcf3c6349cb35b20c6818ea56365d"
+  integrity sha512-da8Xsiun9kRDr8Ojy657dt4bo18DKRTdYBAke39i+LxnzmD6koQGe3ZVgoDFivrSAgzexZECSmwcTfdvcSIOTA==
 
 react-is@^17.0.1:
   version "17.0.2"
