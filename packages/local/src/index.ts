@@ -58,10 +58,12 @@ export default async function run({
  * as an array.
  */
 function getFunctionMap(): ModuleFunction[] {
-  const modules = fs.readdirSync('./src/modules', { withFileTypes: true })
+  const cwd = process.cwd()
+  const relPath = (rel: string) => `${cwd}${rel}`
+  const modules = fs.readdirSync(relPath('/src/modules'), { withFileTypes: true })
     .filter(item => item.isDirectory())
     .map(m => {
-      return fs.readdirSync(`./src/modules/${m.name}`, { withFileTypes: true })
+      return fs.readdirSync(relPath(`/src/modules/${m.name}`), { withFileTypes: true })
         .filter(item => !item.isDirectory())
         .filter(item => item.name.endsWith('.ts'))
         .map(tsFile => {
@@ -70,8 +72,8 @@ function getFunctionMap(): ModuleFunction[] {
             function: funcName,
             module: m.name,
             paths: {
-              file: `./src/modules/${m.name}/${tsFile.name}`,
-              import: `./src/modules/${m.name}/${funcName}`
+              file: relPath(`/src/modules/${m.name}/${tsFile.name}`),
+              import: relPath(`/src/modules/${m.name}/${funcName}`)
             }
           }
         }) as ModuleFunction[]
