@@ -1,6 +1,6 @@
 {
   "name": "@exobase/local",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Exobase utility for running an exobase project locally",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
