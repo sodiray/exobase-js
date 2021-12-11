@@ -39,7 +39,7 @@ export default async function run({
   // Add each endpoint to the local running 
   // express app
   for (const f of getFunctionMap()) {
-    const { default: func } = require(f.paths.import)
+    const { default: func } = await import(f.paths.import)
     api.all(`/${f.module}/${f.function}`, localized(func))
   }
 
