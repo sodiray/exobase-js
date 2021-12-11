@@ -42,7 +42,9 @@ export default async function run({
 
   // Get it poppin bebe
   const p = parseInt(port)
-  api.listen(p, _.partial(cb, p))
+  api.listen(p, () => {
+    cb?.(p)
+  })
 
 }
 
