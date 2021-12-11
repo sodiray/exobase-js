@@ -1,0 +1,38 @@
+{
+  "name": "@exobase/local",
+  "version": "0.0.0",
+  "description": "Exobase utility for running an exobase project locally",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "exo-local": "./dist/cli.js"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "author": "rayepps",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --coverage",
+    "check": "yarn lint && yarn test && yarn build",
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/jest": "^27.0.1",
+    "chai": "^4.3.4",
+    "jest": "^27.1.0",
+    "ts-jest": "^27.0.5",
+    "tslint": "^6.0.0",
+    "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "@exobase/core": "^0.0.3",
+    "aws-lama": "^0.0.1",
+    "aws-lambda": "^1.0.7",
+    "body-parser": "^1.19.1",
+    "express": "^4.17.1",
+    "radash": "^1.3.0"
+  }
+}
