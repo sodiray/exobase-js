@@ -36,7 +36,7 @@ type ModuleFunctionSource = ModuleFunction & {
  * as an array.
  */
 export function getFunctionMap(rootPath: string): ModuleFunctionLocation[] {
-  const relPath = (rel: string) => path.resolve(rootPath, rel)
+  const relPath = (rel: string) => path.join(rootPath, rel)
   const modules = fs.readdirSync(relPath('/src/modules'), { withFileTypes: true })
     .filter(item => item.isDirectory())
     .map(m => {
