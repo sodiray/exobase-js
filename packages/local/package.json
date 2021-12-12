@@ -2,11 +2,8 @@
   "name": "@exobase/local",
   "version": "0.0.7",
   "description": "Exobase utility for running an exobase project locally",
-  "main": "dist/index.js",
+  "main": "dist/index.ts",
   "types": "dist/index.d.ts",
-  "bin": {
-    "exo-local": "./dist/cli.js"
-  },
   "files": [
     "dist/**/*"
   ],
@@ -16,7 +13,7 @@
     "test": "jest --coverage",
     "check": "yarn lint && yarn test && yarn build",
     "build": "tsc",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json"  
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.87",
