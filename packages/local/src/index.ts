@@ -44,7 +44,7 @@ export function getFunctionMap(rootPath: string): ModuleFunctionLocation[] {
         .filter(item => !item.isDirectory())
         .filter(item => item.name.endsWith('.ts'))
         .map(tsFile => {
-          const funcName = tsFile.name.replace(/\.ts^/, '')
+          const funcName = tsFile.name.replace(/\.ts$/, '')
           return {
             function: funcName,
             module: m.name,
