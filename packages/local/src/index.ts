@@ -82,6 +82,7 @@ export async function start({
   // Add each endpoint to the local running 
   // express app
   for (const f of functions) {
+    console.log(`> POST /${f.module}/${f.function}`)
     api.all(`/${f.module}/${f.function}`, mapped(f.func))
   }
 
