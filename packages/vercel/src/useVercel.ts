@@ -44,12 +44,11 @@ export function setResponse(
     status = 200,
     headers = {},
   } = response as exo.Response
-  res.status(status)
   for (const [key, val] of Object.entries(headers)) {
     res.setHeader(key, val)
   }
   res.setHeader('x-request-id', rid)
-  res.json(json)
+  res.status(status).json(json)
 }
 
 const makeReq = (req: VercelRequest): exo.Request => ({
