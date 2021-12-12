@@ -47,6 +47,8 @@ export function setResponse(
   for (const [key, val] of Object.entries(headers)) {
     res.setHeader(key, val)
   }
+  console.log('>> json')
+  console.log(JSON.stringify(json))
   res.setHeader('x-request-id', rid)
   res.status(status).json(json)
 }
