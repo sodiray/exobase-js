@@ -30,10 +30,10 @@ export const fetcher = <TRequestBody, TResponseJson> ({
   const [netErr, response] = await _.try(() => axios.post(fullUrl, data, {
     headers: {
       'content-type': 'application/json',
-      ...(auth.token ? {
+      ...(auth?.token ? {
         'authorization': `Bearer ${auth.token}`
       } : {}),
-      ...(auth.key ? {
+      ...(auth?.key ? {
         'authorization': `Key ${auth.key}`
       } : {})
     }
