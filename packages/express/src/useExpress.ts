@@ -11,7 +11,7 @@ import type {
   Request as ExoRequest,
   Response as ExoResponse
 } from '@exobase/core'
-import { defaultResponse, responseFromError, responseFromResult } from '@exobase/core'
+import { initProps, defaultResponse, responseFromError, responseFromResult } from '@exobase/core'
 import * as makeCompressionMiddleware from 'compression'
 
 
@@ -42,15 +42,13 @@ async function createExpressHandler(
   const middleware = composeMiddleware(...makeMiddleware(options))
   const reqAfterMiddlware = await middleware(req, res)
 
-  const props: Props = {
-    auth: {},
-    args: {},
-    services: {},
-    response: defaultResponse,
-    req: makeMeta(reqAfterMiddlware)
-  }
+  const props: Props = initProps(makeReq(reqAfterMiddlware))
 
-  const [error, result] = await _.tryit<any>(func)(props)
+  console.debug({ message: 'Exo:Express Incoming request props', props })
+
+  const [error, result] = await _.try<any>(func)(props)
+
+  console.debug({ message: 'Exo:Express Function result', result })
 
   if (error) {
     console.error(error)
@@ -59,6 +57,8 @@ async function createExpressHandler(
   const response = error
     ? responseFromError(error)
     : responseFromResult(result)
+
+  console.debug({ message: 'Exo:Express Generated response', response })
 
   setResponse(res, response)
 }
@@ -81,7 +81,7 @@ export function setResponse(
   res.json(json)
 }
 
-const makeMeta = (req: Request): ExoRequest => ({
+const makeReq = (req: Request): ExoRequest => ({
   headers: req.headers as Record<string, string | string[]>,
   url: req.originalUrl,
   body: req.body,
