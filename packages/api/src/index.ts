@@ -38,6 +38,9 @@ export const fetcher = <TRequestBody, TResponseJson> ({
       } : {})
     }
   }))()
+  if (netErr) {
+    console.error(netErr)
+  }
   if (netErr || !response) {
     return { error: {
       message: 'Network Error',
