@@ -1,10 +1,9 @@
 import _ from 'radash'
-import { responseFromResult } from '@exobase/core'
+import { responseFromResult, responseFromError } from '@exobase/core'
 import type { ApiFunction, Props } from '@exobase/core'
 
 
 const DEFAULT_CORS_HEADERS = {
-  'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
   'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Authorization, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
@@ -20,8 +19,10 @@ export async function withCors(func: ApiFunction, corsHeaders: Record<string, st
       }
     }
   }
-  const result = await func(props)
-  const response = responseFromResult(result)
+  const [err, result] = await _.try(func)(props)
+  const response = err
+    ? responseFromError(err)
+    : responseFromResult(result)
   return {
     ...response,
     headers: {
