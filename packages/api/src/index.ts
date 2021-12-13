@@ -50,9 +50,9 @@ export const fetcher = <TRequestBody, TResponseJson> ({
   const json = response.data
   if (json.error) {
     console.error(json.error)
-    return { error: json.error, data: json }
+    return { error: json.error, data: null }
   }
-  return { error: null, data: json }
+  return { error: null, data: json.result }
 }
 
 const api = (baseUrl: string) => _.partob(fetcher, { baseUrl })
