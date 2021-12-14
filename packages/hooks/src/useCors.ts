@@ -20,6 +20,9 @@ export async function withCors(func: ApiFunction, corsHeaders: Record<string, st
     }
   }
   const [err, result] = await _.try(func)(props)
+  if (err) {
+    console.error(err)
+  }
   const response = err
     ? responseFromError(err)
     : responseFromResult(result)
