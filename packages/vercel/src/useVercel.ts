@@ -4,6 +4,18 @@ import { VercelRequest, VercelResponse } from '@vercel/node'
 import * as exo from '@exobase/core'
 
 
+const withErrorLogging = <T extends Function>(func: T): T => {
+  const withError = async (...args: any[]) => {
+    try {
+      return await func(...args)
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
+  }
+  return withError as any as T
+}
+
 async function vercelHandler(
   func: exo.ApiFunction,
   req: VercelRequest,
@@ -32,7 +44,9 @@ async function vercelHandler(
   setResponse(res, rid, response)
 }
 
-export const useVercel = () => (func: exo.ApiFunction) => _.partial(vercelHandler, func)
+export const useVercel = () => (func: exo.ApiFunction) => {
+  return _.partial(withErrorLogging(vercelHandler), func)
+}
 
 export function setResponse(
   res: VercelResponse,
