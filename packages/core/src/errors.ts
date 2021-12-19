@@ -25,7 +25,7 @@ export const unknown = createError({
     status: 500,
     code: 5000,
     details: 'This one is one us, we apologize for the issue. The issue has been logged and our development team will be working on fixing it asap.'
-}) as (input: { key: string }) => ApiError
+}) as (input: { details?: string, key: string }) => ApiError
 
 export const badRequest = createError({
     message: 'Bad Request',
