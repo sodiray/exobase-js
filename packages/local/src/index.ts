@@ -6,7 +6,8 @@ import path from 'path'
 import fs from 'fs'
 import type { FrameworkMapper } from './frameworks/types'
 import expressFrameworkMapper from './frameworks/express'
-import chalk, { ChalkInstance } from 'chalk'
+import chalk from 'chalk'
+import type { ChalkInstance } from 'chalk'
 
 export type { FrameworkMapper } from './frameworks/types'
 export { default as expressFrameworkMapper } from './frameworks/express'
@@ -105,12 +106,12 @@ export async function start({
 
 const colorAtIdx = (idx: number): ChalkInstance => {
   const colors = [
-    chalk.red,
-    chalk.blue,
-    chalk.yellowBright,
-    chalk.magenta,
-    chalk.cyan,
-    chalk.green
+    chalk.red.bind(chalk.red),
+    chalk.blue.bind(chalk.blue),
+    chalk.yellowBright.bind(chalk.yellowBright),
+    chalk.magenta.bind(chalk.magenta),
+    chalk.cyan.bind(chalk.cyan),
+    chalk.green.bind(chalk.green)
   ]
   return colors[idx % colors.length]
 }
