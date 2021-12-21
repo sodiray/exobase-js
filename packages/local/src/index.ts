@@ -6,6 +6,7 @@ import path from 'path'
 import fs from 'fs'
 import type { FrameworkMapper } from './frameworks/types'
 import expressFrameworkMapper from './frameworks/express'
+import chalk, { ChalkInstance } from 'chalk'
 
 export type { FrameworkMapper } from './frameworks/types'
 export { default as expressFrameworkMapper } from './frameworks/express'
@@ -82,8 +83,16 @@ export async function start({
   // Add each endpoint to the local running 
   // express app
   for (const f of functions) {
-    console.log(`> POST /${f.module}/${f.function}`)
     api.all(`/${f.module}/${f.function}`, mapped(f.func))
+  }
+  
+  // Log about it
+  const functionsByModule = Object.values(_.group(functions, f => f.module))
+  for (const [moduleIdx, funcsInModule] of functionsByModule.entries()) {
+    const color = colorAtIdx(moduleIdx)
+    for (const f of funcsInModule) {
+      console.log(`> [POST] ${color('/' + f.module)}${chalk.gray('/' + f.function)}`)
+    }
   }
 
   // Get it poppin bebe
@@ -92,4 +101,16 @@ export async function start({
     cb?.(p)
   })
 
+}
+
+const colorAtIdx = (idx: number): ChalkInstance => {
+  const colors = [
+    chalk.red,
+    chalk.blue,
+    chalk.yellowBright,
+    chalk.magenta,
+    chalk.cyan,
+    chalk.green
+  ]
+  return colors[idx % colors.length]
 }
