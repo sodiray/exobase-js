@@ -44,7 +44,7 @@ async function lambdaHandler(
 
   // @link https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
   const lambdaResponse = {
-    body: JSON.stringify(response),
+    body: JSON.stringify(response.json),
     isBase64Encoded: false,
     headers: {
       ...response.headers,
