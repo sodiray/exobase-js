@@ -91,7 +91,7 @@ export async function start({
   for (const [moduleIdx, funcsInModule] of functionsByModule.entries()) {
     const color = colorAtIdx(moduleIdx)
     for (const f of funcsInModule) {
-      console.log(`> [POST] ${color('/' + f.module)}${chalk.gray('/' + f.function)}`)
+      console.log(`${chalk.gray('|—')} ${color('/' + f.module)}${chalk.gray('/' + f.function)}`)
     }
   }
 
