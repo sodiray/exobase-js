@@ -40,9 +40,10 @@ async function lambdaHandler(
 
   console.debug({ message: 'Exo:Lambda Generated response', response })
 
+  // TODO: Support set cookies
+
   // @link https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
   const lambdaResponse = {
-    cookies: response.cookies,
     body: JSON.stringify(response),
     isBase64Encoded: false,
     headers: {
@@ -53,7 +54,7 @@ async function lambdaHandler(
     statusCode: response.status
   }
 
-  console.debug({ message: 'Exo:Lambda Generated lambda response', response })
+  console.debug({ message: 'Exo:Lambda Generated lambda response', lambdaResponse })
 
   return lambdaResponse
 }
