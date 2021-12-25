@@ -11,7 +11,7 @@ import type {
   Request as ExoRequest,
   Response as ExoResponse
 } from '@exobase/core'
-import { initProps, defaultResponse, responseFromError, responseFromResult } from '@exobase/core'
+import { initProps, responseFromError, responseFromResult } from '@exobase/core'
 import * as makeCompressionMiddleware from 'compression'
 
 
