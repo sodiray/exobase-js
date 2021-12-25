@@ -1,6 +1,6 @@
 {
   "name": "@exobase/auth",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Exobase authentication hooks and token utilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@exobase/core": "^0.0.4",
+    "@exobase/core": "^0.0.5",
     "jsonwebtoken": "^8.5.1",
     "radash": "^1.1.0",
     "yup": "^0.32.11"

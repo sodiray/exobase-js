@@ -1,6 +1,6 @@
 {
   "name": "@exobase/vercel",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Exobase root hook to handle function running on Vercel",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@exobase/core": "^0.0.4",
+    "@exobase/core": "^0.0.5",
     "radash": "^1.1.0"
   },
   "gitHead": "434c958019354bb01642148bf3cecb8b4cb2bdfe"

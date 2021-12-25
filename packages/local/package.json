@@ -1,6 +1,6 @@
 {
   "name": "@exobase/local",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Exobase utility for running an exobase project locally",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@exobase/core": "^0.0.4",
+    "@exobase/core": "^0.0.5",
     "aws-lama": "^0.0.1",
     "aws-lambda": "^1.0.7",
     "body-parser": "^1.19.1",
