@@ -1,11 +1,21 @@
-# `core`
+# `@exobase/core`
 
-> TODO: description
+> Exobase core types and framework functions
+
+## Install
+
+```
+yarn add @exobase/core
+```
 
 ## Usage
 
-```
-const core = require('core');
+```ts
+import type { Props } from '@exobase/core'
 
-// TODO: DEMONSTRATE API
+export const pingEndpoint = async (props: Props) => {
+  return { 
+    message: 'pong' 
+  }
+}
 ```

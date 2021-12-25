@@ -54,7 +54,7 @@ export function setResponse(
   response: exo.Response
 ) {
   const {
-    json,
+    body,
     status = 200,
     headers = {},
   } = response as exo.Response
@@ -62,14 +62,13 @@ export function setResponse(
     res.setHeader(key, val)
   }
   res.setHeader('x-request-id', rid)
-  res.status(status).json(json)
+  res.status(status).json(body)
 }
 
 const makeReq = (req: VercelRequest): exo.Request => ({
   headers: req.headers,
   url: req.url ?? '',
   body: req.body,
-  cookies: req.cookies,
   method: req.method,
   query: req.query as Record<string, string>,
 })

@@ -13,10 +13,9 @@ export const defaultResponse: t.Response = {
     _rid: '',
     status: 200,
     headers: {},
-    json: {
+    body: {
         message: 'success',
-    },
-    cookies: []
+    }
 }
 
 export const initProps = (req: t.Request): t.Props => ({
@@ -56,14 +55,14 @@ export const responseFromResult = (result: any): t.Response => {
     if (!result)
         return {
             ...defaultResponse,
-            json: makeOk(defaultResponse.json),
+            body: makeOk(defaultResponse.body),
         }
 
     // Else, the func returned something that should be
     // returned as the json body response
     return {
         ...defaultResponse,
-        json: makeOk(result),
+        body: makeOk(result),
     }
 }
 
@@ -87,7 +86,7 @@ export const responseFromError = (error: any): t.Response => {
         return {
             ...defaultResponse,
             status: error.status,
-            json: makeError(error as t.ApiError),
+            body: makeError(error as t.ApiError),
         }
     }
 
@@ -99,6 +98,6 @@ export const responseFromError = (error: any): t.Response => {
     return {
         ...defaultResponse,
         status: err.status,
-        json: makeError(err),
+        body: makeError(err),
     }
 }

@@ -81,7 +81,6 @@ export type Request = {
     headers: Record<string, string | string[]>
     url: string
     body: Record<string, any> | string | null
-    cookies: Record<string, string>
     method: string
     query: Record<string, string>
 }
@@ -91,8 +90,7 @@ export type Response = {
     _rid: string
     headers: Record<string, string | string[]>
     status: number
-    json: any
-    cookies: string[]
+    body: any
 }
 
 export interface Props <
@@ -107,6 +105,4 @@ export interface Props <
     response: Response
 }
 
-export type ApiFunction <ArgType = any, ServiceType = any> = (props: Props<ArgType, ServiceType>) => Promise<Response | any>
-
-
+export type ApiFunction <ArgType = any, ServiceType = any, AuthType = any> = (props: Props<ArgType, ServiceType, AuthType>) => Promise<Response | any>

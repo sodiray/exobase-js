@@ -44,12 +44,12 @@ async function lambdaHandler(
 
   // @link https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
   const lambdaResponse = {
-    body: JSON.stringify(response.json),
+    body: JSON.stringify(response.body),
     isBase64Encoded: false,
     headers: {
-      ...response.headers,
       'x-rid': rid,
-      'content-type': 'application/json'
+      'content-type': 'application/json',
+      ...response.headers
     },
     statusCode: response.status
   }
@@ -67,27 +67,9 @@ const makeReq = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context): 
   const headers = _.lowerize(event.headers ?? {})
   return {
     headers,
-    url: '',
+    url: '', // TODO: Try to get this value
     body: event.body,
-    cookies: getCookiesFromHeader(headers),
     method: event.requestContext?.httpMethod,
     query: event.queryStringParameters ?? {}
   }
-}
-
-const getCookiesFromHeader = (headers: Record<string, string | string[]>) => {
-
-  if (!headers || !headers.cookie) {
-    return {}
-  }
-
-  const cookies = headers.cookie as string
-
-  // Split a cookie string in an array (Originally found http://stackoverflow.com/a/3409200/1427439)
-  return cookies.split(';').reduce((acc, cookie) => {
-    const parts = cookie.split('=')
-    const key = parts.shift().trim()
-    const value = decodeURI(parts.join('='))
-    return !!key ? { ...acc, [key]: value } : acc
-  }, {} as Record<string, string>)
 }

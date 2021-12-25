@@ -70,7 +70,7 @@ export function setResponse(
   response: ExoResponse
 ) {
   const {
-    json,
+    body,
     status = 200,
     headers = {},
   } = response as ExoResponse
@@ -78,14 +78,13 @@ export function setResponse(
   for (const [key, val] of Object.entries(headers)) {
     res.set(key, val)
   }
-  res.json(json)
+  res.json(body)
 }
 
 const makeReq = (req: Request): ExoRequest => ({
   headers: req.headers as Record<string, string | string[]>,
   url: req.originalUrl,
   body: req.body,
-  cookies: req.cookies,
   method: req.method,
   query: req.query as Record<string, string>
 })
