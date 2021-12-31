@@ -309,6 +309,21 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@exobase/api@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@exobase/api/-/api-0.0.6.tgz#326ce5145057998110173f1d65ae100e6f38e008"
+  integrity sha512-lIWmmcOM1SWDlvmLZb93nhCBsW45EHCWZDmrBOhkMsQWtWSelBOiDFLLwJU7pzRP9rQNOHsy+zM3Khwd1FJbew==
+  dependencies:
+    axios "^0.24.0"
+    radash "^1.2.0"
+
+"@exobase/client-js@^0.0.16":
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/@exobase/client-js/-/client-js-0.0.16.tgz#c93c4f6c5f724b721b43934cfa10e3a79114c67a"
+  integrity sha512-hz246IunlWUimHysCGj0iuqMKozmG/wGcN7HHkT1PUWgi7OTu217+Yc3DqNSYLL45WWNHMAO6ggbNAbMneQywQ==
+  dependencies:
+    "@exobase/api" "^0.0.6"
+
 "@gar/promisify@^1.0.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
@@ -1429,6 +1444,11 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/baretest@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/baretest/-/baretest-2.0.0.tgz#756390ec91357377554abbc834759408e0d0fabf"
+  integrity sha512-Yd+47uRtX/4No0alCNnnzICDR7aO6GNfyqjAHmAwwZyH/Cht0WOZnnxao83M1W9utce5aPZhtQvdpvIFIJkniw==
+
 "@types/body-parser@*":
   version "1.19.2"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.19.2.tgz#aea2059e28b7658639081347ac4fab3de166e6f0"
@@ -1774,6 +1794,11 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
+argparse@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
+  integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
+
 array-differ@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/array-differ/-/array-differ-3.0.0.tgz#3cbb3d0f316810eafcc47624734237d6aee4ae6b"
@@ -1950,6 +1975,18 @@ balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
+
+barecolor@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/barecolor/-/barecolor-1.0.1.tgz#1bbbbfc41cedecf74e23fb7d9d054cd8763d92cc"
+  integrity sha512-ncJ680U+r1CGBt73L3O6V9GIAPy3hbDmWODEQajwEnDmmzeStvc4UYhapUSxUpS76+MHxyRihzZfwhyl122Zdw==
+
+baretest@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/baretest/-/baretest-2.0.0.tgz#5791667b47329c452e1f9bade879ab8dc0b304ba"
+  integrity sha512-hRmYnBojeijT3jH0GtqLoHus+adPoeYh2NmcNT3wBPH903AUphcFqs1gJ64fBovDXql51Df24g9D9jcXRZd4vA==
+  dependencies:
+    barecolor "1.0.1"
 
 base64-js@^1.0.2:
   version "1.5.1"
@@ -4463,6 +4500,13 @@ js-yaml@^3.13.1, js-yaml@^3.14.1:
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
+
+js-yaml@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.0.tgz#c1fb65f8f5017901cdd2c951864ba18458a10602"
+  integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
+  dependencies:
+    argparse "^2.0.1"
 
 jsbn@~0.1.0:
   version "0.1.1"

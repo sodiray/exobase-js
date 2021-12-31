@@ -13,7 +13,8 @@
     "test": "jest --coverage",
     "check": "yarn lint && yarn test && yarn build",
     "build": "tsc",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.88",
