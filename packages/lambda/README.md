@@ -1,6 +1,6 @@
 # `@exobase/lambda`
 
-> Exobase root hook to handle function running on AWS Lambda
+> Exobase root hook to handle function running on AWS Lambda. Built to support invocation from api gateway
 
 ## Install
 
