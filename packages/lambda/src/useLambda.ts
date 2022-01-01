@@ -65,8 +65,16 @@ const makeReq = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context): 
   const headers = _.lowerize(event.headers ?? {})
   return {
     headers,
-    url: '', // TODO: Try to get this value
-    body: event.body,
+    url: event.path,
+    body: (() => {
+      if (!event.body || event.body === '') {
+        return {}
+      }
+      if (event.isBase64Encoded) {
+        return JSON.parse(Buffer.from(event.body, 'base64').toString())
+      }
+      return JSON.parse(event.body)
+    })(),
     method: event.requestContext?.httpMethod,
     query: event.queryStringParameters ?? {}
   }
