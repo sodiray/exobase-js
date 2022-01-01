@@ -1,6 +1,6 @@
 {
   "name": "@exobase/builds",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Exobase utility for our internal build systems",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

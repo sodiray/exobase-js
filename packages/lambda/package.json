@@ -1,6 +1,6 @@
 {
   "name": "@exobase/lambda",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Exobase root hook to handle function running on AWS Lambda",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,7 +28,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@exobase/core": "^0.0.5",
+    "@exobase/core": "^0.0.6",
     "radash": "^1.1.0"
   }
 }
