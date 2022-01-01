@@ -73,7 +73,10 @@ const makeReq = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context): 
       if (event.isBase64Encoded) {
         return JSON.parse(Buffer.from(event.body, 'base64').toString())
       }
-      return JSON.parse(event.body)
+      if (_.isString(event.body)) {
+        return JSON.parse(event.body)
+      }
+      return event.body
     })(),
     method: event.requestContext?.httpMethod,
     query: event.queryStringParameters ?? {}
