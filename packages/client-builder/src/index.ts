@@ -1,5 +1,5 @@
 import _ from 'radash'
-import axios from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 
 
 export interface ApiError {
@@ -17,7 +17,7 @@ export interface Auth {
   key?: string
 }
 
-export const fetcher = <TRequestBody, TResponseJson> ({
+export const fetcher = <TRequestBody, TResponseJson>({
   baseUrl,
   module,
   function: functionName
@@ -37,27 +37,34 @@ export const fetcher = <TRequestBody, TResponseJson> ({
         'authorization': `Key ${auth.key}`
       } : {})
     }
-  }))()
-
-  console.log('--> CLIENT BUILDER RESPONSE:')
-  console.log(netErr)
-  console.log(response)
-  
+  }))() as [AxiosError, AxiosResponse<any, any>]
   if (netErr) {
-    console.error(netErr)
+    // If the error contains a json body that
+    // also contains a valid error
+    if (netErr.response?.data?.error) {
+      return {
+        data: null,
+        error: netErr.response?.data?.error
+      }
+    }
+    return {
+      data: null,
+      error: {
+        message: 'Network Error',
+        details: 'There was an issue using the network.'
+      }
+    }
   }
-  if (netErr && !response) {
-    return { error: {
-      message: 'Network Error',
-      details: 'There was an issue using the network.'
-    }, data: null }
+  if (response.data.error) {
+    return {
+      data: null,
+      error: response.data.error
+    }
   }
-  const json = response.data
-  if (json.error) {
-    console.error(json.error)
-    return { error: json.error, data: null }
+  return {
+    data: response.data.result,
+    error: null
   }
-  return { error: null, data: json.result }
 }
 
 const api = (baseUrl: string) => _.partob(fetcher, { baseUrl })
