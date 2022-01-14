@@ -1,6 +1,6 @@
 {
   "name": "@exobase/client-builder",
-  "version": "0.0.2-alpha.2",
+  "version": "0.0.2",
   "description": "Exobase api client builder",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
