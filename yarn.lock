@@ -5886,6 +5886,11 @@ radash@^1.3.0:
   resolved "https://registry.yarnpkg.com/radash/-/radash-1.3.0.tgz#eb6ec4fc136cc3d42ae9a1335d929611a49c182b"
   integrity sha512-pclId3/Z8yklOQpTpXXGCN+x6K2k1ILRI7xvZFtA01LpoblzvbAGC4is26kPxLSfLkP4y8dHtE+OKp59y1Q++Q==
 
+radash@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/radash/-/radash-1.5.2.tgz#35029259b22e6f420f94402b1a1dc8dec2319d97"
+  integrity sha512-3G5h7O51h3YhjjUKvVL2aaQx1LWQXxlp6CFhFEpfRaBoR4gfeLc7QV0kvfHHoOMooX2C7HBqc2CG7stPhZcs7A==
+
 range-parser@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
