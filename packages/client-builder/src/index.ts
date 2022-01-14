@@ -34,7 +34,7 @@ export const fetcher = <TRequestBody, TResponseJson>({
         'authorization': `Bearer ${auth.token}`
       } : {}),
       ...(auth?.key ? {
-        'authorization': `Key ${auth.key}`
+        'x-api-key': `Key ${auth.key}`
       } : {})
     }
   }))() as [AxiosError, AxiosResponse<any, any>]
