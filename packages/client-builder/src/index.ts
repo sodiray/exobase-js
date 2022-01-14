@@ -38,9 +38,11 @@ export const fetcher = <TRequestBody, TResponseJson> ({
       } : {})
     }
   }))()
+
   console.log('--> CLIENT BUILDER RESPONSE:')
   console.log(netErr)
   console.log(response)
+  
   if (netErr) {
     console.error(netErr)
   }
