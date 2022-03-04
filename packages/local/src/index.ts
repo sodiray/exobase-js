@@ -1,5 +1,6 @@
 import express from 'express'
 import type { Request, Response } from 'express'
+import type { Server } from 'http'
 import bodyParser from 'body-parser'
 import _ from 'radash'
 import path from 'path'
@@ -75,7 +76,7 @@ export async function start({
   framework?: FrameworkMapper
   json?: boolean
   functions: ModuleFunctionSource[]
-}, cb?: (port: number) => void) {
+}, cb?: (port: number) => Server) {
 
   const api = express()
   if (useJson) api.use(bodyParser.json())
@@ -103,7 +104,7 @@ export async function start({
 
   // Get it poppin bebe
   const p = parseInt(port)
-  api.listen(p, () => {
+  return api.listen(p, () => {
     cb?.(p)
   })
 
