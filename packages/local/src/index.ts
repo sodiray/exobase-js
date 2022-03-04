@@ -76,7 +76,7 @@ export async function start({
   framework?: FrameworkMapper
   json?: boolean
   functions: ModuleFunctionSource[]
-}, cb?: (port: number) => Server) {
+}, cb?: (port: number) => void): Promise<Server> {
 
   const api = express()
   if (useJson) api.use(bodyParser.json())
