@@ -36,22 +36,28 @@ type ModuleFunctionSource = ModuleFunction & {
  * functions. Returns their names and locations
  * as an array.
  */
-export function getFunctionMap(rootPath: string): ModuleFunctionLocation[] {
-  const relPath = (rel: string) => path.join(rootPath, rel)
-  const modules = fs.readdirSync(relPath('/src/modules'), { withFileTypes: true })
+export function getFunctionMap({
+  moduleDirectoryPath,
+  extensions = ['.ts']
+}: {
+  moduleDirectoryPath: string,
+  extensions?: string[]
+}): ModuleFunctionLocation[] {
+  const relPath = (rel: string) => path.join(moduleDirectoryPath, rel)
+  const modules = fs.readdirSync(moduleDirectoryPath, { withFileTypes: true })
     .filter(item => item.isDirectory())
     .map(m => {
-      return fs.readdirSync(relPath(`/src/modules/${m.name}`), { withFileTypes: true })
+      return fs.readdirSync(relPath(m.name), { withFileTypes: true })
         .filter(item => !item.isDirectory())
-        .filter(item => item.name.endsWith('.ts'))
-        .map(tsFile => {
-          const funcName = tsFile.name.replace(/\.ts$/, '')
+        .filter(item => extensions.some(ext => item.name.endsWith(ext)))
+        .map(filePath => {
+          const funcName = filePath.name.replace(path.extname(filePath.name), '')
           return {
             function: funcName,
             module: m.name,
             paths: {
-              file: relPath(`/src/modules/${m.name}/${tsFile.name}`),
-              import: relPath(`/src/modules/${m.name}/${funcName}`)
+              file: relPath(`${m.name}/${filePath.name}`),
+              import: relPath(`${m.name}/${funcName}`)
             }
           }
         }) as ModuleFunctionLocation[]
