@@ -1,5 +1,5 @@
 import _ from 'radash'
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios'
 
 
 export interface ApiError {
@@ -20,14 +20,16 @@ export interface Auth {
 export const fetcher = <TRequestBody, TResponseJson>({
   baseUrl,
   module,
-  function: functionName
+  function: functionName,
+  configure = (x) => x
 }: {
   baseUrl: string
   module: string
   function: string
+  configure?: (options: AxiosRequestConfig<TRequestBody>) => AxiosRequestConfig<TRequestBody>
 }) => async (data: TRequestBody, auth?: Auth): Promise<{ error: ApiError, data: TResponseJson }> => {
   const fullUrl = `${baseUrl}/${module}/${functionName}`
-  const [netErr, response] = await _.try(() => axios.post(fullUrl, data, {
+  const options: AxiosRequestConfig<TRequestBody> = {
     headers: {
       'content-type': 'application/json',
       ...(auth?.token ? {
@@ -37,7 +39,8 @@ export const fetcher = <TRequestBody, TResponseJson>({
         'x-api-key': `Key ${auth.key}`
       } : {})
     }
-  }))() as [AxiosError, AxiosResponse<any, any>]
+  }
+  const [netErr, response] = await _.try(() => axios.post(fullUrl, data, configure(options)))() as [AxiosError, AxiosResponse<any, any>]
   if (netErr) {
     // If the error contains a json body that
     // also contains a valid error
@@ -67,6 +70,6 @@ export const fetcher = <TRequestBody, TResponseJson>({
   }
 }
 
-const api = (baseUrl: string) => _.partob(fetcher, { baseUrl })
+const api = (baseUrl: string, configure?: (options: AxiosRequestConfig) => AxiosRequestConfig) => _.partob(fetcher, { baseUrl, configure })
 
 export default api
