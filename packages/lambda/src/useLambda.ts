@@ -24,12 +24,7 @@ async function lambdaHandler(
   const rid = `r.id.${uuid.v4().substr(0, 7)}`
   const props: exo.Props = exo.initProps(makeReq(event, context))
 
-  console.debug({ message: 'Exo:Lambda Incoming request props', props })
-
   const [error, result] = await _.try<any>(func)(props)
-
-  console.debug({ message: 'Exo:Lambda Function result', result })
-
   if (error) {
     console.error(error)
   }
@@ -38,10 +33,8 @@ async function lambdaHandler(
     ? exo.responseFromError(error)
     : exo.responseFromResult(result)
 
-  console.debug({ message: 'Exo:Lambda Generated response', response })
-
   // @link https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
-  const lambdaResponse = {
+  return {
     body: JSON.stringify(response.body ?? {}),
     isBase64Encoded: false,
     headers: {
@@ -51,10 +44,6 @@ async function lambdaHandler(
     },
     statusCode: response.status
   }
-
-  console.debug({ message: 'Exo:Lambda Generated lambda response', lambdaResponse })
-
-  return lambdaResponse
 }
 
 export const useLambda = () => (func: exo.ApiFunction) => {
