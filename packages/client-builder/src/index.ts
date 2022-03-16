@@ -42,6 +42,7 @@ export const fetcher = <TRequestBody, TResponseJson>({
   }
   const [netErr, response] = await _.try(() => axios.post(fullUrl, data, configure(options)))() as [AxiosError, AxiosResponse<any, any>]
   if (netErr) {
+    console.error(netErr)
     // If the error contains a json body that
     // also contains a valid error
     if (netErr.response?.data?.error) {
