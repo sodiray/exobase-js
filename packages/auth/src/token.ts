@@ -21,7 +21,7 @@ export const create = <ExtraData = {}> ({
   type,
   aud,
   iss,
-  tokenSignatureSecret,
+  secret,
   entity,
   ttl = 1200,
   permissions = [],
@@ -33,7 +33,7 @@ export const create = <ExtraData = {}> ({
   type: 'id' | 'access'
   aud: string
   iss: string
-  tokenSignatureSecret: string
+  secret: string
   entity?: string
   /**
    * Number of seconds from now the token should be considered
@@ -60,6 +60,6 @@ export const create = <ExtraData = {}> ({
     extra: extra ?? {} as ExtraData
   }
 
-  return jwt.sign(payload, tokenSignatureSecret)
+  return jwt.sign(payload, secret)
 
 }
