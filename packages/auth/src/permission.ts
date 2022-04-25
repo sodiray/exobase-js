@@ -33,6 +33,31 @@ export type PermissionAuthorizationOptions = {
   require: Permission[] | ((props: exo.Props) => Promise<Permission[]>)
 }
 
+export const parse = (key: string): Pick<Permission, 'entity' | 'action' | 'scope'> => {
+  const [entity, action, scope] = key.split('::')
+  return { entity, action, scope }
+}
+
+/**
+ * Given a permission key that is required and a permission
+ * key that the user posesses return true if the posessed
+ * key satisfies the required key.
+ * 
+ * This funciton specifically deals with scopes by looking
+ * at the last element of the key (typically :* or :{id}).
+ */
+export const ican = (
+  required: Pick<Permission, 'entity' | 'action' | 'scope'>, 
+  posessed: Pick<Permission, 'entity' | 'action' | 'scope'>
+) => {
+  if (required.entity !== posessed.entity) return false
+  if (required.action !== posessed.action) return false
+  if (!required.scope) return true
+  if (posessed.scope === '*') return true
+  if (required.scope === posessed.scope) return true
+  return false
+}
+
 export async function requirePermissions (options: PermissionAuthorizationOptions, func: exo.ApiFunction, props: exo.Props) {
   const token = props.auth?.token as Token
   if (!token) {
@@ -45,11 +70,11 @@ export async function requirePermissions (options: PermissionAuthorizationOption
   const required = _.isFunction(options.require) 
     ? await (options.require as (props: exo.Props) => Promise<Permission[]>)(props) 
     : options.require as Permission[]
-  for (const { key } of required) {
-    const match = permissions.find(p => p === key)
+  for (const requiredPermission of required) {
+    const match = permissions.find(p => ican(requiredPermission, parse(p)))
     if (!match) {
       throw exo.errors.unauthorized({
-        details: `Missing required permission(${key}) to call this function`,
+        details: `Missing required permission(${requiredPermission.key}) to call this function`,
         key: 'exo.err.auth.permission.missing-permission'
       })
     }
