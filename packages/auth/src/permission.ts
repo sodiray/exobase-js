@@ -16,12 +16,17 @@ export type Permission = {
 * user::{id}::update
 * user::*::update
 */
-export const create = (entity: string, action: string, scope: string, description: string = ''): Permission => ({
+export const create = (
+  entity: string, 
+  action: string, 
+  scope?: string, 
+  description?: string
+): Permission => ({
   entity,
   action,
-  scope,
-  key: `${entity}::${action}::${scope}`,
-  description
+  scope: scope ?? null,
+  key: scope ? `${entity}::${action}::${scope}` : `${entity}::${action}`,
+  description: description ?? ''
 })
 
 export type PermissionAuthorizationOptions = {
