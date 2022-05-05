@@ -67,7 +67,7 @@ const makeReq = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context): 
       }
       return event.body
     })(),
-    method: event.requestContext?.httpMethod,
+    method: event.requestContext?.httpMethod ?? event.httpMethod,
     query: event.queryStringParameters ?? {}
   }
 }
