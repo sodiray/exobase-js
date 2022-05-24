@@ -2,7 +2,6 @@ import _ from 'radash'
 import * as uuid from 'uuid'
 import * as exo from '@exobase/core'
 
-
 const withErrorLogging = <T extends Function>(func: T): T => {
   const withError = async (...args: any[]) => {
     try {
@@ -67,7 +66,7 @@ const makeReq = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context): 
       }
       return event.body
     })(),
-    method: event.requestContext?.httpMethod ?? event.httpMethod,
+    method: event.requestContext?.httpMethod ?? event.httpMethod ?? (event.requestContext as any)?.http?.method ?? '',
     query: event.queryStringParameters ?? {}
   }
 }
