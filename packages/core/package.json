@@ -1,6 +1,6 @@
 {
   "name": "@exobase/core",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Exobase core types and framework functions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
