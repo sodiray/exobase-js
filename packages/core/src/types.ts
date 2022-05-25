@@ -83,6 +83,7 @@ export type Request = {
     body: Record<string, any> | string | null
     method: string
     query: Record<string, string>
+    ip: string
 }
 
 export type Response = {

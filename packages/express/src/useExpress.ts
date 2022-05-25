@@ -86,7 +86,8 @@ const makeReq = (req: Request): ExoRequest => ({
   url: req.originalUrl,
   body: req.body,
   method: req.method,
-  query: req.query as Record<string, string>
+  query: req.query as Record<string, string>,
+  ip: req.socket.remoteAddress
 })
 
 /**
