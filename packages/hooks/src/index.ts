@@ -2,6 +2,7 @@
 import { useService } from './useServices'
 import { useCors } from './useCors'
 import { 
+    useValidation,
     useJsonArgs, 
     useQueryArgs, 
     useHeaderArgs,
@@ -10,7 +11,8 @@ import {
 // EXPORT
 export { useService } from './useServices'
 export { useCors } from './useCors'
-export { 
+export {
+    useValidation,
     useJsonArgs, 
     useQueryArgs, 
     useHeaderArgs,
@@ -21,5 +23,6 @@ export default {
     useService,
     useJsonArgs,
     useQueryArgs,
-    useHeaderArgs
+    useHeaderArgs,
+    useValidation
 }
