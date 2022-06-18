@@ -1,6 +1,6 @@
 {
   "name": "@exobase/hooks",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Exobase utility hooks for typical http/exobase needs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@exobase/core": "^0.0.7",
+    "@exobase/core": "^0.0.8",
     "radash": "^1.1.0",
     "yup": "^0.32.11"
   },

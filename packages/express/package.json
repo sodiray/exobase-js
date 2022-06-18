@@ -1,6 +1,6 @@
 {
   "name": "@exobase/express",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Exobase root hook to handle function running on Express",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -32,7 +32,7 @@
     "typescript": "^4.4.2"
   },
   "dependencies": {
-    "@exobase/core": "^0.0.7",
+    "@exobase/core": "^0.0.8",
     "compression": "^1.7.4",
     "radash": "^1.1.0"
   }
