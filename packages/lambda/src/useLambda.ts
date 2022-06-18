@@ -1,6 +1,7 @@
 import _ from 'radash'
 import * as uuid from 'uuid'
 import * as exo from '@exobase/core'
+import { LambdaRequest } from './types'
 
 const withErrorLogging = <T extends Function>(func: T): T => {
   const withError = async (...args: any[]) => {
@@ -49,7 +50,7 @@ export const useLambda = () => (func: exo.ApiFunction) => {
   return _.partial(withErrorLogging(lambdaHandler), func)
 }
 
-const makeReq = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context): exo.Request => {
+const makeReq = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context): LambdaRequest => {
   const headers = _.lowerize(event.headers ?? {})
   return {
     headers,
@@ -68,6 +69,8 @@ const makeReq = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context): 
     })(),
     method: event.requestContext?.httpMethod ?? event.httpMethod ?? (event.requestContext as any)?.http?.method ?? '',
     query: event.queryStringParameters ?? {},
-    ip: (event.requestContext as any)?.http?.sourceIp ?? event.requestContext?.identity?.sourceIp
+    ip: (event.requestContext as any)?.http?.sourceIp ?? event.requestContext?.identity?.sourceIp,
+    event,
+    context
   }
 }

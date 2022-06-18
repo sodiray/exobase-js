@@ -97,13 +97,19 @@ export type Response = {
 export interface Props <
     ArgType = any, 
     ServiceType = any,
-    AuthType = any
+    AuthType = any,
+    RequestType extends Request = Request
 > {
     auth: AuthType
     args: ArgType
     services: ServiceType
-    req: Request
+    req: RequestType
     response: Response
 }
 
-export type ApiFunction <ArgType = any, ServiceType = any, AuthType = any> = (props: Props<ArgType, ServiceType, AuthType>) => Promise<Response | any>
+export type ApiFunction <
+    ArgType = any, 
+    ServiceType = any, 
+    AuthType = any, 
+    RequestType extends Request = Request
+> = (props: Props<ArgType, ServiceType, AuthType, RequestType>) => Promise<Response | any>
