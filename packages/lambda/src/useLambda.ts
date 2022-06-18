@@ -3,20 +3,13 @@ import * as uuid from 'uuid'
 import * as exo from '@exobase/core'
 import { LambdaRequest } from './types'
 
-const withErrorLogging = <T extends Function>(func: T): T => {
-  const withError = async (...args: any[]) => {
-    try {
-      return await func(...args)
-    } catch (err) {
-      console.error(err)
-      throw err
-    }
-  }
-  return withError as any as T
+export type LambdaOptions = {
+  callbackWaitsForEmptyEventLoop?: boolean
 }
 
 async function lambdaHandler(
   func: exo.ApiFunction,
+  options: LambdaOptions,
   event: AWSLambda.APIGatewayEvent,
   context: AWSLambda.Context
 ) {
@@ -33,6 +26,8 @@ async function lambdaHandler(
     ? exo.responseFromError(error)
     : exo.responseFromResult(result)
 
+  context.callbackWaitsForEmptyEventLoop = options.callbackWaitsForEmptyEventLoop === false ? false : true
+
   // @link https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
   return {
     body: JSON.stringify(response.body ?? {}),
@@ -46,8 +41,8 @@ async function lambdaHandler(
   }
 }
 
-export const useLambda = () => (func: exo.ApiFunction) => {
-  return _.partial(withErrorLogging(lambdaHandler), func)
+export const useLambda = (options?: LambdaOptions) => (func: exo.ApiFunction) => {
+  return _.partial(lambdaHandler, func, options ?? {})
 }
 
 const makeReq = (event: AWSLambda.APIGatewayEvent, context: AWSLambda.Context): LambdaRequest => {
