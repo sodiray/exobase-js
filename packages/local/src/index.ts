@@ -2,7 +2,6 @@ import express from "express";
 import type { Request, Response } from "express";
 import type { Server } from "http";
 import bodyParser from "body-parser";
-import { group } from "radash";
 import type { LocalFrameworkMapper } from "./types";
 import chalk from "chalk";
 
@@ -16,15 +15,16 @@ export async function start(
       toRes: async () => void 0,
     },
     json: useJson = true,
+    import: importFunc,
     functions = [],
   }: {
     port?: string | number;
     framework?: LocalFrameworkMapper;
     json?: boolean;
+    import: (path: string) => Promise<(...args: any[]) => any>;
     functions: {
-      module: string;
-      name: string;
-      function: (...args: any[]) => any;
+      url: string;
+      path: string;
     }[];
   },
   cb?: (port: number) => void
@@ -35,24 +35,17 @@ export async function start(
   // Add each endpoint to the local
   // running express app
   for (const f of functions) {
-    api.all(`/${f.module}/${f.name}`, async (req: Request, res: Response) => {
+    const handler = await importFunc(f.path);
+    api.all(f.url, async (req: Request, res: Response) => {
       const args = await framework.toArgs(req, res);
-      const result = await f.function(...args);
+      const result = await handler(...args);
       framework.toRes(req, res, result);
     });
   }
 
   // Log about it
-  const functionsByModule = Object.values(group(functions, (f) => f.module));
-  for (const [moduleIdx, funcsInModule] of functionsByModule.entries()) {
-    const color = colorAtIdx(moduleIdx);
-    for (const f of funcsInModule) {
-      console.log(
-        `${chalk.gray("|—")} ${color("/" + f.module)}${chalk.gray(
-          "/" + f.name
-        )}`
-      );
-    }
+  for (const f of functions) {
+    console.log(`${chalk.gray("|—")} ${chalk.green(f.url)}`);
   }
 
   // Get it poppin bebe
@@ -61,14 +54,3 @@ export async function start(
     cb?.(p);
   });
 }
-
-const COLORS = [
-  chalk.red.bind(chalk.red),
-  chalk.blue.bind(chalk.blue),
-  chalk.yellowBright.bind(chalk.yellowBright),
-  chalk.magenta.bind(chalk.magenta),
-  chalk.cyan.bind(chalk.cyan),
-  chalk.green.bind(chalk.green),
-];
-
-const colorAtIdx = (idx: number) => COLORS[idx % COLORS.length];
