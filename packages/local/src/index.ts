@@ -15,16 +15,15 @@ export async function start(
       toRes: async () => void 0,
     },
     json: useJson = true,
-    import: importFunc,
     functions = [],
   }: {
     port?: string | number;
     framework?: LocalFrameworkMapper;
     json?: boolean;
-    import: (path: string) => Promise<(...args: any[]) => any>;
     functions: {
       url: string;
       path: string;
+      handler: (...args: any[]) => any
     }[];
   },
   cb?: (port: number) => void
@@ -35,10 +34,9 @@ export async function start(
   // Add each endpoint to the local
   // running express app
   for (const f of functions) {
-    const handler = await importFunc(f.path);
     api.all(f.url, async (req: Request, res: Response) => {
       const args = await framework.toArgs(req, res);
-      const result = await handler(...args);
+      const result = await f.handler(...args);
       framework.toRes(req, res, result);
     });
   }
