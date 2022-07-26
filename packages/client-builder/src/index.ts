@@ -1,6 +1,5 @@
-import _ from 'radash'
+import { try as tryit } from 'radash'
 import axios, { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios'
-
 
 export interface ApiError {
   message: string
@@ -17,18 +16,26 @@ export interface Auth {
   key?: string
 }
 
-export const fetcher = <TRequestBody, TResponseJson>({
-  baseUrl,
-  module,
-  function: functionName,
+export interface Options {
+  configure?: (options: AxiosRequestConfig) => AxiosRequestConfig
+}
+
+const api = (base: string, apiOptions?: Options) => {
+  return (endpoint: string, endpointOptions?: Options) => {
+    return request({
+      url: `${base}${endpoint}`,
+      ...apiOptions,
+      ...endpointOptions
+    })
+  }
+}
+
+export const request = <TRequestBody, TResponseJson>({
+  url,
   configure = (x) => x
-}: {
-  baseUrl: string
-  module: string
-  function: string
-  configure?: (options: AxiosRequestConfig<TRequestBody>) => AxiosRequestConfig<TRequestBody>
+}: Options & {
+  url: string
 }) => async (data: TRequestBody, auth?: Auth): Promise<{ error: ApiError, data: TResponseJson }> => {
-  const fullUrl = `${baseUrl}/${module}/${functionName}`
   const options: AxiosRequestConfig<TRequestBody> = {
     headers: {
       'content-type': 'application/json',
@@ -40,7 +47,9 @@ export const fetcher = <TRequestBody, TResponseJson>({
       } : {})
     }
   }
-  const [netErr, response] = await _.try(() => axios.post(fullUrl, data, configure(options)))() as [AxiosError, AxiosResponse<any, any>]
+  const [netErr, response] = await tryit(() => {
+    return axios.post(url, data, configure(options))
+  })() as [AxiosError, AxiosResponse<any, any>]
   if (netErr) {
     console.error(netErr)
     // If the error contains a json body that
@@ -70,7 +79,5 @@ export const fetcher = <TRequestBody, TResponseJson>({
     error: null
   }
 }
-
-const api = (baseUrl: string, configure?: (options: AxiosRequestConfig) => AxiosRequestConfig) => _.partob(fetcher, { baseUrl, configure })
 
 export default api

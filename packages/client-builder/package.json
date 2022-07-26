@@ -27,6 +27,6 @@
   },
   "dependencies": {
     "axios": "^0.26.1",
-    "radash": "^1.5.2"
+    "radash": "^2.2.1"
   }
 }
