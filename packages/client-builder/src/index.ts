@@ -20,13 +20,15 @@ export interface Options {
   configure?: (options: AxiosRequestConfig) => AxiosRequestConfig
 }
 
+export type RequestFunction<TRequestBody, TResponseJson> = (data: TRequestBody, auth?: Auth) => Promise<{ error: ApiError, data: TResponseJson }>
+
 const api = (base: string, apiOptions?: Options) => {
-  return (endpoint: string, endpointOptions?: Options) => {
+  return <TRequestBody, TResponseJson>(endpoint: string, endpointOptions?: Options) => {
     return request({
       url: `${base}${endpoint}`,
       ...apiOptions,
       ...endpointOptions
-    })
+    }) as RequestFunction<TRequestBody, TResponseJson>
   }
 }
 
@@ -35,7 +37,7 @@ export const request = <TRequestBody, TResponseJson>({
   configure = (x) => x
 }: Options & {
   url: string
-}) => async (data: TRequestBody, auth?: Auth): Promise<{ error: ApiError, data: TResponseJson }> => {
+}): RequestFunction<TRequestBody, TResponseJson> => async (data: TRequestBody, auth?: Auth): Promise<{ error: ApiError, data: TResponseJson }> => {
   const options: AxiosRequestConfig<TRequestBody> = {
     headers: {
       'content-type': 'application/json',
