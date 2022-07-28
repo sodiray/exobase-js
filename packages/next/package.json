@@ -1,0 +1,35 @@
+{
+  "name": "@exobase/next",
+  "version": "0.0.0",
+  "description": "Exobase root hook to handle function running on Next.js api functions",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "author": "rayepps",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --coverage",
+    "check": "yarn lint && yarn test && yarn build",
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^18.6.2",
+    "@types/react-dom": "^18.0.6",
+    "chai": "^4.3.4",
+    "jest": "^27.1.0",
+    "next": "^12.2.3",
+    "ts-jest": "^27.0.5",
+    "tslint": "^6.0.0",
+    "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "@exobase/core": "^0.0.8",
+    "radash": "^3.0.0"
+  }
+}
