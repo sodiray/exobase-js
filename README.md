@@ -42,12 +42,12 @@ export default compose(
 
 See packages in the `/packages` directory.
 
-- The `@exobase/core` package provides the Props type, a functional structure for errors, and a utility for parsing results returned from endpoint functions. It's three files. You could install core only and write your own hooks.
-- The `@exobase/hooks` package provides commonly used hooks to do  CORS, query validation, json validation, header validation, and dependency inversion.
-- The `@exobase/auth` package provides hooks and models useful for wiring up your own authentication.
-- The `@exobase/next` package provides the NextJS root hook useNext that abstracts the NextJS framework.
-- The `@exobase/lambda` package provides the AWS Lambda root hook useLambda that abstracts the AWS Lambda framework.
-- The `@exobase/express` package provides the ExpressJS root hook useExpress that abstracts the ExpressJS framework
+- The [@exobase/core](./packages/core) package provides the Props type, a functional structure for errors, and a utility for parsing results returned from endpoint functions. It's three files. You could install core only and write your own hooks.
+- The [@exobase/hooks](./packages/hooks) package provides commonly used hooks to do  CORS, query validation, json validation, header validation, and dependency inversion.
+- The [@exobase/auth](./packages/auth) package provides hooks and models useful for wiring up your own authentication.
+- The [@exobase/next](./packages/next) package provides the NextJS root hook useNext that abstracts the NextJS framework.
+- The [@exobase/lambda](./packages/lambda) package provides the AWS Lambda root hook useLambda that abstracts the AWS Lambda framework.
+- The [@exobase/express](./packages/express) package provides the ExpressJS root hook useExpress that abstracts the ExpressJS framework
 
 ## Core Concepts
 These concepts are mostly synonymous with the Abstract & Compose design pattern. However, the pattern is a general guide and many implementation details are decided by Exobase.
