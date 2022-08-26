@@ -1,11 +1,26 @@
-# `core`
+# `@exobase/express`
 
-> TODO: description
+> An Exobase root hook for the ExpressJS framework
+
+## Install
+Yarn
+```sh
+yarn add @exobase/express
+```
 
 ## Usage
 
-```
-const core = require('core');
+```ts
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/express'
 
-// TODO: DEMONSTRATE API
+const endpoint = (props: Props) => {
+  console.log(props)
+}
+
+export default compose(
+  useExpress(),
+  endpoint
+)
 ```
