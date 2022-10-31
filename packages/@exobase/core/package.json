@@ -1,0 +1,20 @@
+{
+  "name": "@exobase/core",
+  "version": "1.0.0-rc.1",
+  "description": "Exobase types and hook helper functions",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "repository": {
+    "url": "https://github.com/rayepps/exobase-js"
+  },
+  "author": "rayepps",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --coverage",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  }
+}

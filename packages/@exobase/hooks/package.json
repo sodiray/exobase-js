@@ -1,0 +1,31 @@
+{
+  "name": "@exobase/hooks",
+  "version": "1.0.0-rc.0",
+  "description": "All the Exobase hooks",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "author": "rayepps",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/rayepps/exobase-js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --coverage",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  },
+  "dependencies": {
+    "@exobase/core": "^1.0.0-rc.1",
+    "@exobase/use-api-key": "^1.0.0-rc.0",
+    "@exobase/use-basic-auth": "^1.0.0-rc.0",
+    "@exobase/use-cors": "^1.0.0-rc.0",
+    "@exobase/use-jwt-auth": "^1.0.0-rc.0",
+    "@exobase/use-path-params": "^1.0.0-rc.0",
+    "@exobase/use-route": "^1.0.0-rc.0",
+    "@exobase/use-services": "^1.0.0-rc.0",
+    "@exobase/use-validation": "^1.0.0-rc.0"
+  }
+}

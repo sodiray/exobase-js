@@ -1,0 +1,20 @@
+{
+  "name": "@exobase/use-cors",
+  "version": "1.0.0-rc.0",
+  "description": "Exobase hook for CORS request/response",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "author": "rayepps",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --coverage",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  },
+  "dependencies": {
+    "@exobase/core": "^2.0.0-rc.1"
+  }
+}

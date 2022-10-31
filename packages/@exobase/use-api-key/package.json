@@ -1,0 +1,24 @@
+{
+  "name": "@exobase/use-api-key",
+  "version": "1.0.0-rc.0",
+  "description": "Exobase api key authentication hook",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "author": "rayepps",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/rayepps/exobase-js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --coverage",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  },
+  "dependencies": {
+    "radash": "^7.1.0",
+    "@exobase/core": "^2.0.0-rc.1"
+  }
+}
