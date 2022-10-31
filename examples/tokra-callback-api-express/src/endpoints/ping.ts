@@ -1,5 +1,5 @@
-import type { Props } from 'exobase'
-import { useExpress } from 'exobase-use-express'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
 import { compose } from 'radash'
 import * as t from '../types'
 

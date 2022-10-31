@@ -1,10 +1,6 @@
 import { omit } from 'radash'
 import * as t from './types'
 
-// Used to detect if a thrown error
-// was produced by this module or not
-export const ERROR_TYPE: t.AbstractError['type'] = '@error:json'
-
 /**
  * There is a 1 in 1,000,000,000 chance that someone may
  * return an object with _type equal to '@exobase:response'
@@ -15,7 +11,7 @@ export const isAbstractResponse = (res: any): res is t.AbstractResponse => {
 }
 
 export const isAbstractError = (err: any): err is t.AbstractError => {
-  return (err as t.AbstractError)?.type === ERROR_TYPE
+  return (err as t.AbstractError)?.type === '@error:json'
 }
 
 export const defaultResponse: t.AbstractResponse = {
