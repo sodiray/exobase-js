@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-jwt-auth",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "Exobase authentication hook for JWTs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,7 +18,7 @@
     "@types/jsonwebtoken": "^8.5.6"
   },
   "dependencies": {
-    "jsonwebtoken": "^8.5.1",
-    "@exobase/core": "^2.0.0-rc.1"
+    "@exobase/core": "^2.0.0-rc.1",
+    "jsonwebtoken": "^8.5.1"
   }
 }
