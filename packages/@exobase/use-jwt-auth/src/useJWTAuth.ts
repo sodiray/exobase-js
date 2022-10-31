@@ -1,7 +1,7 @@
-import * as jwt from 'jsonwebtoken'
-import { partial, partob } from 'radash'
 import type { ApiFunction, Props } from '@exobase/core'
 import { error } from '@exobase/core'
+import * as jwt from 'jsonwebtoken'
+import { partial, partob } from 'radash'
 import { Token } from './token'
 
 export interface JWTAuthOptions {

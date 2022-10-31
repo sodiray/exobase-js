@@ -1,6 +1,6 @@
 # `@exobase/use-validation`
 
-> Provides hooks 
+> Provides hooks
 
 ## Install
 
@@ -26,19 +26,23 @@ type Args = {
 }
 
 const createAccount = async ({ args }: Props) => {
-  // await db.users.add({ 
+  // await db.users.add({
   //   username: args.username,
   //   password: args.password
   // })
 }
 
-const STRONG = /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/
+const STRONG =
+  /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/
 
 export default compose(
   useLambda(),
   useJsonArgs(yup => ({
     username: yup.string().required(),
-    password: yup.string().matches(STRONG, { message: 'Password is too weak' }).required()
+    password: yup
+      .string()
+      .matches(STRONG, { message: 'Password is too weak' })
+      .required()
   })),
   createAccount
 )

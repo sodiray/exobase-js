@@ -1,5 +1,5 @@
-import { partial } from 'radash'
 import type { AbstractRequest, ApiFunction, Props } from '@exobase/core'
+import { partial } from 'radash'
 
 type MethodKey = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH' | '*'
 type RouteKey = `/${string}` | '*'

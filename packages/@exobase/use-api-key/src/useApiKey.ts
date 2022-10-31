@@ -1,6 +1,6 @@
-import { isFunction, partial, partob } from 'radash'
 import type { ApiFunction, Props } from '@exobase/core'
 import { error } from '@exobase/core'
+import { isFunction, partial, partob } from 'radash'
 
 type PropsGetter<T> = (props: Props) => Promise<T>
 

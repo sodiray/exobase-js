@@ -1,6 +1,6 @@
-import { partial, partob } from 'radash'
 import type { ApiFunction, Props } from '@exobase/core'
 import { error } from '@exobase/core'
+import { partial, partob } from 'radash'
 
 export type BasicAuth = {
   clientId: string

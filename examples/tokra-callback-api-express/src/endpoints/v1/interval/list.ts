@@ -1,7 +1,7 @@
-import { compose } from 'radash'
 import type { Props } from 'exobase'
 import { useExpress } from 'exobase-use-express'
 import { useServices } from 'exobase-use-services'
+import { compose } from 'radash'
 import makeDatabase, { Database } from '../../../database'
 import * as t from '../../../types'
 import * as mappers from '../../../view/mappers'

@@ -1,5 +1,5 @@
-import { objectify, parallel, partial } from 'radash'
 import type { ApiFunction, Props } from '@exobase/core'
+import { objectify, parallel, partial } from 'radash'
 
 type ServiceMap<TServices> = {
   -readonly [Key in keyof TServices]:

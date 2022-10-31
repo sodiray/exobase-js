@@ -1,6 +1,6 @@
-import { compose } from 'radash'
 import type { Props } from 'exobase'
 import { useNext } from 'exobase-use-next'
+import { compose } from 'radash'
 
 type Args = {}
 type Services = {}

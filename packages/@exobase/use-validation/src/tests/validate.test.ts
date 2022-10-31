@@ -1,5 +1,5 @@
-import { expect, test } from '@jest/globals'
 import type { AbstractRequest, Props } from '@exobase/core'
+import { expect, test } from '@jest/globals'
 import * as yup from 'yup'
 import { validate, withShapeValidation } from '../useValidation'
 

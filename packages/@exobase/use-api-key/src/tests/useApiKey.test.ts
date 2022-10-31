@@ -1,5 +1,5 @@
-import { test } from '@jest/globals'
 import { AbstractRequest, Props } from '@exobase/core'
+import { test } from '@jest/globals'
 import { withApiKey } from '../useApiKey'
 
 test('withApiKey does not throw error given valid key', async () => {

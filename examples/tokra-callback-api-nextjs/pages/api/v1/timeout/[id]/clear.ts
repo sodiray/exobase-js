@@ -1,8 +1,8 @@
-import { compose } from 'radash'
 import type { Props } from 'exobase'
 import { useNext } from 'exobase-use-next'
 import { usePathParams } from 'exobase-use-path-params'
 import { useServices } from 'exobase-use-services'
+import { compose } from 'radash'
 import makeDatabase, { Database } from '../../../../../backend/database'
 import * as t from '../../../../../backend/types'
 
