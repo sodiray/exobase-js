@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-api-key",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Exobase api key authentication hook",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

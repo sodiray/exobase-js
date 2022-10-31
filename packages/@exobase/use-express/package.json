@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-express",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Exobase root hook to handle function running on Express",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

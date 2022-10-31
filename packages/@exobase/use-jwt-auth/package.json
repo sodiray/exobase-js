@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-jwt-auth",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Exobase authentication hook for JWTs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
