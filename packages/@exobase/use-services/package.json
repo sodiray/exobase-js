@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-services",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "Exobase hook to inject services into function",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
