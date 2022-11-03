@@ -1,12 +1,19 @@
 # Exobase
 
-> Be an outsider, rebel against the frameworks that control your code. Stay nimble.
-
-Exobase is an implementation of the Abstract & Compose design pattern, you'll use it to create APIs and backend web services.
+<div align="center">
+  <p align="center">
+    <img src="https://github.com/rayepps/exobase-js/blob/v1-release/banner.png" alt="radash" width="100%" style="border-radius:4px" />
+  </p>
+</div>
+<div>
+  <h3 align="center">
+    Exobase is a Typescript implementation of the <a target="_blank" href="https://medium.com/@rayepps/the-abstract-compose-design-pattern-814756d8e06a">Abstract & Compose design pattern</a>. Use it to create APIs and backend web services.
+  </h3>
+</div>
 
 ## Installation
 
-Exobase is split into a tiny core package and then one package for each hook (learn about hooks here). You'll always need to install at least two packages:
+To keep dependencies lean, Exobase is split into a core package and then one package for each hook (learn about hooks here).
 
 1. First, you'll need that tiny core packages:
 
