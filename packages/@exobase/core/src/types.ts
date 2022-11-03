@@ -32,7 +32,7 @@ export type AbstractRequest = {
 }
 
 export type AbstractResponse = {
-  _type: '@exobase:response'
+  type: '@exobase:response'
   headers: Record<string, string | string[]>
   status: number
   body: any

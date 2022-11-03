@@ -44,7 +44,7 @@ export const create = <ExtraData = {}>({
   provider?: string
 }): string => {
   const payload: Token<ExtraData> = {
-    exp: Math.floor(Date.now() + ttl * 1000),
+    exp: Math.floor((Date.now() + ttl * 1000) / 1000),
     sub,
     iss,
     type,

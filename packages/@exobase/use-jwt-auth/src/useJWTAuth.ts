@@ -1,7 +1,7 @@
 import type { ApiFunction, Props } from '@exobase/core'
 import { error } from '@exobase/core'
 import * as jwt from 'jsonwebtoken'
-import { partial, partob } from 'radash'
+import { partial } from 'radash'
 import { Token } from './token'
 
 export interface JWTAuthOptions {
@@ -13,25 +13,29 @@ export interface JWTAuthOptions {
   secret: string
 }
 
-export const forbidden = partob(error, {
-  message: 'Not Authorized',
-  status: 403,
-  cause: 'FORBIDDEN'
-})
+export const forbidden = (extra: { info: string; key: string }) => {
+  return error({
+    message: 'Not Authorized',
+    status: 403,
+    ...extra
+  })
+}
 
-export const unauthorized = partob(error, {
-  message: 'Not Authenticated',
-  status: 401,
-  cause: 'NOT_AUTHENTICATED'
-})
+export const unauthorized = (extra: { info: string; key: string }) => {
+  return error({
+    message: 'Not Authenticated',
+    status: 401,
+    ...extra
+  })
+}
 
 const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
   const { type, iss, aud, permission, scope } = options
   if (permission) {
     if (!decoded.permissions || !decoded.permissions.includes(permission)) {
       throw forbidden({
-        note: 'Given token does not have required permissions',
-        key: 'exo.err.core.auth.capricornus'
+        info: 'Given token does not have required permissions',
+        key: 'exo.err.jwt.capricornus'
       })
     }
   }
@@ -39,8 +43,8 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
   if (scope) {
     if (!decoded.scopes || !decoded.scopes.includes(scope)) {
       throw forbidden({
-        note: 'Given token does not have required scope',
-        key: 'exo.err.core.auth.caprinaught'
+        info: 'Given token does not have required scope',
+        key: 'exo.err.jwt.caprinaught'
       })
     }
   }
@@ -48,8 +52,8 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
   if (type) {
     if (!decoded.type || decoded.type !== type) {
       throw forbidden({
-        note: 'Given token does not have required type',
-        key: 'exo.err.core.auth.caprorilous'
+        info: 'Given token does not have required type',
+        key: 'exo.err.jwt.caprorilous'
       })
     }
   }
@@ -57,8 +61,8 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
   if (iss) {
     if (!decoded.iss || decoded.iss !== iss) {
       throw forbidden({
-        note: 'Given token does not have required issuer',
-        key: 'exo.err.core.auth.caprisaur'
+        info: 'Given token does not have required issuer',
+        key: 'exo.err.jwt.caprisaur'
       })
     }
   }
@@ -66,8 +70,8 @@ const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
   if (aud) {
     if (!decoded.aud || decoded.aud !== aud) {
       throw forbidden({
-        note: 'Given token does not have required audience',
-        key: 'exo.err.core.auth.halliphace'
+        info: 'Given token does not have required audience',
+        key: 'exo.err.jwt.halliphace'
       })
     }
   }
@@ -91,15 +95,15 @@ export async function withJWTAuth(
   const header = props.request.headers['authorization'] as string
   if (!header) {
     throw unauthorized({
-      note: 'This function requires authentication via a token',
-      key: 'exo.err.core.auth.canes-venatici'
+      info: 'This function requires authentication via a token',
+      key: 'exo.err.jwt.canes-venatici'
     })
   }
 
   if (!header.startsWith('Bearer ')) {
     throw unauthorized({
-      note: 'This function requires an authentication via a token',
-      key: 'exo.err.core.auth.canes-veeticar'
+      info: 'This function requires an authentication via a token',
+      key: 'exo.err.jwt.canes-veeticar'
     })
   }
 
@@ -108,10 +112,16 @@ export async function withJWTAuth(
   const { err, decoded } = await verifyToken(bearerToken, options.secret)
 
   if (err) {
-    console.error('Inavlid token', { err }, 'r.log.core.auth.beiyn')
+    console.error('Inavlid token', { err }, 'r.log.jwt.beiyn')
+    if (err.name === 'TokenExpiredError') {
+      throw forbidden({
+        info: 'Provided token is expired',
+        key: 'exo.err.jwt.expired'
+      })
+    }
     throw forbidden({
-      note: 'Cannot call this function without a valid authentication token',
-      key: 'exo.err.core.auth.canis-major'
+      info: 'Cannot call this function without a valid authentication token',
+      key: 'exo.err.jwt.canis-major'
     })
   }
 

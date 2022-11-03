@@ -2,7 +2,7 @@ import type { ApiFunction, Props } from '@exobase/core'
 import { responseFromError, responseFromResult } from '@exobase/core'
 import { partial, try as tryit } from 'radash'
 
-const DEFAULT_CORS_HEADERS = {
+export const DEFAULT_CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
   'Access-Control-Allow-Headers':
@@ -11,15 +11,19 @@ const DEFAULT_CORS_HEADERS = {
 
 export async function withCors(
   func: ApiFunction,
-  corsHeaders: Record<string, string>,
+  headers: Partial<typeof DEFAULT_CORS_HEADERS> | undefined,
   props: Props
 ) {
+  const headersToApply = {
+    ...DEFAULT_CORS_HEADERS,
+    ...(headers ?? {})
+  }
   if (props.request.method.toLowerCase() === 'options') {
     return {
       ...props.response,
       headers: {
         ...props.response.headers,
-        ...corsHeaders
+        ...headersToApply
       }
     }
   }
@@ -32,12 +36,11 @@ export async function withCors(
     ...response,
     headers: {
       ...response.headers,
-      ...corsHeaders
+      ...headersToApply
     }
   }
 }
 
 export const useCors =
-  (corsHeaders: Record<string, string> = DEFAULT_CORS_HEADERS) =>
-  (func: ApiFunction) =>
-    partial(withCors, func, corsHeaders)
+  (headers?: Partial<typeof DEFAULT_CORS_HEADERS>) => (func: ApiFunction) =>
+    partial(withCors, func, headers)

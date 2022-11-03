@@ -7,7 +7,7 @@ import * as t from './types'
  * and this will break. Nobody do that...
  */
 export const isAbstractResponse = (res: any): res is t.AbstractResponse => {
-  return (res as t.AbstractResponse)?._type === '@exobase:response'
+  return (res as t.AbstractResponse)?.type === '@exobase:response'
 }
 
 export const isAbstractError = (err: any): err is t.AbstractError => {
@@ -15,7 +15,7 @@ export const isAbstractError = (err: any): err is t.AbstractError => {
 }
 
 export const defaultResponse: t.AbstractResponse = {
-  _type: '@exobase:response',
+  type: '@exobase:response',
   status: 200,
   headers: {},
   body: {
