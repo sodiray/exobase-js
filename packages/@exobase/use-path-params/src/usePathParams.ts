@@ -1,22 +1,23 @@
 import type { AbstractRequest, ApiFunction, Props } from '@exobase/core'
 import { error } from '@exobase/core'
-import { partial, partob } from 'radash'
 
 export const parsePathParams = (
   request: Pick<AbstractRequest, 'path'>,
   path: string
 ): Record<string, string> => {
-  const badPathError = partob(error, {
-    cause: 'BAD_PATH_PARAMATER',
-    status: 400,
-    note: `This function can only be called with a path matching ${path}`
-  })
+  const badPathError = (extra: { info: string; key: string }) => {
+    return error({
+      status: 400,
+      note: `This function can only be called with a path matching ${path}`,
+      ...extra
+    })
+  }
   const pathParts = request.path.split('/')
   const requiredParts = path.split('/')
   if (pathParts.length !== requiredParts.length) {
     throw badPathError({
-      key: 'tk.error.path-param',
-      message: 'Endpoint called with invalid path'
+      info: 'Endpoint called with invalid path',
+      key: 'tk.error.path-param'
     })
   }
   const zipped = requiredParts.map((x, i) => [x, pathParts[i]])
@@ -30,8 +31,8 @@ export const parsePathParams = (
     }
     if (requiredPart !== pathPart) {
       throw badPathError({
-        key: 'tk.error.path-param',
-        message: 'Endpoint called with invalid path'
+        info: 'Endpoint called with invalid path',
+        key: 'tk.error.path-param'
       })
     }
   }
@@ -52,6 +53,6 @@ export async function withPathParams(
   })
 }
 
-export const usePathParams = (path: string) => (func: ApiFunction) => {
-  return partial(withPathParams, func, path)
-}
+export const usePathParams =
+  (path: string) => (func: ApiFunction) => (props: Props) =>
+    withPathParams(func, path, props)

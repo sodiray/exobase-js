@@ -1,14 +1,15 @@
 import type { ApiFunction, Props } from '@exobase/core'
 import { error } from '@exobase/core'
-import { isFunction, partial, partob } from 'radash'
+import { isFunction } from 'radash'
 
 type PropsGetter<T> = (props: Props) => Promise<T>
 
-export const unauthorized = partob(error, {
-  message: 'Not Authenticated',
-  status: 401,
-  cause: 'NOT_AUTHENTICATED'
-})
+export const unauthorized = (extra: { info: string; key: string }) =>
+  error({
+    message: 'Not Authenticated',
+    status: 401,
+    ...extra
+  })
 
 export async function withApiKey(
   func: ApiFunction,
@@ -23,7 +24,7 @@ export async function withApiKey(
 
   if (!header) {
     throw unauthorized({
-      note: 'This function requires an api key',
+      info: 'This function requires an api key',
       key: 'exo.err.core.auth.canes-venarias'
     })
   }
@@ -32,7 +33,7 @@ export async function withApiKey(
 
   if (!key || !providedKey || providedKey !== key) {
     throw unauthorized({
-      note: 'Invalid api key',
+      info: 'Invalid api key',
       key: 'exo.err.core.auth.balefeign'
     })
   }
@@ -41,6 +42,7 @@ export async function withApiKey(
 }
 
 export const useApiKey =
-  (key: string | PropsGetter<string>) => (func: ApiFunction) => {
-    return partial(withApiKey, func, key)
-  }
+  (key: string | PropsGetter<string>) =>
+  (func: ApiFunction) =>
+  (props: Props) =>
+    withApiKey(func, key, props)

@@ -1,6 +1,5 @@
 import type { ApiFunction, Props } from '@exobase/core'
 import { error } from '@exobase/core'
-import { partial } from 'radash'
 
 export type BasicAuth = {
   clientId: string
@@ -53,6 +52,5 @@ export async function withBasicAuth(func: ApiFunction, props: Props) {
   })
 }
 
-export const useBasicAuth = () => (func: ApiFunction) => {
-  return partial(withBasicAuth, func)
-}
+export const useBasicAuth = () => (func: ApiFunction) => (props: Props) =>
+  withBasicAuth(func, props)

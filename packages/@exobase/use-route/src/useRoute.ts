@@ -1,5 +1,4 @@
 import type { AbstractRequest, ApiFunction, Props } from '@exobase/core'
-import { partial } from 'radash'
 
 type MethodKey = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH' | '*'
 type RouteKey = `/${string}` | '*'
@@ -49,4 +48,5 @@ export async function withRoute<TServices>(
 export const useRoute =
   (methodKey: MethodKey, routeKey: RouteKey, endpointFunction: Function) =>
   (func: ApiFunction) =>
-    partial(withRoute, func, methodKey, routeKey, endpointFunction)
+  (props: Props) =>
+    withRoute(func, methodKey, routeKey, endpointFunction, props)
