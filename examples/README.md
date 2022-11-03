@@ -10,10 +10,10 @@ To understand the true power of Exobase, I recommend opening the endpoints for t
 
 No matter the underlying architecture or framework each example will have the same endpoints:
 
-| Method | Path                      | Description                                                                                                                       |
-| ------ | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/ping`                   | A health check endpoint that always returns pong                                                                                  |
-| POST   | `/v1/timeout`             | Create a new timeout. When the timeout is up, a request will be made back to the caller using the information posted.             |
-| GET    | `/v1/timeout`             | Get all active timeouts                                                                                                           |
-| GET    | `/v1/timeout/{id}`        | Get a timeout by id                                                                                                               |
-| PUT    | `/v1/timeout/{id}/clear`  | Clear a timeout by id                                                                                                             |
+| Method | Path                     | Description                                                                                                           |
+| ------ | ------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/ping`                  | A health check endpoint that always returns pong                                                                      |
+| POST   | `/v1/timeout`            | Create a new timeout. When the timeout is up, a request will be made back to the caller using the information posted. |
+| GET    | `/v1/timeout`            | Get all active timeouts                                                                                               |
+| GET    | `/v1/timeout/{id}`       | Get a timeout by id                                                                                                   |
+| PUT    | `/v1/timeout/{id}/clear` | Clear a timeout by id                                                                                                 |

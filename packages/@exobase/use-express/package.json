@@ -26,8 +26,9 @@
     "express": "^4.18.1"
   },
   "dependencies": {
-    "@exobase/core": "^2.0.0-rc.1",
-    "compression": "^1.7.4"
+    "@exobase/core": "^1.0.0-rc.5",
+    "compression": "^1.7.4",
+    "radash": "^9.0.1"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
 }

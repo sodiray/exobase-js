@@ -6,8 +6,14 @@
     "packages/@exobase/*"
   ],
   "scripts": {
+    "bootstrap": "yarn && lerna bootstrap --use-workspaces && lerna exec yarn && lerna link",
     "build": "lerna run build",
-    "clean": "lerna run clean",
+    "clean": "yarn clean:packages && yarn clean:tld",
+    "clean:tld": "rm -rf node_modules && rm -rf coverage",
+    "clean:packages": "yarn clean:packages:nm && yarn clean:packages:dist && yarn clean:packages:coverage",
+    "clean:packages:nm": "lerna exec -- rm -rf node_modules",
+    "clean:packages:dist": "lerna exec -- rm -rf dist",
+    "clean:packages:coverage": "lerna exec -- rm -rf coverage",
     "test": "jest --coverage",
     "format": "prettier --write \"**/*.{ts,md}\""
   },

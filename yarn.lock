@@ -311,13 +311,6 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@exobase/core@^2.0.0-rc.1":
-  version "2.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@exobase/core/-/core-2.0.0-rc.1.tgz#00019eed26d3932f850d95146821972b9146fc81"
-  integrity sha512-3p6ZDNVVatuUwFWUvwU/MhjElO49O9IAcNh5mrW/jqoHaCSZ0ol1oW2k7kMgyTxCBWKZjkuOeZjR4Mpi4Zwy1w==
-  dependencies:
-    radash "^7.1.0"
-
 "@gar/promisify@^1.0.1":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
@@ -5566,11 +5559,6 @@ quick-lru@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
-
-radash@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/radash/-/radash-7.1.0.tgz#b6da541c678368ab3a1f3702057342e944599e92"
-  integrity sha512-NOWTaF5YMY3mCgrNq9Fw9fK8yvJv92uqRb2StcVq5W8kcJ6949EbV2vk6nLJKAocYs29rzJafZZP1lFkEkoVGw==
 
 radash@^9.0.1:
   version "9.0.1"

@@ -1,14 +1,14 @@
 import type { ApiFunction, Props } from '@exobase/core'
 import { error } from '@exobase/core'
-import { partial, partob } from 'radash'
 import * as yup from 'yup'
 import { KeyOfType, Yup } from './types'
 
-const validationFailed = partob(error, {
-  message: 'Json body validation failed',
-  status: 400,
-  cause: 'INVALID_INPUT'
-})
+const validationFailed = (extra: { info: string; key: string }) =>
+  error({
+    message: 'Json body validation failed',
+    status: 400,
+    ...extra
+  })
 
 export const validate = async (model: any, args: any) =>
   await model.validate(args, {
@@ -28,7 +28,7 @@ export const withShapeValidation = async (
     validArgs = await validate(model, getArgs(props))
   } catch (err: any) {
     throw validationFailed({
-      note: err?.message ?? '',
+      info: err?.message ?? '',
       key: 'lune.api.err.core.args.baradoor'
     })
   }
@@ -48,5 +48,5 @@ export const useValidation =
   ) =>
   (func: ApiFunction) => {
     const model = yup.object(shapeMaker(yup))
-    return partial(withShapeValidation, func, model, getData)
+    return (props: Props) => withShapeValidation(func, model, getData, props)
   }

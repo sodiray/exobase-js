@@ -30,10 +30,9 @@ describe('parsePathParams', () => {
         return null
       }
     const p = caught(parse)
-    const CAUSE = 'BAD_PATH_PARAMATER'
-    expect(p('/v1/show/{workspace}/account/{account}')?.cause).toBe(CAUSE)
-    expect(p('/v1/show/{workspace}')?.cause).toBe(CAUSE)
-    expect(p('/v1/show/{workspace}/account')?.cause).toBe(CAUSE)
-    expect(p('/v1/show')?.cause).toBe(CAUSE)
+    expect(p('/v1/show/{workspace}/account/{account}')?.key).not.toBeNull()
+    expect(p('/v1/show/{workspace}')?.key).not.toBeNull()
+    expect(p('/v1/show/{workspace}/account')?.key).not.toBeNull()
+    expect(p('/v1/show')?.key).not.toBeNull()
   })
 })
