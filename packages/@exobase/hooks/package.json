@@ -1,6 +1,6 @@
 {
   "name": "@exobase/hooks",
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0-rc.4",
   "description": "All the Exobase hooks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,11 +21,11 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.4",
+    "@exobase/core": "^1.0.0-rc.5",
     "@exobase/use-api-key": "^1.0.0-rc.3",
-    "@exobase/use-basic-auth": "^1.0.0-rc.3",
-    "@exobase/use-cors": "^1.0.0-rc.3",
-    "@exobase/use-jwt-auth": "^1.0.0-rc.3",
+    "@exobase/use-basic-auth": "^1.0.0-rc.4",
+    "@exobase/use-cors": "^1.0.0-rc.4",
+    "@exobase/use-jwt-auth": "^1.0.0-rc.4",
     "@exobase/use-path-params": "^1.0.0-rc.3",
     "@exobase/use-route": "^1.0.0-rc.3",
     "@exobase/use-services": "^1.0.0-rc.3",

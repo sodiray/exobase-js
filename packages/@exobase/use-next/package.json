@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-next",
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0-rc.4",
   "description": "Exobase root hook to handle function running on Next.js api functions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
     "next": "^12.2.3"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.4"
+    "@exobase/core": "^1.0.0-rc.5"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
 }
