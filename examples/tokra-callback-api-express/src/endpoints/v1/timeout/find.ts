@@ -1,4 +1,5 @@
 import type { Props } from '@exobase/core'
+import { error } from '@exobase/core'
 import { useExpress } from '@exobase/use-express'
 import { usePathParams } from '@exobase/use-path-params'
 import { useServices } from '@exobase/use-services'

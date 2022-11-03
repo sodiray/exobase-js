@@ -8,9 +8,9 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "exobase": "^0.0.1-rc.3",
-    "exobase-hooks": "^0.0.1-rc.2",
-    "exobase-use-lambda": "^0.0.1-rc.4",
+    "@exobase/core": "^1.0.0-rc.4",
+    "@exobase/hooks": "^1.0.0-rc.3",
+    "@exobase/use-lambda": "^1.0.0-rc.3",
     "uuid": "^9.0.0"
   }
 }

@@ -9,15 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@exobase/core": "^1.0.0-rc.4",
+    "@exobase/hooks": "^1.0.0-rc.3",
+    "@exobase/use-next": "^1.0.0-rc.3",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "exobase": "^0.0.1-rc.3",
-    "exobase-use-next": "^0.0.1-rc.2",
-    "exobase-use-path-params": "^0.0.1-rc.1",
-    "exobase-use-route": "^0.0.1-rc.1",
-    "exobase-use-services": "^0.0.1-rc.2",
-    "exobase-use-validation": "^0.0.1-rc.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

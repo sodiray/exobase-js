@@ -21,17 +21,17 @@
   resolved "https://registry.yarnpkg.com/@exobase/core/-/core-1.0.0-rc.3.tgz#f21b2d9bc37ab9f70d27435122ccfe7ffefe77ad"
   integrity sha512-0oerihBZTKd1v06EUn0zSd/bDxMTKOrHQQTLL7BMcaDcNvVXEIC4+ZPoj+VSWIt68gVkgs/V72PCsXXwompHlg==
 
+"@exobase/core@^1.0.0-rc.4":
+  version "1.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@exobase/core/-/core-1.0.0-rc.4.tgz#2933dcb681c46a13bfad07cd8b5a0add2a89d0c4"
+  integrity sha512-4FqVvhWz7ubTUrronxYCWx7TlWAo6Sexq4gPNP3D6ln7CXyUQSfHOd4yVfuRxAMfJFTyV2PunUmRKAoUUzkgyA==
+
 "@exobase/core@^2.0.0-rc.1":
   version "2.0.0-rc.1"
   resolved "https://registry.yarnpkg.com/@exobase/core/-/core-2.0.0-rc.1.tgz#00019eed26d3932f850d95146821972b9146fc81"
   integrity sha512-3p6ZDNVVatuUwFWUvwU/MhjElO49O9IAcNh5mrW/jqoHaCSZ0ol1oW2k7kMgyTxCBWKZjkuOeZjR4Mpi4Zwy1w==
   dependencies:
     radash "^7.1.0"
-
-"@exobase/core@next":
-  version "1.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@exobase/core/-/core-1.0.0-rc.1.tgz#b256871a6ec1df2028ae86f9c8edd645d901dcc3"
-  integrity sha512-TfheBYRsr9Q+Ropf16nh6DhNPCxiWdCIYBJ12qgx75d9j/bMyJFC//JTIktmzEocdH1hhxFaYIELyBGAGZuJHg==
 
 "@exobase/hooks@next":
   version "1.0.0-rc.2"
