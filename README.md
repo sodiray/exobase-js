@@ -34,7 +34,7 @@ yarn add @exobase/use-path-params
 yarn add @exobase/use-route
 ```
 
-> If you don't want to deal with a bunch of packages you can install `exobase-hooks` with `yarn add exobase-hooks` which provides all of the hook packages in one.
+> If you don't want to deal with a bunch of packages you can install `exobase-hooks` with `yarn add @exobase/hooks` which provides all of the hook packages in one.
 
 See the packages section below for a list of all the packages available and how to use them.
 
