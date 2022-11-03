@@ -1,6 +1,6 @@
 # Exobase
 
-> Rebel against the frameworks that control our code and companies.
+> Be an outsider, rebel against the frameworks that control your code. Stay nimble.
 
 Exobase is an implementation of the Abstract & Compose design pattern, you'll use it to create APIs and backend web services.
 
@@ -11,7 +11,7 @@ Exobase is split into a tiny core package and then one package for each hook (le
 1. First, you'll need that tiny core packages:
 
 ```sh
-yarn add exobase
+yarn add @exobase/core
 ```
 
 2. Second, you'll want the root hook that will act like a hypervisor for the framework you're running on. _i.e. if you're running on Express, you'll need to install the express root hook_ `@exobase/use-express`)
