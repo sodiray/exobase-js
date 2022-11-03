@@ -7,9 +7,9 @@
     "dev": "ts-node src/app.ts"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.4",
-    "@exobase/hooks": "next",
-    "@exobase/use-express": "next",
+    "@exobase/core": "^1.0.0-rc.6",
+    "@exobase/hooks": "^1.0.0-rc.5",
+    "@exobase/use-express": "^1.0.0-rc.4",
     "express": "^4.18.1",
     "uuid": "^9.0.0"
   },

@@ -41,27 +41,3 @@ functions:
       - httpApi:
           path: /v1/timeout/{id}/clear
           method: put
-  v1CreateInterval:
-    handler: src/endpoints/v1/interval/create.default
-    events:
-      - httpApi:
-          path: /v1/interval
-          method: post
-  v1ListIntervals:
-    handler: src/endpoints/v1/interval/list.default
-    events:
-      - httpApi:
-          path: /v1/interval
-          method: get
-  v1FindInterval:
-    handler: src/endpoints/v1/interval/find.default
-    events:
-      - httpApi:
-          path: /v1/interval/{id}
-          method: get
-  v1ClearInterval:
-    handler: src/endpoints/v1/interval/clear.default
-    events:
-      - httpApi:
-          path: /v1/interval/{id}/clear
-          method: put

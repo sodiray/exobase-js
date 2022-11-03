@@ -1,6 +1,6 @@
 import type { Props } from '@exobase/core'
+import { useServices } from '@exobase/hooks'
 import { useExpress } from '@exobase/use-express'
-import { useServices } from '@exobase/use-services'
 import { compose } from 'radash'
 import makeDatabase, { Database } from '../../../database'
 import * as t from '../../../types'

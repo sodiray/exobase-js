@@ -3,107 +3,97 @@
 
 
 "@babel/runtime@^7.15.4":
-  version "7.19.0"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.19.0.tgz#22b11c037b094d27a8a2504ea4dcff00f50e2259"
-  integrity sha512-eR8Lo9hnDS7tqkO7NsV+mKvCmv5boaXFSZ70DnfhcgiEne8hv9oCEd36Klw74EtizEqLsy4YnW8UWwpBVolHZA==
+  version "7.20.1"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.20.1.tgz#1148bb33ab252b165a06698fde7576092a78b4a9"
+  integrity sha512-mrzLkl6U9YLF8qpqI7TB82PESyEGjm/0Ly91jG575eVxMMlb8fYfOXFZIJ8XfLrJZQbm7dlKry2bJmXBUEkdFg==
   dependencies:
-    regenerator-runtime "^0.13.4"
+    regenerator-runtime "^0.13.10"
 
-"@exobase/core@^1.0.0-rc.4":
+"@exobase/core@^1.0.0-rc.6":
+  version "1.0.0-rc.6"
+  resolved "https://registry.yarnpkg.com/@exobase/core/-/core-1.0.0-rc.6.tgz#b091ad0fc7c6f229b913168fc578ff8c02b55fdd"
+  integrity sha512-i6elM2VgVW37gWoBVraAS/svizui/nueSlb3aukStnIpTDCHC4viKN5neJ27NkRKhSuvguuppRNjJBcDbjDKnA==
+
+"@exobase/hooks@^1.0.0-rc.5":
+  version "1.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@exobase/hooks/-/hooks-1.0.0-rc.5.tgz#834580d51d1f04d45251a12223cf83cb00ea1cd7"
+  integrity sha512-jaIW81VA5xscNSohXA9Vw6JqZNPHVMlNKndNMAh3euUb6rG7SthD6cpHXvFhoPXferXv1PoB49xgm2JBViSExg==
+  dependencies:
+    "@exobase/core" "^1.0.0-rc.6"
+    "@exobase/use-api-key" "^1.0.0-rc.4"
+    "@exobase/use-basic-auth" "^1.0.0-rc.5"
+    "@exobase/use-cors" "^1.0.0-rc.5"
+    "@exobase/use-jwt-auth" "^1.0.0-rc.5"
+    "@exobase/use-path-params" "^1.0.0-rc.4"
+    "@exobase/use-route" "^1.0.0-rc.4"
+    "@exobase/use-services" "^1.0.0-rc.4"
+    "@exobase/use-validation" "^1.0.0-rc.4"
+
+"@exobase/use-api-key@^1.0.0-rc.4":
   version "1.0.0-rc.4"
-  resolved "https://registry.yarnpkg.com/@exobase/core/-/core-1.0.0-rc.4.tgz#2933dcb681c46a13bfad07cd8b5a0add2a89d0c4"
-  integrity sha512-4FqVvhWz7ubTUrronxYCWx7TlWAo6Sexq4gPNP3D6ln7CXyUQSfHOd4yVfuRxAMfJFTyV2PunUmRKAoUUzkgyA==
-
-"@exobase/core@^2.0.0-rc.1":
-  version "2.0.0-rc.1"
-  resolved "https://registry.yarnpkg.com/@exobase/core/-/core-2.0.0-rc.1.tgz#00019eed26d3932f850d95146821972b9146fc81"
-  integrity sha512-3p6ZDNVVatuUwFWUvwU/MhjElO49O9IAcNh5mrW/jqoHaCSZ0ol1oW2k7kMgyTxCBWKZjkuOeZjR4Mpi4Zwy1w==
+  resolved "https://registry.yarnpkg.com/@exobase/use-api-key/-/use-api-key-1.0.0-rc.4.tgz#c0621f85e13ed3ad8855fcf05523ec946f6df0f0"
+  integrity sha512-IOC7EzxNkbqvgOeKiFvAB3N9erKuwdcYnYNCyNDesnoacuzH/QXkKwHG7mNe7t2MgbCfOM2qeu2CE5ZHWI1/Sw==
   dependencies:
-    radash "^7.1.0"
+    "@exobase/core" "^1.0.0-rc.6"
+    radash "^9.0.1"
 
-"@exobase/hooks@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/hooks/-/hooks-1.0.0-rc.3.tgz#8190d6978921f0736ada03c0d44c1fe640116e16"
-  integrity sha512-12Y9riAQLAhZ8ZGxsQ0LGnB05sL/MqAb8AOu6/oh+QzLYqI8IfQsEmfepiCihJgp50m237uiV8e8gcwkf+YPNw==
+"@exobase/use-basic-auth@^1.0.0-rc.5":
+  version "1.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@exobase/use-basic-auth/-/use-basic-auth-1.0.0-rc.5.tgz#dfa48a408e5f8802be29474b138b73c32ef2b68e"
+  integrity sha512-8X6hw5ZL/YfxC54JfGbDjVGWt9saLjeiHnREn92w0Ao8KHfv/N3HG1K/XMP+F96YrlZRKtDgzChbJl3jMjG+mQ==
   dependencies:
-    "@exobase/core" "^1.0.0-rc.4"
-    "@exobase/use-api-key" "^1.0.0-rc.3"
-    "@exobase/use-basic-auth" "^1.0.0-rc.3"
-    "@exobase/use-cors" "^1.0.0-rc.3"
-    "@exobase/use-jwt-auth" "^1.0.0-rc.3"
-    "@exobase/use-path-params" "^1.0.0-rc.3"
-    "@exobase/use-route" "^1.0.0-rc.3"
-    "@exobase/use-services" "^1.0.0-rc.3"
-    "@exobase/use-validation" "^1.0.0-rc.3"
+    "@exobase/core" "^1.0.0-rc.6"
 
-"@exobase/use-api-key@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-api-key/-/use-api-key-1.0.0-rc.3.tgz#20542137970bac75ecd76ece5fcbd2c28da9c032"
-  integrity sha512-2J4hC6cX9UuFVskc4Cj2W+SDw43NDSTylIcNkMK3yo7Z2T9xjlTM9RBJ/GDokzZhuglOLmdHqSOFgrZvOmN9vw==
+"@exobase/use-cors@^1.0.0-rc.5":
+  version "1.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@exobase/use-cors/-/use-cors-1.0.0-rc.5.tgz#68414090a7e4482880e48ee4f6bc08821b0585ed"
+  integrity sha512-V2zVjQGFlhRZAWmD6m85OvACc0bVhd1p1dZzM2StXae6mr+rJii92GenXZDjgnMZxeIVQtwpW4CHBFj9VXYEIA==
   dependencies:
-    "@exobase/core" "^2.0.0-rc.1"
-    radash "^7.1.0"
+    "@exobase/core" "^1.0.0-rc.6"
 
-"@exobase/use-basic-auth@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-basic-auth/-/use-basic-auth-1.0.0-rc.3.tgz#345125cf5295606f0dff8be5dc357e849a7218ab"
-  integrity sha512-2c8l/GbCPVIHOIYbT0mDDuy8zfsdZG677pCpUq6nqK7yxQ+3oF8VueQ7vDuWjersBsKbxom1zJYNa2tD+JPcBA==
+"@exobase/use-jwt-auth@^1.0.0-rc.5":
+  version "1.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@exobase/use-jwt-auth/-/use-jwt-auth-1.0.0-rc.5.tgz#edc4f8e78332fcd21921778ea1681c0c633c4ed6"
+  integrity sha512-Uj4c6mTtAMoHNb6+VrK9Ipzli4NGiXEouJPRbvd8QzNh80EBiFu6V+F0HqaPledhcsBqZx9BOcc7D0umtmTmRA==
   dependencies:
-    "@exobase/core" "^2.0.0-rc.1"
-    radash "^7.1.0"
-
-"@exobase/use-cors@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-cors/-/use-cors-1.0.0-rc.3.tgz#06bd1b31d06942db67cf646fac73d3772f03f5f3"
-  integrity sha512-vlZrVl7zJahZyk4X7SsTP5oPo+eqVvBlO4jcEhfmuHEt8MeNlwgAplZ8OWqX10/aKQSVMCLUrQgL4iyCXuX4Sw==
-  dependencies:
-    "@exobase/core" "^2.0.0-rc.1"
-
-"@exobase/use-jwt-auth@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-jwt-auth/-/use-jwt-auth-1.0.0-rc.3.tgz#4e58482d22b6efac08b377c91cac1d6fc2a7a6c6"
-  integrity sha512-SBNi8tMQ/9jcADffaPXvTj9DUjDtALOTkJ4RZtjyNdvr5MpfjEG1JxuRgZ05MT2QfAGjth5sYRFRWyBBLcSxXQ==
-  dependencies:
-    "@exobase/core" "^2.0.0-rc.1"
+    "@exobase/core" "^1.0.0-rc.6"
     jsonwebtoken "^8.5.1"
 
-"@exobase/use-lambda@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-lambda/-/use-lambda-1.0.0-rc.3.tgz#9ece28d61f23f6fe18b9956611d6f29915fade08"
-  integrity sha512-UPxgU5eg4inDRe5q6shFJ31gzcHXHDAHowomepkXxB9tLq0p/Z2nV2t89aFYm+qwplFSIPHW5lEdLeCoPqZIng==
+"@exobase/use-lambda@^1.0.0-rc.4":
+  version "1.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@exobase/use-lambda/-/use-lambda-1.0.0-rc.4.tgz#00f12d2f700d2b37e66235a34179a5e8adc185ed"
+  integrity sha512-iGqKPmT5xceL177KJb/jitoF8+YjlFQYH0J2o/OU8yQV4lK0zzcjseIb/QTk40Jo4bdFN0567rE90sjTuUtiNw==
   dependencies:
-    "@exobase/core" "^2.0.0-rc.1"
+    "@exobase/core" "^1.0.0-rc.6"
 
-"@exobase/use-path-params@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-path-params/-/use-path-params-1.0.0-rc.3.tgz#a4901186e1546f2197558ad978fa9f3d7af1614c"
-  integrity sha512-6CyNk+X1eW7hP/NU7A6L91u9UTdkM8WxL+0/dlvDGCPz8wBg63mjngW4aOEApJJmmEvo6UkSvlR0rU40Hy3Cmg==
+"@exobase/use-path-params@^1.0.0-rc.4":
+  version "1.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@exobase/use-path-params/-/use-path-params-1.0.0-rc.4.tgz#54a268d19c2c4fc5434390507ba26055810079a4"
+  integrity sha512-7xtEZngWZ6X3cUpgOVZM6R9crTyNojjmC7XIohU2yIIgY3JDoWXhEu5ygpnjjAgtRUia2NgnLaFh2I+GhP13IA==
   dependencies:
-    "@exobase/core" "^2.0.0-rc.1"
-    radash "^7.1.0"
+    "@exobase/core" "^1.0.0-rc.6"
 
-"@exobase/use-route@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-route/-/use-route-1.0.0-rc.3.tgz#976edbab5ba92695acfa8bcc439f6350f4ec7455"
-  integrity sha512-vOSeRb6BsszRTXOQkNSsp8gZDmDNOmVtjO2tfl7nQhKmP3DmzHH13XQpnPArvkRGciWE7o+U1//fUuwVFTUidw==
+"@exobase/use-route@^1.0.0-rc.4":
+  version "1.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@exobase/use-route/-/use-route-1.0.0-rc.4.tgz#1254522ed43fa98582e59dcecaf60c01d23cae75"
+  integrity sha512-NJ0kVVEyo4MUAii2tZ9FWtPA+lIN+0wXLA9Niiv46eLPFTEAuQ1qJZzJQ2MrVLp9BFFPXFvB5dXeRx0Go/b7ow==
   dependencies:
-    "@exobase/core" "^2.0.0-rc.1"
-    radash "^7.1.0"
+    "@exobase/core" "^1.0.0-rc.6"
 
-"@exobase/use-services@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-services/-/use-services-1.0.0-rc.3.tgz#4875788f733b6ea5ca8b57c0107233d3d664834b"
-  integrity sha512-T+e51BlzTqL0sTVdjyeRi7Y3yU6RGedrRw5OcwIbqg4Cb5iVL9SkHEwaR0dWl0GuuM6GXN3BsVTLwUmcVDmU6A==
+"@exobase/use-services@^1.0.0-rc.4":
+  version "1.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@exobase/use-services/-/use-services-1.0.0-rc.4.tgz#ea6716d0489a6089e9c00007f7e2a813ce6a224e"
+  integrity sha512-oTxh4TC9zdSyCUoGBBqUZB6NhtaK4Q+GtmB1sz0mwb8j+qk80ji9C42q0HYtNTgSnCmpqdBgs5TB0hzoLN33Fg==
   dependencies:
-    "@exobase/core" "^2.0.0-rc.1"
-    radash "^7.1.0"
+    "@exobase/core" "^1.0.0-rc.6"
+    radash "^9.0.1"
 
-"@exobase/use-validation@^1.0.0-rc.3":
-  version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-validation/-/use-validation-1.0.0-rc.3.tgz#ad9ff068bf1187615ee9d19f4003d570e108b4c0"
-  integrity sha512-QKNozhz548k47ena+9o/OuPn/9jLGQBcMndW2d6CoIbH8zHpAk9yl+H9VBbnoj5LqxKg8AI5iYTkd2QgRoFjxQ==
+"@exobase/use-validation@^1.0.0-rc.4":
+  version "1.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@exobase/use-validation/-/use-validation-1.0.0-rc.4.tgz#a097253393df190e19643c3a0e3e8be61a268ae3"
+  integrity sha512-7YHx/KVbfwLLxOfLXiuHsWnjbJLG1hduaFrsKmXPsRZsoQLYAUhhEwlN5R4MuYJCWha0c/INj0wduc46iu1uyA==
   dependencies:
-    "@exobase/core" "^2.0.0-rc.1"
+    "@exobase/core" "^1.0.0-rc.6"
     yup "^0.32.11"
 
 "@nodelib/fs.scandir@2.1.5":
@@ -136,9 +126,9 @@
     "@types/node" "*"
 
 "@types/lodash@^4.14.175":
-  version "4.14.186"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.186.tgz#862e5514dd7bd66ada6c70ee5fce844b06c8ee97"
-  integrity sha512-eHcVlLXP0c2FlMPm56ITode2AgLMSa6aJ05JTTbYbI+7EMkCEE5qk2E41d5g2lCVTqRe0GnnRFurmlCsDODrPw==
+  version "4.14.187"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.187.tgz#122ff0a7192115b4c1a19444ab4482caa77e2c9d"
+  integrity sha512-MrO/xLXCaUgZy3y96C/iOsaIqZSeupyTImKClHunL5GrmaiII2VwvWmLBu2hwa0Kp0sV19CsyjtrTc/Fx8rg/A==
 
 "@types/minimatch@*":
   version "5.1.2"
@@ -463,15 +453,15 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-radash@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/radash/-/radash-7.1.0.tgz#b6da541c678368ab3a1f3702057342e944599e92"
-  integrity sha512-NOWTaF5YMY3mCgrNq9Fw9fK8yvJv92uqRb2StcVq5W8kcJ6949EbV2vk6nLJKAocYs29rzJafZZP1lFkEkoVGw==
+radash@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/radash/-/radash-9.0.1.tgz#3ac8967f72a71ddbe84998237d397b1ed047e57c"
+  integrity sha512-fkyeC97QsYT+YVzpF6Gb0wYWFMMZ36VWzCt5wW8oG+NCn/e1hiz/7oiBX1s2+hC5oLAlBZtEh3Jmw1Yq0Txfsg==
 
-regenerator-runtime@^0.13.4:
-  version "0.13.9"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
-  integrity sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==
+regenerator-runtime@^0.13.10:
+  version "0.13.10"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.10.tgz#ed07b19616bcbec5da6274ebc75ae95634bfc2ee"
+  integrity sha512-KepLsg4dU12hryUO7bp/axHAKvwGOCV0sGloQtpagJ12ai+ojVDqkeGSiRX1zlq+kjIMZ1t7gpze+26QqtdGqw==
 
 reusify@^1.0.4:
   version "1.0.4"

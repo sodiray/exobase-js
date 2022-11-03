@@ -1,5 +1,5 @@
-import type { Props } from 'exobase'
-import { useLambda } from 'exobase-use-lambda'
+import type { Props } from '@exobase/core'
+import { useLambda } from '@exobase/use-lambda'
 import { compose } from 'radash'
 
 type Args = {}
