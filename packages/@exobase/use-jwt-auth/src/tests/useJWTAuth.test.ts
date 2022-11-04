@@ -1,10 +1,33 @@
 import { describe, expect, test } from '@jest/globals'
 import * as tu from '../token'
-import { withJWTAuth } from '../useJWTAuth'
+import { useJWTAuth, withJWTAuth } from '../useJWTAuth'
 
 const SECRET = 'unknown'
 
 describe('useJWTAuth hook function', () => {
+  test('executes withJWTAuth function', async () => {
+    const token = tu.create({
+      secret: SECRET,
+      sub: 'test',
+      type: 'id',
+      aud: 'test',
+      iss: 'test'
+    })
+    const sut = useJWTAuth({
+      secret: SECRET
+    })
+    const result = await sut(async () => 'success')({
+      request: {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      } as any
+    } as any)
+    expect(result).toBe('success')
+  })
+})
+
+describe('withJWTAuth function', () => {
   test('returns func result for success', async () => {
     const token = tu.create({
       secret: SECRET,

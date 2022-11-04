@@ -53,9 +53,9 @@ export const responseFromError = (error: any): t.AbstractResponse => {
         ? omit(error, ['type'])
         : {
             key: 'err.unknown',
+            status: 500,
             message: 'Unknown Error',
-            cause: 'UNKNOWN',
-            note: 'This one is on us, we apologize. The issue has been logged and our development team will be working on a fix asap.'
+            info: 'The issue has been logged and our development team will be working on a fix asap.'
           }
     }
   }
