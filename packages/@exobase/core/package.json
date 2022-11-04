@@ -1,6 +1,6 @@
 {
   "name": "@exobase/core",
-  "version": "1.0.0-rc.7",
+  "version": "1.0.0-rc.6",
   "description": "Exobase types and hook helper functions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
