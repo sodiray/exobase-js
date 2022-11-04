@@ -2,7 +2,7 @@
 
 <div align="center">
   <p align="center">
-    <img src="https://github.com/rayepps/exobase-js/blob/v1-release/banner.png" alt="radash" width="100%" style="border-radius:4px" />
+    <img src="https://github.com/rayepps/exobase-js/blob/master/banner.png" alt="radash" width="100%" style="border-radius:4px" />
   </p>
 </div>
 <div>
