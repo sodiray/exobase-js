@@ -136,7 +136,7 @@ export async function withJWTAuth(
   })
 }
 
-export type TokenAuth<ExtraData = any> = {
+export type TokenAuth<ExtraData = Record<string, string>> = {
   token: Token<ExtraData>
 }
 

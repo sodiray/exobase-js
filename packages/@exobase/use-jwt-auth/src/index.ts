@@ -1,2 +1,2 @@
-export { create as createToken } from './token'
-export { useJWTAuth } from './useJWTAuth'
+export * from './token'
+export * from './useJWTAuth'

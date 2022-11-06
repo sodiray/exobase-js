@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken'
 
-export type Token<ExtraData = any> = {
+export type Token<ExtraData = Record<string, string>> = {
   exp: number
   sub: string
   iss: string
@@ -14,7 +14,7 @@ export type Token<ExtraData = any> = {
   extra?: ExtraData
 }
 
-export const create = <ExtraData = {}>({
+export const createToken = <ExtraData = {}>({
   sub,
   type,
   aud,
