@@ -53,34 +53,6 @@ export type Props<
   framework: TFramework
 }
 
-export type InitHook = (
-  func: (...args: any[]) => Promise<any>
-) => (...args: any[]) => Promise<any>
-
-export type RootHook<
-  TInitArgs extends any[],
-  TCurrentArgs extends {},
-  TCurrentServices extends {},
-  TCurrentAuth extends {}
-> = (
-  func: (
-    props: Props<TCurrentArgs, TCurrentServices, TCurrentAuth>
-  ) => Promise<any>
-) => (...args: TInitArgs) => Promise<any>
-
-export type Hook<
-  TNextArgs extends {},
-  TNextServices extends {},
-  TNextAuth extends {},
-  TRequiredServices extends {},
-  TRequiredAuth extends {},
-  TRequiredArgs extends {}
-> = (
-  func: (props: Props<TNextArgs, TNextServices, TNextAuth>) => Promise<any>
-) => (
-  props: Props<TRequiredArgs, TRequiredServices, TRequiredAuth>
-) => Promise<any>
-
 export type Handler<TProps extends Props = Props, TResult = any> = (
   props: TProps
 ) => Promise<TResult>
