@@ -27,7 +27,7 @@ const endpoint = (props: Props) => {
 
 An endpoint function can return any object as the result. If the result is an `AnbstractResponse` object it should be parsed and applied with all specified headers, body, and status. If the result is any other object it should be treated as the json body and returned as such in the response.
 
-The core package gives you a few small helpers to deal with these results that are not always known. A function can throw an error, return an `AbstractResponse` object, or return any other object. In almost any case, all of these need to be converted to an `AbstractResponse` so they can be applied to a framework.
+The core package gives you a few small helpers to deal with these results that are not always known. A function can throw an error, return an `Response` object, or return any other object. In almost any case, all of these need to be converted to an `Response` so they can be applied to a framework.
 
 For an example, see the source for the `useExpress` hook.
 
@@ -36,5 +36,5 @@ import { props, responseFromError, responseFromResult } from '@exobase/core'
 ```
 
 - `props` is a helper you can use in a root hook to generate the initial `Props` object. Think of it like a constructor.
-- `responseFromError` will convert an error object into an `AbstractResponse`, handling error objects and unkonwn errors.
-- `responseFromResult` will convert a function's result into an `AbstractResponse`, handling both cases mentioned above.
+- `responseFromError` will convert an error object into an `Response`, handling error objects and unkonwn errors.
+- `responseFromResult` will convert a function's result into an `Response`, handling both cases mentioned above.

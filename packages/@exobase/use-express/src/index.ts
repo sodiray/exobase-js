@@ -1,2 +1,1 @@
-export { useExpress } from './useExpress'
-export type { ExpressFunctionOptions } from './useExpress'
+export * from './useExpress'

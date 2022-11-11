@@ -1,26 +1,32 @@
-import type { ApiFunction, Props } from '@exobase/core'
+import type { Handler, Props } from '@exobase/core'
 import { error } from '@exobase/core'
 import { isFunction } from 'radash'
 
-type PropsGetter<T> = (props: Props) => Promise<T>
+type PropsGetter<TProps extends Props, TResult> = (
+  props: TProps
+) => Promise<TResult>
 
-export const unauthorized = (extra: { info: string; key: string }) =>
+export type ApiKeyAuth = {
+  apiKey: string
+}
+
+const unauthorized = (extra: { info: string; key: string }) =>
   error({
     message: 'Not Authenticated',
     status: 401,
     ...extra
   })
 
-export async function withApiKey(
-  func: ApiFunction,
-  keyFunc: string | PropsGetter<string>,
-  props: Props
+export async function withApiKey<TProps extends Props>(
+  func: Handler<TProps & { auth: TProps['auth'] & ApiKeyAuth }>,
+  keyFunc: string | PropsGetter<TProps, string>,
+  props: TProps
 ) {
   const header = props.request.headers['x-api-key'] as string
 
   const key = !isFunction(keyFunc)
     ? keyFunc
-    : await (keyFunc as PropsGetter<string>)(props)
+    : await (keyFunc as PropsGetter<TProps, string>)(props)
 
   if (!header) {
     throw unauthorized({
@@ -38,11 +44,18 @@ export async function withApiKey(
     })
   }
 
-  return await func(props)
+  return await func({
+    ...props,
+    auth: {
+      ...props.auth,
+      apiKey: providedKey
+    }
+  })
 }
 
-export const useApiKey =
-  (key: string | PropsGetter<string>) =>
-  (func: ApiFunction) =>
-  (props: Props) =>
-    withApiKey(func, key, props)
+export const useApiKey: <TProps extends Props>(
+  keyOrFunc: string | PropsGetter<TProps, string>
+) => (
+  func: Handler<TProps & { auth: TProps['auth'] & ApiKeyAuth }>
+) => Handler<TProps> = keyOrFunc => func => props =>
+  withApiKey(func, keyOrFunc, props)

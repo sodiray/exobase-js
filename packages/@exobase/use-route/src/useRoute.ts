@@ -1,10 +1,10 @@
-import type { AbstractRequest, ApiFunction, Props } from '@exobase/core'
+import type { Handler, Props, Request } from '@exobase/core'
 
 type MethodKey = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH' | '*'
 type RouteKey = `/${string}` | '*'
 
 export const isMatch = (
-  request: Pick<AbstractRequest, 'method' | 'path'>,
+  request: Pick<Request, 'method' | 'path'>,
   methodKey: MethodKey,
   routeKey: RouteKey
 ): boolean => {
@@ -33,20 +33,22 @@ export const isMatch = (
   return true
 }
 
-export async function withRoute<TServices>(
-  func: ApiFunction,
+export async function withRoute<TProps extends Props>(
+  func: Handler<TProps>,
   methodKey: MethodKey,
   routeKey: RouteKey,
   endpointFunction: Function,
-  props: Props
+  props: TProps
 ) {
   if (isMatch(props.request, methodKey, routeKey))
     return await endpointFunction(props)
   else return await func(props)
 }
 
-export const useRoute =
-  (methodKey: MethodKey, routeKey: RouteKey, endpointFunction: Function) =>
-  (func: ApiFunction) =>
-  (props: Props) =>
+export const useRoute: <TProps extends Props>(
+  methodKey: MethodKey,
+  routeKey: RouteKey,
+  endpointFunction: Function
+) => (func: Handler<TProps>) => Handler<TProps> =
+  (methodKey, routeKey, endpointFunction) => func => props =>
     withRoute(func, methodKey, routeKey, endpointFunction, props)

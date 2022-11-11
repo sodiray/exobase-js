@@ -1,1 +1,1 @@
-export { usePathParams } from './usePathParams'
+export * from './usePathParams'

@@ -1,5 +1,6 @@
-import type { ApiFunction, Props } from '@exobase/core'
+import type { Handler, Props } from '@exobase/core'
 import { error } from '@exobase/core'
+import { tryit } from 'radash'
 import * as yup from 'yup'
 import { KeyOfType, Yup } from './types'
 
@@ -17,16 +18,17 @@ export const validate = async (model: any, args: any) =>
     abortEarly: true
   })
 
-export const withShapeValidation = async (
-  func: ApiFunction,
+export const withShapeValidation = async <
+  TArgs extends {},
+  TProps extends Props
+>(
+  func: Handler<TProps & { args: TProps['args'] & TArgs }>,
   model: any,
   getArgs: (props: Props) => Record<string, any>,
-  props: Props
+  props: TProps
 ) => {
-  let validArgs = {}
-  try {
-    validArgs = await validate(model, getArgs(props))
-  } catch (err: any) {
+  const [err, validArgs] = await tryit(validate)(model, getArgs(props))
+  if (err) {
     throw validationFailed({
       info: err?.message ?? '',
       key: 'lune.api.err.core.args.baradoor'
@@ -41,12 +43,12 @@ export const withShapeValidation = async (
   })
 }
 
-export const useValidation =
-  <TArgs = any>(
-    getData: (props: Props) => any,
-    shapeMaker: (yup: Yup) => KeyOfType<TArgs, any>
-  ) =>
-  (func: ApiFunction) => {
-    const model = yup.object(shapeMaker(yup))
-    return (props: Props) => withShapeValidation(func, model, getData, props)
-  }
+export const useValidation: <TArgs extends {}, TProps extends Props>(
+  getData: (props: Props) => any,
+  shapeMaker: (yup: Yup) => KeyOfType<TArgs, any>
+) => (
+  func: Handler<TProps & { args: TProps['args'] & TArgs }>
+) => Handler<TProps> = (getData, shapeMaker) => func => {
+  const model = yup.object(shapeMaker(yup))
+  return props => withShapeValidation(func, model, getData, props)
+}

@@ -1,4 +1,4 @@
-import type { AbstractRequest, Props } from '@exobase/core'
+import type { Request, Props } from '@exobase/core'
 import { expect, test } from '@jest/globals'
 import * as yup from 'yup'
 import { validate, withShapeValidation } from '../useValidation'
@@ -35,7 +35,7 @@ test('validate casts valid model', async () => {
 })
 
 test('withShapeValidation applies model attributes to args', async () => {
-  const mockHandlerFn = (props: Props) => props.args
+  const mockHandlerFn = async (props: Props) => props.args
   const getArgs = (props: Props) => props.request.query
   const props: Pick<Props, 'request'> = {
     request: {
@@ -43,7 +43,7 @@ test('withShapeValidation applies model attributes to args', async () => {
         id: 22,
         name: 'mock-nmame'
       }
-    } as unknown as AbstractRequest
+    } as unknown as Request
   }
   const args = await withShapeValidation(
     mockHandlerFn,

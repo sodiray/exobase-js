@@ -6,15 +6,15 @@ import * as t from './types'
  * return an object with _type equal to '@exobase:response'
  * and this will break. Nobody do that...
  */
-export const isAbstractResponse = (res: any): res is t.AbstractResponse => {
-  return (res as t.AbstractResponse)?.type === '@exobase:response'
+export const isResponse = (res: any): res is t.Response => {
+  return (res as t.Response)?.type === '@exobase:response'
 }
 
 export const isAbstractError = (err: any): err is t.AbstractError => {
   return (err as t.AbstractError)?.type === '@error:json'
 }
 
-export const defaultResponse: t.AbstractResponse = {
+export const defaultResponse: t.Response = {
   type: '@exobase:response',
   status: 200,
   headers: {},
@@ -23,8 +23,8 @@ export const defaultResponse: t.AbstractResponse = {
   }
 }
 
-export const responseFromResult = (result: any): t.AbstractResponse => {
-  if (isAbstractResponse(result)) return result
+export const responseFromResult = (result: any): t.Response => {
+  if (isResponse(result)) return result
   // If nothing was returned then return the default
   // success response
   // Else, the func returned something that should be
@@ -39,8 +39,8 @@ export const responseFromResult = (result: any): t.AbstractResponse => {
   }
 }
 
-export const responseFromError = (error: any): t.AbstractResponse => {
-  if (isAbstractResponse(error)) return error
+export const responseFromError = (error: any): t.Response => {
+  if (isResponse(error)) return error
   // Else its some generic error, wrap it in our
   // error object as an unknown error
   return {

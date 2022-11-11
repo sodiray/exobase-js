@@ -1,20 +1,29 @@
-import type {
-  AbstractRequest,
-  AbstractResponse,
-  ApiFunction
-} from '@exobase/core'
+import type { Handler, Props, Request, Response } from '@exobase/core'
 import { props, responseFromError, responseFromResult } from '@exobase/core'
 import makeCompressionMiddleware from 'compression'
-import type { NextFunction, Request, Response } from 'express'
+import type {
+  NextFunction,
+  Request as ExpressRequest,
+  Response as ExpressResponse
+} from 'express'
 import { json as makeJsonMiddleware } from 'express'
-import { partial, sift, try as tryit } from 'radash'
+import { sift, try as tryit } from 'radash'
 
 type ExpressMiddlewareFunc = (
-  req: Request,
-  res: Response,
+  req: ExpressRequest,
+  res: ExpressResponse,
   next: NextFunction
 ) => void
-type InvertedMiddlewareFunc = (req: Request, res: Response) => Promise<Request>
+
+type InvertedMiddlewareFunc = (
+  req: ExpressRequest,
+  res: ExpressResponse
+) => Promise<ExpressRequest>
+
+export type ExpressFramework = {
+  req: ExpressRequest
+  res: ExpressResponse
+}
 
 export type ExpressFunctionOptions = {
   skipJson?: boolean
@@ -34,30 +43,37 @@ const makeMiddleware = (options: ExpressFunctionOptions) => {
 }
 
 export async function withExpress(
-  func: ApiFunction,
+  func: Handler<Props & { framework: ExpressFramework }>,
   options: ExpressFunctionOptions,
-  req: Request,
-  res: Response
+  req: ExpressRequest,
+  res: ExpressResponse
 ) {
   const middleware = composeMiddleware(...makeMiddleware(options))
   const reqAfterMiddlware = await middleware(req, res)
 
-  const [error, result] = await tryit<any>(func)(
-    props(makeReq(reqAfterMiddlware))
-  )
+  const [error, result] = await tryit(func)({
+    ...props(makeReq(reqAfterMiddlware)),
+    framework: {
+      req,
+      res
+    }
+  })
   if (error) console.error(error)
 
   const response = error ? responseFromError(error) : responseFromResult(result)
   setResponse(res, response)
 }
 
-export const useExpress =
-  (options: ExpressFunctionOptions = {}) =>
-  (func: ApiFunction) =>
-    partial(withExpress, func, options)
+export const useExpress: (
+  options?: ExpressFunctionOptions
+) => (
+  func: Handler<Props & { framework: ExpressFramework }>
+) => (req: ExpressRequest, res: ExpressResponse) => Promise<any> =
+  options => func => (req, res) =>
+    withExpress(func, options ?? {}, req, res)
 
-export function setResponse(res: Response, response: AbstractResponse) {
-  const { body, status = 200, headers = {} } = response as AbstractResponse
+export function setResponse(res: ExpressResponse, response: Response) {
+  const { body, status = 200, headers = {} } = response as Response
   res.status(status)
   for (const [key, val] of Object.entries(headers)) {
     res.set(key, val)
@@ -65,7 +81,7 @@ export function setResponse(res: Response, response: AbstractResponse) {
   res.json(body)
 }
 
-const makeReq = (req: Request): AbstractRequest => ({
+const makeReq = (req: ExpressRequest): Request => ({
   headers: req.headers as Record<string, string | string[]>,
   url: req.originalUrl,
   path: req.path,
@@ -100,7 +116,7 @@ function invertMiddleware(
 function composeMiddleware(
   ...funcs: InvertedMiddlewareFunc[]
 ): InvertedMiddlewareFunc {
-  return async (req: Request, res: Response) => {
+  return async (req: ExpressRequest, res: ExpressResponse) => {
     let r = req
     for (const func of funcs) {
       r = await func(r, res)

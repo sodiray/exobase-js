@@ -1,6 +1,6 @@
-import type { ApiFunction, Props } from '@exobase/core'
+import type { Handler, Props } from '@exobase/core'
 import { responseFromError, responseFromResult } from '@exobase/core'
-import { partial, try as tryit } from 'radash'
+import { try as tryit } from 'radash'
 
 export const DEFAULT_CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -9,10 +9,10 @@ export const DEFAULT_CORS_HEADERS = {
     'X-CSRF-Token, X-Requested-With, Authorization, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
 }
 
-export async function withCors(
-  func: ApiFunction,
+export async function withCors<TProps extends Props>(
+  func: Handler<TProps>,
   headers: Partial<typeof DEFAULT_CORS_HEADERS> | undefined,
-  props: Props
+  props: TProps
 ) {
   const headersToApply = {
     ...DEFAULT_CORS_HEADERS,
@@ -41,6 +41,7 @@ export async function withCors(
   }
 }
 
-export const useCors =
-  (headers?: Partial<typeof DEFAULT_CORS_HEADERS>) => (func: ApiFunction) =>
-    partial(withCors, func, headers)
+export const useCors: <TProps extends Props>(
+  headers?: Partial<typeof DEFAULT_CORS_HEADERS>
+) => (func: Handler<TProps>) => Handler<TProps> = headers => func => props =>
+  withCors(func, headers, props)

@@ -1,16 +1,17 @@
-import type { ApiFunction, Props } from '@exobase/core'
-import { objectify, parallel, partial } from 'radash'
+import type { Handler, Props } from '@exobase/core'
+import { isFunction, objectify, parallel } from 'radash'
 
 type ServiceMap<TServices> = {
   -readonly [Key in keyof TServices]:
+    | TServices[Key]
     | ((props: Props) => Promise<TServices[Key]>)
     | ((props: Props) => TServices[Key])
 }
 
-export async function withServices<TServices>(
-  func: ApiFunction,
+export async function withServices<TServices, TProps extends Props>(
+  func: Handler<TProps & { services: TProps['services'] & TServices }>,
   serviceFunctionsByKey: ServiceMap<TServices>,
-  props: Props
+  props: TProps
 ) {
   const serviceList = await parallel(
     10,
@@ -19,7 +20,9 @@ export async function withServices<TServices>(
       const serviceOrFunction = serviceFunctionsByKey[key]
       return {
         key,
-        value: await Promise.resolve(serviceOrFunction(props))
+        value: isFunction(serviceOrFunction)
+          ? await Promise.resolve(serviceOrFunction(props))
+          : serviceOrFunction
       }
     }
   )
@@ -27,7 +30,8 @@ export async function withServices<TServices>(
     serviceList,
     s => s.key,
     s => s.value
-  )
+  ) as unknown as TServices
+
   return await func({
     ...props,
     services: {
@@ -37,7 +41,9 @@ export async function withServices<TServices>(
   })
 }
 
-export const useServices =
-  <TServices>(serviceFunctionsByKey: ServiceMap<TServices>) =>
-  (func: ApiFunction) =>
-    partial(withServices, func, serviceFunctionsByKey)
+export const useServices: <TServices, TProps extends Props = Props>(
+  serviceFunctionsByKey: ServiceMap<TServices>
+) => (
+  func: Handler<TProps & { services: TProps['services'] & TServices }>
+) => Handler<TProps> = serviceFunctionsByKey => func => props =>
+  withServices(func, serviceFunctionsByKey, props)

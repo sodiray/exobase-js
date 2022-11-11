@@ -1,4 +1,4 @@
-import type { ApiFunction, Props } from '@exobase/core'
+import type { Handler, Props } from '@exobase/core'
 import { error } from '@exobase/core'
 
 export type BasicAuth = {
@@ -14,7 +14,10 @@ export const unauthenticated = (extra: { info: string; key: string }) => {
   })
 }
 
-export async function withBasicAuth(func: ApiFunction, props: Props) {
+export async function withBasicAuth<TProps extends Props>(
+  func: Handler<TProps & { auth: TProps['auth'] & BasicAuth }>,
+  props: TProps
+) {
   const header = props.request.headers['authorization'] as string
   if (!header) {
     throw unauthenticated({
@@ -52,5 +55,6 @@ export async function withBasicAuth(func: ApiFunction, props: Props) {
   })
 }
 
-export const useBasicAuth = () => (func: ApiFunction) => (props: Props) =>
-  withBasicAuth(func, props)
+export const useBasicAuth: <TProps extends Props>() => (
+  func: Handler<TProps & { auth: TProps['auth'] & BasicAuth }>
+) => Handler<TProps> = () => func => props => withBasicAuth(func, props)

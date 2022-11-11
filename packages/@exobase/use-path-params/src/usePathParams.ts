@@ -1,8 +1,8 @@
-import type { AbstractRequest, ApiFunction, Props } from '@exobase/core'
+import type { Handler, Props, Request } from '@exobase/core'
 import { error } from '@exobase/core'
 
 export const parsePathParams = (
-  request: Pick<AbstractRequest, 'path'>,
+  request: Pick<Request, 'path'>,
   path: string
 ): Record<string, string> => {
   const badPathError = (extra: { info: string; key: string }) => {
@@ -39,20 +39,24 @@ export const parsePathParams = (
   return params
 }
 
-export async function withPathParams(
-  func: ApiFunction,
+export async function withPathParams<TProps extends Props>(
+  func: Handler<TProps & { args: TProps['args'] & Record<string, string> }>,
   path: string,
-  props: Props
+  props: TProps
 ) {
   const params = parsePathParams(props.request, path)
   return await func({
     ...props,
     args: {
+      ...props.args,
       ...params
     }
   })
 }
 
-export const usePathParams =
-  (path: string) => (func: ApiFunction) => (props: Props) =>
-    withPathParams(func, path, props)
+export const usePathParams: <TProps extends Props>(
+  path: string
+) => (
+  func: Handler<TProps & { args: TProps['args'] & Record<string, string> }>
+) => Handler<TProps> = path => func => props =>
+  withPathParams(func, path, props)

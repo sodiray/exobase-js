@@ -1,21 +1,25 @@
-import type {
-  AbstractRequest,
-  AbstractResponse,
-  ApiFunction
-} from '@exobase/core'
+import type { Handler, Props, Request, Response } from '@exobase/core'
 import { props, responseFromError, responseFromResult } from '@exobase/core'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { partial, try as tryit } from 'radash'
+import { try as tryit } from 'radash'
 
 export type NextFunctionOptions = {}
 
+export type NextFramework = {
+  req: NextApiRequest
+  res: NextApiResponse
+}
+
 export async function withNext(
-  func: ApiFunction,
+  func: Handler<Props & { framework: NextFramework }>,
   options: NextFunctionOptions,
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const [error, result] = await tryit(func)(props(makeReq(req)))
+  const [error, result] = await tryit(func)({
+    ...props(makeReq(req)),
+    framework: { req, res }
+  })
   if (error) {
     console.error(error)
   }
@@ -23,13 +27,16 @@ export async function withNext(
   setResponse(res, response)
 }
 
-export const useNext =
-  (options: NextFunctionOptions = {}) =>
-  (func: ApiFunction) =>
-    partial(withNext, func, options)
+export const useNext: (
+  options?: NextFunctionOptions
+) => (
+  func: Handler<Props & { framework: NextFramework }>
+) => (req: NextApiRequest, res: NextApiResponse) => Promise<any> =
+  options => func => (req, res) =>
+    withNext(func, options ?? {}, req, res)
 
-export function setResponse(res: NextApiResponse, response: AbstractResponse) {
-  const { body, status = 200, headers = {} } = response as AbstractResponse
+export function setResponse(res: NextApiResponse, response: Response) {
+  const { body, status = 200, headers = {} } = response as Response
   res.status(status)
   for (const [key, val] of Object.entries(headers)) {
     res.setHeader(key, val)
@@ -37,7 +44,7 @@ export function setResponse(res: NextApiResponse, response: AbstractResponse) {
   res.json(body)
 }
 
-const makeReq = (req: NextApiRequest): AbstractRequest => ({
+const makeReq = (req: NextApiRequest): Request => ({
   headers: req.headers as Record<string, string | string[]>,
   url: req.url ?? '/',
   body: req.body,

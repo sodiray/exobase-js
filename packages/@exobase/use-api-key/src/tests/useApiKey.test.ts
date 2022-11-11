@@ -1,4 +1,4 @@
-import { AbstractRequest, Props } from '@exobase/core'
+import { Props, Request } from '@exobase/core'
 import { describe, test } from '@jest/globals'
 import { useApiKey, withApiKey } from '../useApiKey'
 
@@ -10,7 +10,7 @@ describe('useApiKey hook', () => {
         headers: {
           'x-api-key': 'Key mock-secret'
         }
-      } as unknown as AbstractRequest
+      } as unknown as Request
     }
     const sut = useApiKey('mock-secret')
     await sut(mockFn)(mockProps as Props)
@@ -25,7 +25,7 @@ describe('withApiKey function', () => {
         headers: {
           'x-api-key': 'Key mock-secret'
         }
-      } as unknown as AbstractRequest
+      } as unknown as Request
     }
     await withApiKey(mockFn, 'mock-secret', mockProps as Props)
   })
@@ -37,7 +37,7 @@ describe('withApiKey function', () => {
         headers: {
           /** no api key header **/
         }
-      } as unknown as AbstractRequest
+      } as unknown as Request
     }
     try {
       await withApiKey(mockFn, 'mock-secret', mockProps as Props)
@@ -54,7 +54,7 @@ describe('withApiKey function', () => {
         headers: {
           'x-api-key': 'wrong-mock-secret'
         }
-      } as unknown as AbstractRequest
+      } as unknown as Request
     }
     try {
       await withApiKey(mockFn, 'mock-secret', mockProps as Props)

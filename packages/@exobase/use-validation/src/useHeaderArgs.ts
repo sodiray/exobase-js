@@ -1,11 +1,10 @@
-import type { ApiFunction, Props } from '@exobase/core'
-import { partial } from 'radash'
+import type { Handler, Props } from '@exobase/core'
 import { KeyOfType, Yup } from './types'
 import { useValidation } from './useValidation'
 
-export const useHeaderArgs = partial(
-  useValidation,
-  (props: Props) => props.request.headers
-) as <TArgs = any>(
+export const useHeaderArgs: <TArgs extends {}, TProps extends Props>(
   shapeMaker: (yup: Yup) => KeyOfType<TArgs, any>
-) => (func: ApiFunction) => ApiFunction
+) => (
+  func: Handler<TProps & { args: TProps['args'] & TArgs }>
+) => Handler<TProps> = shapeMaker =>
+  useValidation(props => props.request.headers, shapeMaker)

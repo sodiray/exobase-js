@@ -1,2 +1,1 @@
-// IMPORT
-export { useRoute } from './useRoute'
+export * from './useRoute'

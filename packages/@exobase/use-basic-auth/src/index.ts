@@ -1,2 +1,1 @@
-export { useBasicAuth } from './useBasicAuth'
-export type { BasicAuth } from './useBasicAuth'
+export * from './useBasicAuth'

@@ -92,7 +92,7 @@ describe('withCors function', () => {
   test('handles error from next func', async () => {
     const result = await withCors(
       async () => {
-        throw new Error('testing')
+        throw new Error("Ignore this, it's OK, expected to log when testing")
       },
       undefined,
       {

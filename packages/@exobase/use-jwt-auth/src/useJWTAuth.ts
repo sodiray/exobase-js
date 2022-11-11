@@ -1,7 +1,6 @@
-import type { ApiFunction, Props } from '@exobase/core'
+import type { Handler, Props } from '@exobase/core'
 import { error } from '@exobase/core'
 import * as jwt from 'jsonwebtoken'
-import { partial } from 'radash'
 import { Token } from './token'
 
 export interface JWTAuthOptions {
@@ -13,7 +12,11 @@ export interface JWTAuthOptions {
   secret: string
 }
 
-export const forbidden = (extra: { info: string; key: string }) => {
+export type JWTAuth = {
+  token: Token
+}
+
+const forbidden = (extra: { info: string; key: string }) => {
   return error({
     message: 'Not Authorized',
     status: 403,
@@ -21,7 +24,7 @@ export const forbidden = (extra: { info: string; key: string }) => {
   })
 }
 
-export const unauthorized = (extra: { info: string; key: string }) => {
+const unauthorized = (extra: { info: string; key: string }) => {
   return error({
     message: 'Not Authenticated',
     status: 401,
@@ -87,10 +90,10 @@ const verifyToken = async (
   return { err, decoded }
 }
 
-export async function withJWTAuth(
-  func: ApiFunction,
+export async function withJWTAuth<TProps extends Props>(
+  func: Handler<TProps & { auth: TProps['auth'] & JWTAuth }>,
   options: JWTAuthOptions,
-  props: Props
+  props: TProps
 ) {
   const header = props.request.headers['authorization'] as string
   if (!header) {
@@ -140,6 +143,9 @@ export type TokenAuth<ExtraData = Record<string, string>> = {
   token: Token<ExtraData>
 }
 
-export const useJWTAuth = (options: JWTAuthOptions) => (func: ApiFunction) => {
-  return partial(withJWTAuth, func, options)
-}
+export const useJWTAuth: <TProps extends Props>(
+  options: JWTAuthOptions
+) => (
+  func: Handler<TProps & { auth: TProps['auth'] & JWTAuth }>
+) => Handler<TProps> = options => func => props =>
+  withJWTAuth(func, options, props)

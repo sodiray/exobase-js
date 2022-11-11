@@ -1,19 +1,33 @@
-import type { ApiFunction } from '@exobase/core'
+import type { Handler, Props, Request } from '@exobase/core'
 import { props, responseFromError, responseFromResult } from '@exobase/core'
-import { isString, lowerize, partial, try as tryit } from 'radash'
-import type { LambdaRequest } from './types'
+import { Context } from 'aws-lambda'
+import { isString, lowerize, try as tryit } from 'radash'
+
+export type LambdaRequest<TEvent = any> = Request & {
+  event: TEvent
+  context: Context
+}
 
 export type LambdaOptions = {}
 
+export type LambdaFramework = {
+  event: AWSLambda.APIGatewayProxyEvent
+  context: AWSLambda.Context
+}
+
 export async function withLambda(
-  func: ApiFunction,
+  func: Handler<Props & { framework: LambdaFramework }>,
   options: LambdaOptions,
   event: AWSLambda.APIGatewayEvent,
   context: AWSLambda.Context
 ) {
-  const [error, result] = await tryit<any>(func)(
-    props(makeRequest(event, context))
-  )
+  const [error, result] = await tryit(func)({
+    ...props(makeRequest(event, context)),
+    framework: {
+      event,
+      context
+    }
+  })
   if (error) {
     console.error(error)
   }
@@ -32,9 +46,15 @@ export async function withLambda(
   }
 }
 
-export const useLambda = (options?: LambdaOptions) => (func: ApiFunction) => {
-  return partial(withLambda, func, options ?? {})
-}
+export const useLambda: (
+  options?: LambdaOptions
+) => (
+  func: Handler<Props & { framework: LambdaFramework }>
+) => (
+  event: AWSLambda.APIGatewayProxyEvent,
+  context: AWSLambda.Context
+) => Promise<any> = options => func => (event, context) =>
+  withLambda(func, options ?? {}, event, context)
 
 export const makeRequest = (
   event: AWSLambda.APIGatewayEvent,

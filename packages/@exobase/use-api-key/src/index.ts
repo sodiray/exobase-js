@@ -1,2 +1,1 @@
-// IMPORT
-export { useApiKey } from './useApiKey'
+export * from './useApiKey'

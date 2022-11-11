@@ -21,7 +21,7 @@ export interface SuccessResult<T> {
 
 export type Result<T> = ErrorResult | SuccessResult<T>
 
-export type AbstractRequest = {
+export type Request = {
   headers: Record<string, string | string[]>
   url: string
   path: string
@@ -31,31 +31,56 @@ export type AbstractRequest = {
   ip: string
 }
 
-export type AbstractResponse = {
+export type Response = {
   type: '@exobase:response'
   headers: Record<string, string | string[]>
   status: number
   body: any
 }
 
-export interface Props<
-  ArgType = any,
-  ServiceType = any,
-  AuthType = any,
-  RequestType extends AbstractRequest = AbstractRequest
-> {
-  auth: AuthType
-  args: ArgType
-  services: ServiceType
-  request: RequestType
-  response: AbstractResponse
+export type Props<
+  TArgs extends {} = {},
+  TServices extends {} = {},
+  TAuth extends {} = {},
+  TRequest extends Request = Request,
+  TFramework extends {} = {}
+> = {
+  auth: TAuth
+  args: TArgs
+  services: TServices
+  request: TRequest
+  response: Response
+  framework: TFramework
 }
 
-export type ApiFunction<
-  ArgType = any,
-  ServiceType = any,
-  AuthType = any,
-  RequestType extends AbstractRequest = AbstractRequest
+export type InitHook = (
+  func: (...args: any[]) => Promise<any>
+) => (...args: any[]) => Promise<any>
+
+export type RootHook<
+  TInitArgs extends any[],
+  TCurrentArgs extends {},
+  TCurrentServices extends {},
+  TCurrentAuth extends {}
 > = (
-  props: Props<ArgType, ServiceType, AuthType, RequestType>
-) => Promise<AbstractResponse | any>
+  func: (
+    props: Props<TCurrentArgs, TCurrentServices, TCurrentAuth>
+  ) => Promise<any>
+) => (...args: TInitArgs) => Promise<any>
+
+export type Hook<
+  TNextArgs extends {},
+  TNextServices extends {},
+  TNextAuth extends {},
+  TRequiredServices extends {},
+  TRequiredAuth extends {},
+  TRequiredArgs extends {}
+> = (
+  func: (props: Props<TNextArgs, TNextServices, TNextAuth>) => Promise<any>
+) => (
+  props: Props<TRequiredArgs, TRequiredServices, TRequiredAuth>
+) => Promise<any>
+
+export type Handler<TProps extends Props = Props, TResult = any> = (
+  props: TProps
+) => Promise<TResult>

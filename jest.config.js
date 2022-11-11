@@ -3,7 +3,7 @@ module.exports = {
     "<rootDir>/packages"
   ],
   "testMatch": [
-    "**/*test.ts",
+    "**/src/tests/**/*test.ts",
   ],
   "transform": {
     "^.+\\.ts$": "ts-jest"

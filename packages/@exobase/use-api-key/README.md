@@ -97,7 +97,7 @@ type Services = {
   db: Database
 }
 
-const withClientArg = (func: ApiFunction, props: Props<Args, Services>) => {
+const withClientArg = (func: Handler, props: Props<Args, Services>) => {
   const { db } = props.services
   const clientId = request.headers['x-client-id']
   const client = await db.clients.find(clientId)
@@ -110,7 +110,7 @@ const withClientArg = (func: ApiFunction, props: Props<Args, Services>) => {
   })
 }
 
-export const useClientArg = () => (func: ApiFunction) => {
+export const useClientArg = () => (func: Handler) => {
   return partial(withClientArg, func)
 }
 ```

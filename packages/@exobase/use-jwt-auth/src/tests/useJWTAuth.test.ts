@@ -6,7 +6,7 @@ const SECRET = 'unknown'
 
 describe('useJWTAuth hook function', () => {
   test('executes withJWTAuth function', async () => {
-    const token = tu.create({
+    const token = tu.createToken({
       secret: SECRET,
       sub: 'test',
       type: 'id',
@@ -29,7 +29,7 @@ describe('useJWTAuth hook function', () => {
 
 describe('withJWTAuth function', () => {
   test('returns func result for success', async () => {
-    const token = tu.create({
+    const token = tu.createToken({
       secret: SECRET,
       sub: 'test',
       type: 'id',
@@ -52,7 +52,7 @@ describe('withJWTAuth function', () => {
     expect(result).toBe('success')
   })
   test('returns func result for matching validation', async () => {
-    const token = tu.create({
+    const token = tu.createToken({
       secret: SECRET,
       sub: 'test',
       type: 'id',
@@ -78,7 +78,7 @@ describe('withJWTAuth function', () => {
     expect(result).toBe('success')
   })
   test('throws error when token is expired', async () => {
-    const token = tu.create({
+    const token = tu.createToken({
       secret: SECRET,
       ttl: -10000,
       sub: 'test',
