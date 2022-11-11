@@ -33,7 +33,5 @@ describe('makeRequest', () => {
       id: '1234'
     })
     expect(result.ip).toBe('55.0.0.55')
-    expect(result.event).toStrictEqual(event)
-    expect(result.context).toStrictEqual(context)
   })
 })

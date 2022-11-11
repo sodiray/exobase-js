@@ -1,12 +1,6 @@
 import type { Handler, Props, Request } from '@exobase/core'
 import { props, responseFromError, responseFromResult } from '@exobase/core'
-import { Context } from 'aws-lambda'
 import { isString, lowerize, try as tryit } from 'radash'
-
-export type LambdaRequest<TEvent = any> = Request & {
-  event: TEvent
-  context: Context
-}
 
 export type LambdaOptions = {}
 
@@ -59,7 +53,7 @@ export const useLambda: (
 export const makeRequest = (
   event: AWSLambda.APIGatewayEvent,
   context: AWSLambda.Context
-): LambdaRequest => {
+): Request => {
   const headers = lowerize((event.headers as Record<string, string>) ?? {})
   return {
     headers,
@@ -85,8 +79,6 @@ export const makeRequest = (
     query: (event.queryStringParameters as Record<string, string>) ?? {},
     ip:
       (event.requestContext as any)?.http?.sourceIp ??
-      event.requestContext?.identity?.sourceIp,
-    event,
-    context
+      event.requestContext?.identity?.sourceIp
   }
 }
