@@ -242,6 +242,7 @@ describe('exo function builder', () => {
       )
       .hook(useAuth())
       .endpoint(addTweet)
+
     const result = await handler(
       {
         id: 'aws.api-gateway.proxy.event'
