@@ -2,18 +2,22 @@
   "name": "@exobase/use-services",
   "version": "1.0.0-rc.6",
   "description": "Exobase hook to inject services into function",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist/**/*"
-  ],
+  "exports": {
+    "import": "./dist/esm/index.mjs",
+    "require": "./dist/cjs/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
   "author": "rayepps",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "yarn tsc --noEmit && yarn rollup -c",
     "test": "jest --coverage",
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
