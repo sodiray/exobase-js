@@ -1,7 +1,7 @@
 import type { Props, Request } from '@exobase/core'
 import { expect, test } from '@jest/globals'
 import * as yup from 'yup'
-import { validate, withShapeValidation } from '../useValidation'
+import { validate, withShapeValidation } from '../index'
 
 const model = yup.object({
   id: yup.number().required(),

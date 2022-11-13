@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { isMatch } from '../useRoute'
+import { isMatch } from '../index'
 
 describe('isMatch', () => {
   const request = {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { parsePathParams as parse } from '../usePathParams'
+import { parsePathParams as parse } from '../index'
 
 describe('parsePathParams', () => {
   const workspace = 'w1'

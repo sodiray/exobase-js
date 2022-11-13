@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals'
+import { useJWTAuth, withJWTAuth } from '../index'
 import * as tu from '../token'
-import { useJWTAuth, withJWTAuth } from '../useJWTAuth'
 
 const SECRET = 'unknown'
 

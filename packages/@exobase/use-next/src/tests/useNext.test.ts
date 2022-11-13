@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { useNext, withNext } from '../useNext'
+import { useNext, withNext } from '../index'
 
 describe('useNext hook', () => {
   test('returns and executes withNext', async () => {

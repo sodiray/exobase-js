@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { makeRequest } from '../useLambda'
+import { makeRequest } from '../index'
 
 describe('makeRequest', () => {
   test('returns correct request object given event and context', () => {

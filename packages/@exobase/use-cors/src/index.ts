@@ -1,1 +1,1 @@
-export { useCors } from './useCors'
+export * from './useCors'

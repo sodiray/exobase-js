@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { useLambdaTracer } from '../useLambdaTracer'
+import { useLambdaTracer } from '../index'
 
 describe('useLambdaTracer hook', () => {
   test('returns handler result when tracing is disabled', async () => {
