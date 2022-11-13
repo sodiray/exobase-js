@@ -35,7 +35,3 @@ describe('useLambdaTracer hook', () => {
     expect(result.result).toBe('success')
   })
 })
-
-describe('withLambdaTracer', () => {
-  test('returns ', () => {})
-})

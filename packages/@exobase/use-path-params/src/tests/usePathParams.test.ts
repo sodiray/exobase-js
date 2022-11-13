@@ -1,5 +1,19 @@
-import { describe, expect, test } from '@jest/globals'
-import { parsePathParams as parse } from '../index'
+import { describe, expect, jest, test } from '@jest/globals'
+import { usePathParams } from '../index'
+import { parsePathParams as parse } from '../usePathParams'
+
+describe('usePathParams hook', () => {
+  test('calls endpoint with parsed path param', async () => {
+    const sut = usePathParams('/library/books/{id}')
+    const mockEndpoint = jest.fn(props => ({ book: { id: props.args.id } }))
+    const result = await sut(mockEndpoint as any)({
+      request: {
+        path: '/library/books/x.book.abc123'
+      }
+    } as any)
+    expect(result.book.id).toBe('x.book.abc123')
+  })
+})
 
 describe('parsePathParams', () => {
   const workspace = 'w1'

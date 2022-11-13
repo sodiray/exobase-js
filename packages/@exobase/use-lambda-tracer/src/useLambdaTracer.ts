@@ -3,7 +3,7 @@ import type { Handler, Props } from '@exobase/core'
 import type { Segment, Subsegment } from 'aws-xray-sdk-core'
 import { tryit } from 'radash'
 
-export type LambdaTracerOptions = {
+export type UseLambdaTracerOptions = {
   serviceName?: string
   captureResponse?: boolean
   tracer?: Tracer
@@ -11,7 +11,7 @@ export type LambdaTracerOptions = {
 
 export async function withLambdaTracer<TProps extends Props>(
   func: Handler<TProps & { services: TProps['services'] & { tracer: Tracer } }>,
-  options: LambdaTracerOptions | undefined,
+  options: UseLambdaTracerOptions | undefined,
   tracer: Tracer,
   props: TProps
 ) {
@@ -59,12 +59,12 @@ export async function withLambdaTracer<TProps extends Props>(
 }
 
 export const useLambdaTracer: <TProps extends Props>(
-  options?: LambdaTracerOptions
+  options?: UseLambdaTracerOptions
 ) => (
   func: Handler<TProps>
 ) => Handler<TProps & { services: TProps['services'] & { tracer: Tracer } }> =
   (
-    { captureResponse = true, serviceName, tracer }: LambdaTracerOptions = {
+    { captureResponse = true, serviceName, tracer }: UseLambdaTracerOptions = {
       captureResponse: true
     }
   ) =>

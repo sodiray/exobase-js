@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals'
-import { useBasicAuth, withBasicAuth } from '../index'
+import { useBasicAuth } from '../index'
+import { withBasicAuth } from '../useBasicAuth'
 
 describe('useBasicAuth function', () => {
   test('returns hook function that calls withBasicAuth', async () => {

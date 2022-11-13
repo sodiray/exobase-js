@@ -1,6 +1,7 @@
 import { Props, Request } from '@exobase/core'
 import { describe, test } from '@jest/globals'
-import { useApiKey, withApiKey } from '../index'
+import { useApiKey } from '../index'
+import { withApiKey } from '../useApiKey'
 
 describe('useApiKey hook', () => {
   test('calls withApiKey function', async () => {

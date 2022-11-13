@@ -1,6 +1,7 @@
 import { defaultResponse } from '@exobase/core'
 import { describe, expect, jest, test } from '@jest/globals'
-import { LogEngine, useLogging } from '../index'
+import { useLogging } from '../index'
+import { LogEngine } from '../useLogging'
 
 describe('useLogging hook', () => {
   test('logs format given next functions result', async () => {

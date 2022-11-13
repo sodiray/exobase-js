@@ -1,12 +1,12 @@
 import { describe, expect, test } from '@jest/globals'
-import { useJWTAuth, withJWTAuth } from '../index'
-import * as tu from '../token'
+import { createToken, useJWTAuth } from '../index'
+import { withJWTAuth } from '../useJWTAuth'
 
 const SECRET = 'unknown'
 
 describe('useJWTAuth hook function', () => {
   test('executes withJWTAuth function', async () => {
-    const token = tu.createToken({
+    const token = createToken({
       secret: SECRET,
       sub: 'test',
       type: 'id',
@@ -29,7 +29,7 @@ describe('useJWTAuth hook function', () => {
 
 describe('withJWTAuth function', () => {
   test('returns func result for success', async () => {
-    const token = tu.createToken({
+    const token = createToken({
       secret: SECRET,
       sub: 'test',
       type: 'id',
@@ -52,7 +52,7 @@ describe('withJWTAuth function', () => {
     expect(result).toBe('success')
   })
   test('returns func result for matching validation', async () => {
-    const token = tu.createToken({
+    const token = createToken({
       secret: SECRET,
       sub: 'test',
       type: 'id',
@@ -78,7 +78,7 @@ describe('withJWTAuth function', () => {
     expect(result).toBe('success')
   })
   test('throws error when token is expired', async () => {
-    const token = tu.createToken({
+    const token = createToken({
       secret: SECRET,
       ttl: -10000,
       sub: 'test',

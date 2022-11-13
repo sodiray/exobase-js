@@ -3,7 +3,7 @@ import { error } from '@exobase/core'
 import * as jwt from 'jsonwebtoken'
 import { Token } from './token'
 
-export interface JWTAuthOptions {
+export interface UseJWTAuthOptions {
   type?: 'id' | 'access'
   iss?: string
   aud?: string
@@ -12,8 +12,8 @@ export interface JWTAuthOptions {
   secret: string
 }
 
-export type JWTAuth = {
-  token: Token
+export type JWTAuth<ExtraData = Record<string, string>> = {
+  token: Token<ExtraData>
 }
 
 const forbidden = (extra: { info: string; key: string }) => {
@@ -32,7 +32,7 @@ const unauthorized = (extra: { info: string; key: string }) => {
   })
 }
 
-const validateClaims = (decoded: Token, options: JWTAuthOptions) => {
+const validateClaims = (decoded: Token, options: UseJWTAuthOptions) => {
   const { type, iss, aud, permission, scope } = options
   if (permission) {
     if (!decoded.permissions || !decoded.permissions.includes(permission)) {
@@ -92,7 +92,7 @@ const verifyToken = async (
 
 export async function withJWTAuth<TProps extends Props>(
   func: Handler<TProps & { auth: TProps['auth'] & JWTAuth }>,
-  options: JWTAuthOptions,
+  options: UseJWTAuthOptions,
   props: TProps
 ) {
   const header = props.request.headers['authorization'] as string
@@ -139,12 +139,8 @@ export async function withJWTAuth<TProps extends Props>(
   })
 }
 
-export type TokenAuth<ExtraData = Record<string, string>> = {
-  token: Token<ExtraData>
-}
-
 export const useJWTAuth: <TProps extends Props>(
-  options: JWTAuthOptions
+  options: UseJWTAuthOptions
 ) => (
   func: Handler<TProps & { auth: TProps['auth'] & JWTAuth }>
 ) => Handler<TProps> = options => func => props =>

@@ -10,10 +10,10 @@ module.exports = {
   },
   "coverageThreshold": {
     "global": {
-      "branches": 24,
-      "functions": 24,
-      "lines": 53,
-      "statements": 54
+      "branches": 53,
+      "functions": 75,
+      "lines": 86,
+      "statements": 84
     }
   }
 }

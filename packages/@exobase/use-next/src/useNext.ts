@@ -3,7 +3,7 @@ import { props, responseFromError, responseFromResult } from '@exobase/core'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { try as tryit } from 'radash'
 
-export type NextFunctionOptions = {}
+export type UseNextOptions = {}
 
 export type NextFramework = {
   req: NextApiRequest
@@ -12,7 +12,7 @@ export type NextFramework = {
 
 export async function withNext(
   func: Handler<Props & { framework: NextFramework }>,
-  options: NextFunctionOptions,
+  options: UseNextOptions,
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -28,7 +28,7 @@ export async function withNext(
 }
 
 export const useNext: (
-  options?: NextFunctionOptions
+  options?: UseNextOptions
 ) => (
   func: Handler<Props & { framework: NextFramework }>
 ) => (req: NextApiRequest, res: NextApiResponse) => Promise<any> =

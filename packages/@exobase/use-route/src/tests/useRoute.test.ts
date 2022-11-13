@@ -1,5 +1,23 @@
-import { describe, expect, test } from '@jest/globals'
-import { isMatch } from '../index'
+import { describe, expect, jest, test } from '@jest/globals'
+import { useRoute } from '../index'
+import { isMatch } from '../useRoute'
+
+describe('usePathParams hook', () => {
+  test('calls endpoint with parsed path param', async () => {
+    const mockEndpoint = jest.fn(() => ({ message: 'success' }))
+    const mockFinalEndpointFunction = jest.fn(() => null)
+    const sut = useRoute('GET', '*', mockEndpoint)
+    const result = await sut(mockFinalEndpointFunction as any)({
+      request: {
+        method: 'GET',
+        path: '/library/books/x.book.abc123'
+      }
+    } as any)
+    expect(mockEndpoint).toBeCalledTimes(1)
+    expect(mockFinalEndpointFunction).not.toBeCalled()
+    expect(result).toEqual({ message: 'success' })
+  })
+})
 
 describe('isMatch', () => {
   const request = {

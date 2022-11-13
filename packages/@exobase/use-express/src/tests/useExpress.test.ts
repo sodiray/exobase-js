@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import { withExpress } from '../index'
+import { withExpress } from '../useExpress'
 
 describe('withExpress function', () => {
   test('applys result to response', async () => {

@@ -1,1 +1,2 @@
-export * from './useApiKey'
+export { useApiKey } from './useApiKey'
+export type { ApiKeyAuth } from './useApiKey'

@@ -1,1 +1,1 @@
-export * from './useServices'
+export { useServices } from './useServices'

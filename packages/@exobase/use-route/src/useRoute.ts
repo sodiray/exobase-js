@@ -1,12 +1,19 @@
 import type { Handler, Props, Request } from '@exobase/core'
 
-type MethodKey = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS' | 'PATCH' | '*'
-type RouteKey = `/${string}` | '*'
+export type UseRouteMethod =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'OPTIONS'
+  | 'PATCH'
+  | '*'
+export type UseRouteRoute = `/${string}` | '*'
 
 export const isMatch = (
   request: Pick<Request, 'method' | 'path'>,
-  methodKey: MethodKey,
-  routeKey: RouteKey
+  methodKey: UseRouteMethod,
+  routeKey: UseRouteRoute
 ): boolean => {
   // Check method
   if (methodKey !== '*') {
@@ -35,8 +42,8 @@ export const isMatch = (
 
 export async function withRoute<TProps extends Props>(
   func: Handler<TProps>,
-  methodKey: MethodKey,
-  routeKey: RouteKey,
+  methodKey: UseRouteMethod,
+  routeKey: UseRouteRoute,
   endpointFunction: Function,
   props: TProps
 ) {
@@ -46,8 +53,8 @@ export async function withRoute<TProps extends Props>(
 }
 
 export const useRoute: <TProps extends Props>(
-  methodKey: MethodKey,
-  routeKey: RouteKey,
+  methodKey: UseRouteMethod,
+  routeKey: UseRouteRoute,
   endpointFunction: Function
 ) => (func: Handler<TProps>) => Handler<TProps> =
   (methodKey, routeKey, endpointFunction) => func => props =>

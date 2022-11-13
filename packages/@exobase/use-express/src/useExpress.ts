@@ -25,7 +25,7 @@ export type ExpressFramework = {
   res: ExpressResponse
 }
 
-export type ExpressFunctionOptions = {
+export type UseExpressOptions = {
   skipJson?: boolean
   skipCompression?: boolean
 }
@@ -35,7 +35,7 @@ const applyCompression = invertMiddleware(
   (makeCompressionMiddleware as unknown as Function)()
 )
 
-const makeMiddleware = (options: ExpressFunctionOptions) => {
+const makeMiddleware = (options: UseExpressOptions) => {
   return sift([
     !options.skipJson && applyJson,
     !options.skipCompression && applyCompression
@@ -44,7 +44,7 @@ const makeMiddleware = (options: ExpressFunctionOptions) => {
 
 export async function withExpress(
   func: Handler<Props & { framework: ExpressFramework }>,
-  options: ExpressFunctionOptions,
+  options: UseExpressOptions,
   req: ExpressRequest,
   res: ExpressResponse
 ) {
@@ -65,7 +65,7 @@ export async function withExpress(
 }
 
 export const useExpress: (
-  options?: ExpressFunctionOptions
+  options?: UseExpressOptions
 ) => (
   func: Handler<Props & { framework: ExpressFramework }>
 ) => (req: ExpressRequest, res: ExpressResponse) => Promise<any> =

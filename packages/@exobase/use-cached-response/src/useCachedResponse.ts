@@ -4,12 +4,12 @@ import * as uuid from 'uuid'
 
 type UnitOfTime = 'second' | 'minute' | 'hour' | 'seconds' | 'minutes' | 'hours'
 
-export interface Cache {
+export interface ICache {
   get: (key: string) => Promise<string>
   set: (key: string, value: string, ttl: number) => Promise<void>
 }
 
-export interface CacheLogger {
+export interface ICacheLogger {
   log: (...args: any[]) => void
   warn: (...args: any[]) => void
   error: (...args: any[]) => void
@@ -31,7 +31,7 @@ export type UseCachedResponseOptions<TArgs extends {} = {}, TResponse = any> = {
    * If passed, the hook will log information about the caching using
    * this object. If nothing is passed the hook will be silent.
    */
-  logger?: CacheLogger
+  logger?: ICacheLogger
   /**
    * In some cases, it can be useful to override the cache and force
    * the endpoint to do the work again. Configure skipping to let a
@@ -117,7 +117,7 @@ const flatten = (
 export async function withCachedResponse<
   TArgs extends {},
   TServices extends {
-    cache: Cache
+    cache: ICache
   },
   TAuth extends {},
   TRequest extends Request,
@@ -176,7 +176,7 @@ export async function withCachedResponse<
 export const useCachedResponse: <
   TArgs extends {},
   TServices extends {
-    cache: Cache
+    cache: ICache
   },
   TAuth extends {},
   TRequest extends Request,

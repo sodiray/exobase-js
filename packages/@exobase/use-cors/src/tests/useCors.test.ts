@@ -1,6 +1,7 @@
 import { defaultResponse } from '@exobase/core'
 import { describe, expect, test } from '@jest/globals'
-import { DEFAULT_CORS_HEADERS, useCors, withCors } from '../index'
+import { useCors } from '../index'
+import { DEFAULT_CORS_HEADERS, withCors } from '../useCors'
 
 describe('useCors hook', () => {
   test('returns and executes withCors function', async () => {

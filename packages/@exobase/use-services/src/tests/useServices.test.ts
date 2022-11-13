@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { withServices } from '../index'
+import { withServices } from '../useServices'
 
 test('withServices passess all services', async () => {
   const services = {
