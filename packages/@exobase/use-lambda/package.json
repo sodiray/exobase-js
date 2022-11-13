@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-lambda",
-  "version": "1.0.0-rc.8",
+  "version": "1.0.0-rc.9",
   "description": "Exobase root hook to handle function running on AWS Lambda",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",

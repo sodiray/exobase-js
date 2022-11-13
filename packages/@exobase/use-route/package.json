@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-route",
-  "version": "1.0.0-rc.8",
+  "version": "1.0.0-rc.9",
   "description": "Exobase routing hook",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",

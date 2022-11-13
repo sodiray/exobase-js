@@ -1,6 +1,6 @@
 {
   "name": "@exobase/hooks",
-  "version": "1.0.0-rc.9",
+  "version": "1.0.0-rc.10",
   "description": "All the Exobase hooks",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -26,16 +26,16 @@
   },
   "dependencies": {
     "@exobase/core": "^1.0.0-rc.10",
-    "@exobase/use-api-key": "^1.0.0-rc.8",
-    "@exobase/use-basic-auth": "^1.0.0-rc.9",
-    "@exobase/use-cached-response": "^1.0.0-rc.2",
-    "@exobase/use-cors": "^1.0.0-rc.9",
-    "@exobase/use-jwt-auth": "^1.0.0-rc.9",
-    "@exobase/use-lambda-tracer": "^1.0.0-rc.3",
-    "@exobase/use-path-params": "^1.0.0-rc.8",
-    "@exobase/use-route": "^1.0.0-rc.8",
-    "@exobase/use-services": "^1.0.0-rc.8",
-    "@exobase/use-validation": "^1.0.0-rc.8"
+    "@exobase/use-api-key": "^1.0.0-rc.9",
+    "@exobase/use-basic-auth": "^1.0.0-rc.10",
+    "@exobase/use-cached-response": "^1.0.0-rc.3",
+    "@exobase/use-cors": "^1.0.0-rc.10",
+    "@exobase/use-jwt-auth": "^1.0.0-rc.10",
+    "@exobase/use-lambda-tracer": "^1.0.0-rc.4",
+    "@exobase/use-path-params": "^1.0.0-rc.9",
+    "@exobase/use-route": "^1.0.0-rc.9",
+    "@exobase/use-services": "^1.0.0-rc.9",
+    "@exobase/use-validation": "^1.0.0-rc.9"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
 }

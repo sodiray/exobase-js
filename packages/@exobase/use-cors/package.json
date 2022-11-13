@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-cors",
-  "version": "1.0.0-rc.9",
+  "version": "1.0.0-rc.10",
   "description": "Exobase hook for CORS request/response",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
