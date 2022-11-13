@@ -51,5 +51,8 @@ const makeReq = (req: NextApiRequest): Request => ({
   path: req.url ?? '/',
   method: req.method ?? 'ANY',
   query: req.query as Record<string, string>,
-  ip: req.socket.remoteAddress ?? ''
+  ip: req.socket.remoteAddress ?? '',
+  startedAt: Date.now(),
+  protocol: req.httpVersion.toLowerCase().includes('https') ? 'https' : 'http',
+  httpVersion: req.httpVersion
 })

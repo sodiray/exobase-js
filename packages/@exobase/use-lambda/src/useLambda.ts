@@ -50,6 +50,9 @@ export const useLambda: (
 ) => Promise<any> = options => func => (event, context) =>
   withLambda(func, options ?? {}, event, context)
 
+// For docs on the shape of the request see
+// docs: https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html#apigateway-example-event
+// example: https://github.com/awsdocs/aws-lambda-developer-guide/blob/main/sample-apps/nodejs-apig/event.json
 export const makeRequest = (
   event: AWSLambda.APIGatewayEvent,
   context: AWSLambda.Context
@@ -79,6 +82,9 @@ export const makeRequest = (
     query: (event.queryStringParameters as Record<string, string>) ?? {},
     ip:
       (event.requestContext as any)?.http?.sourceIp ??
-      event.requestContext?.identity?.sourceIp
+      event.requestContext?.identity?.sourceIp,
+    startedAt: Date.now(),
+    protocol: event.requestContext.protocol,
+    httpVersion: (event.requestContext.protocol.split('/')[1] as string) ?? ''
   }
 }

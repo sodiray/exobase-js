@@ -17,7 +17,8 @@ describe('useNext hook', () => {
         body: {},
         method: 'POST',
         query: {},
-        socket: { remoteAddress: '0.0.0.0' }
+        socket: { remoteAddress: '0.0.0.0' },
+        httpVersion: '1.1'
       } as any,
       {
         status: (s: number) => (status = s),
@@ -51,7 +52,8 @@ describe('withNext function', () => {
         body: {},
         method: 'POST',
         query: {},
-        socket: { remoteAddress: '0.0.0.0' }
+        socket: { remoteAddress: '0.0.0.0' },
+        httpVersion: '1.1'
       } as any,
       {
         status: (s: number) => (status = s),
@@ -89,7 +91,8 @@ describe('withNext function', () => {
         body: {},
         method: 'POST',
         query: {},
-        socket: { remoteAddress: '0.0.0.0' }
+        socket: { remoteAddress: '0.0.0.0' },
+        httpVersion: '1.1'
       } as any,
       {
         status: (s: number) => (status = s),

@@ -15,7 +15,8 @@ describe('makeRequest', () => {
         httpMethod: 'POST',
         http: {
           sourceIp: '55.0.0.55'
-        }
+        },
+        protocol: 'HTTPS/1.1'
       },
       queryStringParameters: {
         id: '1234'

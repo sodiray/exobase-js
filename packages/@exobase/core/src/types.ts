@@ -29,6 +29,12 @@ export type Request = {
   method: string
   query: Record<string, string>
   ip: string
+  /**
+   * Milliseconds timestamp when the request started
+   */
+  startedAt: number
+  httpVersion: string
+  protocol: string
 }
 
 export type Response = {
