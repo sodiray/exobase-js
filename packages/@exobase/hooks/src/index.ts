@@ -1,5 +1,6 @@
 export * from '@exobase/use-api-key'
 export * from '@exobase/use-basic-auth'
+export * from '@exobase/use-cached-response'
 export * from '@exobase/use-cors'
 export * from '@exobase/use-jwt-auth'
 export * from '@exobase/use-path-params'
