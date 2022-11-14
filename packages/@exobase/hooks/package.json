@@ -35,7 +35,9 @@
     "@exobase/use-path-params": "^1.0.0-rc.9",
     "@exobase/use-route": "^1.0.0-rc.9",
     "@exobase/use-services": "^1.0.0-rc.9",
-    "@exobase/use-validation": "^1.0.0-rc.9"
+    "@exobase/use-header-args": "^1.0.0-rc.0",
+    "@exobase/use-json-args": "^1.0.0-rc.0",
+    "@exobase/use-query-args": "^1.0.0-rc.0"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
 }

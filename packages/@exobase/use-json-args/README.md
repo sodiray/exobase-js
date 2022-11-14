@@ -1,4 +1,4 @@
-# `@exobase/use-validation`
+# `@exobase/use-json-args`
 
 > Provides hooks
 
@@ -7,7 +7,7 @@
 Yarn
 
 ```sh
-yarn add @exobase/use-validation
+yarn add @exobase/use-json-args
 ```
 
 ## Usage
@@ -17,7 +17,7 @@ If you're writing Exobase endpoints in Typescript you'll want to import the `Pro
 ```ts
 import { compose } from 'radash'
 import type { Props } from '@exobase/core'
-import { useJsonArgs } from '@exobase/use-validation'
+import { useJsonArgs } from '@exobase/use-json-args'
 import { useLambda } from '@exobase/use-lambda'
 
 type Args = {

@@ -1,0 +1,29 @@
+{
+  "name": "@exobase/use-query-args",
+  "version": "1.0.0-rc.0",
+  "description": "Exobase hook to parse and validate query string values in a request",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.mjs",
+    "require": "./dist/cjs/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "rayepps",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn tsc --noEmit && yarn rollup -c",
+    "test": "jest --coverage",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  },
+  "dependencies": {
+    "@exobase/core": "^1.0.0-rc.10",
+    "zod": "^3.19.1"
+  },
+  "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
+}
