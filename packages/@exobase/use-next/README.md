@@ -1,6 +1,4 @@
-# `@exobase/use-next`
-
-> Exobase root hook to handle function running on Next.js api functions
+Exobase root hook to handle function running on Next.js api functions
 
 ## Install
 

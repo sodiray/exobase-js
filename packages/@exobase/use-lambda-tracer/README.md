@@ -1,6 +1,4 @@
-# `@exobase/use-lambda-tracer`
-
-> Provides an Exobase hook that will capture tracing data in an AWS Lambda function
+Provides an Exobase hook that will capture tracing data in an AWS Lambda function
 
 ## Usage
 

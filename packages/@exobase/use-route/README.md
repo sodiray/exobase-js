@@ -1,6 +1,4 @@
-# `@exobase/use-route`
-
-> Provides an Exobase hook that will do simple method/route routing to differnet endpoint functions.
+Provides an Exobase hook that will do simple method/route routing to differnet endpoint functions.
 
 ## Usage
 

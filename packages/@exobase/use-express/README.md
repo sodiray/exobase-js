@@ -1,6 +1,4 @@
-# `@exobase/use-express`
-
-> An Exobase root hook for the ExpressJS framework
+An Exobase root hook for the ExpressJS framework
 
 ## Install
 

@@ -1,6 +1,4 @@
-# `@exobase/use-header-args`
-
-> Provides a hook to parse and validate headers in the request.
+Provides a hook to parse and validate headers in the request.
 
 ## Install
 

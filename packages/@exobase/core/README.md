@@ -1,6 +1,5 @@
-# `@exobase/core`
 
-> Provides the core types and functions to implement the Abstract & Compose design pattern with the Exobase library
+Provides the core types and functions to implement the Abstract & Compose design pattern with the Exobase library.
 
 If you're writing endpoints (following the Abstract & Compose design pattern) and you're using Typescript you'll probably want this package for the types. If you're developing your own hooks you'll want the core package for the response parsing functions.
 

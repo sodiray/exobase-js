@@ -1,6 +1,4 @@
-# `@exobase/use-cached-response`
-
-> An Exobase hook that will check incoming request argument for a match in the cache, if one exists it will be returned without executing the endpoint function.
+An Exobase hook that will check incoming request argument for a match in the cache, if one exists it will be returned without executing the endpoint function.
 
 ## Usage
 

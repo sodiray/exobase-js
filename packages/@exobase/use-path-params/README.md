@@ -1,6 +1,4 @@
-# `@exobase/use-path-params`
-
-> Provides an Exobase hook that will parse path params.
+Provides an Exobase hook that will parse path params.
 
 ## Usage
 

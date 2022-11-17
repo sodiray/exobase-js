@@ -1,6 +1,4 @@
-# `@exobase/use-logging`
-
-> Provides an Exobase hook that will log information about the request given a string of tokens.
+Provides an Exobase hook that will log information about the request given a string of tokens.
 
 This module inspired by [morgan](https://github.com/expressjs/morgan), the logging middleware library for Express.
 
@@ -21,7 +19,7 @@ export default compose(
   useLogging(),
   useLogging('[:method] :path at :date(iso) -> :status in :ms-elapsed'),
   useLogging('[:method] :request-id', {
-    format: (message) => JSON.stringify({ message }),
+    format: message => JSON.stringify({ message }),
     logger: console,
     tokens: (l, p, e, r) => ({
       'request-id': () => p.request.headers['x-request-id']

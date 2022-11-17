@@ -30,5 +30,9 @@
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac",
   "dependencies": {
     "radash": "^9.0.2"
+  },
+  "exobaseDocs": {
+    "group": "Packages",
+    "name": "core"
   }
 }

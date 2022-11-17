@@ -1,6 +1,4 @@
-# `@exobase/use-api-key`
-
-> Exobase hook function that provides authentication by way of validating the `x-api-key` header.
+Exobase hook function that provides authentication by way of validating the `x-api-key` header.
 
 ## Install
 

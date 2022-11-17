@@ -1,6 +1,4 @@
-# `@exobase/use-query-args`
-
-> Provides a hook to parse and validate query string values in the request.
+Provides a hook to parse and validate query string values in the request.
 
 ## Install
 

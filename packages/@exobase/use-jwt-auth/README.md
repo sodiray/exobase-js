@@ -1,6 +1,4 @@
-# `@exobase/use-jwt-auth`
-
-> Provides an Exobase hook to parse and validate a JWT token in a request. It also includes a utility for generating JWT tokens.
+Provides an Exobase hook to parse and validate a JWT token in a request. It also includes a utility for generating JWT tokens.
 
 ## Usage
 

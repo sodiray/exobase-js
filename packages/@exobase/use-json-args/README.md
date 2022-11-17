@@ -1,6 +1,4 @@
-# `@exobase/use-json-args`
-
-> Provides hooks
+Provides a hook to parse and validate request arguments from the json body.
 
 ## Install
 

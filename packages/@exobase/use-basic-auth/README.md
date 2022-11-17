@@ -1,6 +1,4 @@
-# `@exobase/use-basic-auth`
-
-> Provides a Exobase hook function that will parse out the client id and client secret of an incoming request
+Provides a Exobase hook function that will parse out the client id and client secret of an incoming request
 
 _NOTE: This hook does not validate the values it parses, you'll need to do that on your own_
 

@@ -29,6 +29,10 @@
     "uuid": "^9.0.0"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac",
+  "exobaseDocs": {
+    "group": "Hooks",
+    "name": "useCachedResponse"
+  },
   "devDependencies": {
     "@types/uuid": "^8.3.4"
   }
