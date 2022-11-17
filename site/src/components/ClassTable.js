@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState, Fragment } from 'react'
-import { isObject } from '@/utils/isObject'
+import { isObject } from 'radash'
 import { castArray } from '@/utils/castArray'
 import clsx from 'clsx'
 import { Heading } from '@/components/Heading'
