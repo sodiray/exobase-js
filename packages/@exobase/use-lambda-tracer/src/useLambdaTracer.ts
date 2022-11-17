@@ -1,6 +1,6 @@
 import { Tracer } from '@aws-lambda-powertools/tracer'
 import type { Handler, Props } from '@exobase/core'
-import type { Segment, Subsegment } from 'aws-xray-sdk-core'
+import type { Segment } from 'aws-xray-sdk-core'
 import { tryit } from 'radash'
 
 export type UseLambdaTracerOptions = {
@@ -16,9 +16,17 @@ export async function withLambdaTracer<TProps extends Props>(
   props: TProps
 ) {
   const enabled = tracer.isTracingEnabled()
-  const segment: Subsegment | Segment | null = enabled
-    ? tracer.getSegment()
-    : null
+
+  if (!enabled)
+    return await func({
+      ...props,
+      services: {
+        ...props.services,
+        tracer
+      }
+    })
+
+  const segment = tracer.getSegment()
 
   const close = () => {
     const subsegment = tracer.getSegment()
@@ -26,11 +34,9 @@ export async function withLambdaTracer<TProps extends Props>(
     tracer.setSegment(segment as Segment)
   }
 
-  if (enabled && segment) {
-    tracer.setSegment(segment.addNewSubsegment(`## ${process.env._HANDLER}`))
-    tracer.annotateColdStart()
-    tracer.addServiceNameAnnotation()
-  }
+  tracer.setSegment(segment.addNewSubsegment(`## ${process.env._HANDLER}`))
+  tracer.annotateColdStart()
+  tracer.addServiceNameAnnotation()
 
   const [err, response] = await tryit(func)({
     ...props,
@@ -41,19 +47,15 @@ export async function withLambdaTracer<TProps extends Props>(
   })
 
   if (err) {
-    if (enabled) {
-      tracer.addErrorAsMetadata(err as Error)
-      close()
-    }
+    tracer.addErrorAsMetadata(err as Error)
+    close()
     throw err
   }
 
-  if (enabled) {
-    if (options?.captureResponse ?? true) {
-      tracer.addResponseAsMetadata(response, process.env._HANDLER)
-    }
-    close()
+  if (options?.captureResponse ?? true) {
+    tracer.addResponseAsMetadata(response, process.env._HANDLER)
   }
+  close()
 
   return response
 }
