@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-next",
-  "version": "1.0.0-rc.10",
+  "version": "1.0.0-rc.11",
   "description": "Exobase root hook to handle function running on Next.js api functions",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -30,7 +30,7 @@
     "next": "^12.2.3"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.10"
+    "@exobase/core": "^1.0.0-rc.11"
   },
   "exobaseDocs": {
     "group": "Root Hooks",

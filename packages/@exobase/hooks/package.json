@@ -1,6 +1,6 @@
 {
   "name": "@exobase/hooks",
-  "version": "1.0.0-rc.11",
+  "version": "1.0.0-rc.12",
   "description": "All the Exobase hooks",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -25,20 +25,20 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.10",
-    "@exobase/use-api-key": "^1.0.0-rc.9",
-    "@exobase/use-basic-auth": "^1.0.0-rc.10",
-    "@exobase/use-cached-response": "^1.0.0-rc.3",
-    "@exobase/use-cors": "^1.0.0-rc.10",
-    "@exobase/use-header-args": "^1.0.0-rc.1",
-    "@exobase/use-json-args": "^1.0.0-rc.1",
-    "@exobase/use-jwt-auth": "^1.0.0-rc.10",
-    "@exobase/use-lambda-tracer": "^1.0.0-rc.4",
-    "@exobase/use-path-params": "^1.0.0-rc.9",
-    "@exobase/use-query-args": "^1.0.0-rc.1",
-    "@exobase/use-route": "^1.0.0-rc.9",
-    "@exobase/use-services": "^1.0.0-rc.9",
-    "@exobase/use-init-logger": "^1.0.0-rc.0"
+    "@exobase/core": "^1.0.0-rc.11",
+    "@exobase/use-api-key": "^1.0.0-rc.10",
+    "@exobase/use-basic-auth": "^1.0.0-rc.11",
+    "@exobase/use-cached-response": "^1.0.0-rc.4",
+    "@exobase/use-cors": "^1.0.0-rc.11",
+    "@exobase/use-header-args": "^1.0.0-rc.2",
+    "@exobase/use-init-logger": "^1.0.0-rc.1",
+    "@exobase/use-json-args": "^1.0.0-rc.2",
+    "@exobase/use-jwt-auth": "^1.0.0-rc.11",
+    "@exobase/use-lambda-tracer": "^1.0.0-rc.5",
+    "@exobase/use-path-params": "^1.0.0-rc.10",
+    "@exobase/use-query-args": "^1.0.0-rc.2",
+    "@exobase/use-route": "^1.0.0-rc.10",
+    "@exobase/use-services": "^1.0.0-rc.10"
   },
   "exobaseDocs": {
     "group": "Packages",
