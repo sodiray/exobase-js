@@ -8,7 +8,17 @@ type Args = {
   debug?: boolean
 }
 
-export const groups = ['Getting Started', 'Packages', 'Root Hooks', 'Hooks']
+/**
+ * This array determines the order of nav
+ * groups in the site's left nav bar.
+ */
+export const groups = [
+  'Getting Started',
+  'Packages',
+  'Root Hooks',
+  'Hooks',
+  'Init Hooks'
+]
 
 const run = async ({ debug = false }: Args) => {
   await tryit(fs.promises.mkdir)('site/src/pages/docs')

@@ -37,7 +37,8 @@
     "@exobase/use-path-params": "^1.0.0-rc.9",
     "@exobase/use-query-args": "^1.0.0-rc.1",
     "@exobase/use-route": "^1.0.0-rc.9",
-    "@exobase/use-services": "^1.0.0-rc.9"
+    "@exobase/use-services": "^1.0.0-rc.9",
+    "@exobase/use-init-logger": "^1.0.0-rc.0"
   },
   "exobaseDocs": {
     "group": "Packages",
