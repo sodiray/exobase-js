@@ -152,7 +152,7 @@ const Path = (absPath: string) => {
       return JSON.parse(str)
     },
     inDocs: (relDocsPath: `site/${string}`) => {
-      return absPath.replace(/\/exobase\-js\/.+/, `/exobase-js/${relDocsPath}`)
+      return rel(`../${relDocsPath}`)
     },
     read: async () => {
       return await fs.readFile(absPath, 'utf-8')
