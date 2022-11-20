@@ -52,6 +52,7 @@ ${footer()}
       if (dry) {
         console.log({ dest }, `\n${md}`)
       } else {
+        console.log(`[WRITE]: ${dest}`, { markdown: md.slice(0, 15) })
         await fs.writeFile(dest, md, 'utf-8')
       }
 
@@ -67,14 +68,15 @@ ${footer()}
     async absPath => {
       const p = Path(absPath)
       const dest = p.inDocs(`site/src/pages/docs/${p.fileName}`)
-      const content = await p.read()
+      const md = await p.read()
       if (dry) {
-        console.log({ dest }, `\n${content}`)
+        console.log({ dest }, `\n${md}`)
       } else {
-        await fs.writeFile(dest, content, 'utf-8')
+        console.log(`[WRITE]: ${dest}`, { markdown: md.slice(0, 15) })
+        await fs.writeFile(dest, md, 'utf-8')
       }
-      const group = /group:\s["'](.+?)["']/.exec(content)?.[1]
-      const order = toInt(/order:\s(.+?)\n/.exec(content)?.[1], 0)
+      const group = /group:\s["'](.+?)["']/.exec(md)?.[1]
+      const order = toInt(/order:\s(.+?)\n/.exec(md)?.[1], 0)
       if (!group) {
         throw `The mdx doc ${p.fileName} requires a group`
       }
