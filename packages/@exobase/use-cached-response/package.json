@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-cached-response",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0-rc.5",
   "description": "Exobase hook to help wire up response caching",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -25,7 +25,7 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.11",
+    "@exobase/core": "^1.0.0-rc.12",
     "uuid": "^9.0.0"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac",
