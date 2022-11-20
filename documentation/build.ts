@@ -5,7 +5,7 @@ import { join } from 'path'
 import { omit, parallel, sift, sort, toInt, tryit } from 'radash'
 
 type Args = {
-  debug?: boolean
+  dry?: boolean
 }
 
 /**
@@ -20,14 +20,16 @@ export const groups = [
   'Init Hooks'
 ]
 
-const run = async ({ debug = false }: Args) => {
-  await tryit(fs.mkdir)('site/src/pages/docs')
-  await tryit(clean)('site/src/pages/docs')
+const rel = (path: string) => join(__dirname, path)
+
+const run = async ({ dry = false }: Args) => {
+  await tryit(fs.mkdir)(rel('../site/src/pages/docs'))
+  await tryit(clean)(rel('../site/src/pages/docs'))
   const packageDocs = await parallel(
     6,
-    glob.sync('packages/@exobase/*/*.{md,mdx}'),
-    async relPath => {
-      const p = Path(relPath)
+    glob.sync(rel('../packages/@exobase/*/*.{md,mdx}')),
+    async absPath => {
+      const p = Path(absPath)
       if (p.isLicense()) return
       const pack = await p.package()
       const dest = p.inDocs(`site/src/pages/docs/${p.packageDir}.mdx`)
@@ -46,7 +48,7 @@ const run = async ({ debug = false }: Args) => {
 ${content}
 ${footer()}
     `
-      if (debug) {
+      if (dry) {
         console.log({ dest }, `\n${md}`)
       } else {
         await fs.writeFile(dest, md, 'utf-8')
@@ -60,12 +62,12 @@ ${footer()}
   )
   const docDocs = await parallel(
     6,
-    glob.sync('./documentation/*.{md,mdx}'),
-    async relPath => {
-      const p = Path(relPath)
+    glob.sync(rel('./*.{md,mdx}')),
+    async absPath => {
+      const p = Path(absPath)
       const dest = p.inDocs(`site/src/pages/docs/${p.fileName}`)
       const content = await p.read()
-      if (debug) {
+      if (dry) {
         console.log({ dest }, `\n${content}`)
       } else {
         await fs.writeFile(dest, content, 'utf-8')
@@ -97,7 +99,7 @@ ${footer()}
   }
 
   await fs.writeFile(
-    join(process.cwd(), 'site/src/pages/docs/manifest.json'),
+    rel('../site/src/pages/docs/manifest.json'),
     JSON.stringify(manifest, null, 2),
     'utf-8'
   )
@@ -124,8 +126,7 @@ location: "${location}"
 
 const footer = () => ``
 
-const Path = (relPath: string) => {
-  const absPath = join(process.cwd(), relPath)
+const Path = (absPath: string) => {
   const fileName = /([^\/]+?)\.(md|mdx|md|js|ts)$/.exec(absPath)![0]
   const repoPath = absPath.replace(/^.+\/exobase\-js\//, '')
   const packageDir =
