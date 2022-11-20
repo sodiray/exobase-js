@@ -6,6 +6,7 @@ import { omit, parallel, sift, sort, toInt, tryit } from 'radash'
 
 type Args = {
   dry?: boolean
+  debug?: boolean
 }
 
 /**
@@ -22,7 +23,7 @@ export const groups = [
 
 const rel = (path: string) => join(__dirname, path)
 
-const run = async ({ dry = false }: Args) => {
+const run = async ({ dry = false, debug = false }: Args) => {
   await tryit(fs.mkdir)(rel('../site/src/pages/docs'))
   await tryit(clean)(rel('../site/src/pages/docs'))
   const packageDocs = await parallel(
@@ -96,6 +97,10 @@ ${footer()}
       }),
       {} as Record<string, string[]>
     )
+  }
+
+  if (debug) {
+    console.log(JSON.stringify(manifest, null, 2))
   }
 
   await fs.writeFile(
