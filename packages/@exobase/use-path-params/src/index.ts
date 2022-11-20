@@ -1,0 +1,1 @@
+export { usePathParams } from './usePathParams'

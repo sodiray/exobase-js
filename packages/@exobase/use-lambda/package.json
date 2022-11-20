@@ -1,0 +1,35 @@
+{
+  "name": "@exobase/use-lambda",
+  "version": "1.0.0-rc.10",
+  "description": "Exobase root hook to handle function running on AWS Lambda",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.mjs",
+    "require": "./dist/cjs/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "rayepps",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn tsc --noEmit && yarn rollup -c",
+    "test": "jest --coverage",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.97"
+  },
+  "dependencies": {
+    "@exobase/core": "^1.0.0-rc.11"
+  },
+  "exobaseDocs": {
+    "group": "Root Hooks",
+    "name": "useLambda"
+  },
+  "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
+}

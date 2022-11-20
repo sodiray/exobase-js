@@ -1,0 +1,43 @@
+org: rayepps
+app: exobase-callback-api-serverless
+service: exobase-callback-api-serverless
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+plugins:
+  - serverless-plugin-typescript
+
+functions:
+  ping:
+    handler: src/endpoints/ping.default
+    events:
+      - httpApi:
+          path: /ping
+          method: get
+  v1CreateTimeout:
+    handler: src/endpoints/v1/timeout/create.default
+    events:
+      - httpApi:
+          path: /v1/timeout
+          method: post
+  v1ListTimeouts:
+    handler: src/endpoints/v1/timeout/list.default
+    events:
+      - httpApi:
+          path: /v1/timeout
+          method: get
+  v1FindTimeout:
+    handler: src/endpoints/v1/timeout/find.default
+    events:
+      - httpApi:
+          path: /v1/timeout/{id}
+          method: get
+  v1ClearTimeout:
+    handler: src/endpoints/v1/timeout/clear.default
+    events:
+      - httpApi:
+          path: /v1/timeout/{id}/clear
+          method: put

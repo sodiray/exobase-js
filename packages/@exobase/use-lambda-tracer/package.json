@@ -1,0 +1,40 @@
+{
+  "name": "@exobase/use-lambda-tracer",
+  "version": "1.0.0-rc.5",
+  "description": "Exobase hook to capture tracing data in an AWS Lambda function",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.mjs",
+    "require": "./dist/cjs/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "rayepps",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/rayepps/exobase-js"
+  },
+  "scripts": {
+    "build": "yarn tsc --noEmit && yarn rollup -c",
+    "test": "jest --coverage",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  },
+  "dependencies": {
+    "@aws-lambda-powertools/tracer": "^1.4.1",
+    "@exobase/core": "^1.0.0-rc.11",
+    "aws-xray-sdk-core": "^3.4.0"
+  },
+  "exobaseDocs": {
+    "group": "Hooks",
+    "name": "useLambdaTracer"
+  },
+  "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac",
+  "devDependencies": {
+    "@middy/core": "^3.6.2"
+  }
+}

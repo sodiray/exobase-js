@@ -1,22 +1,47 @@
 {
-  "name": "root",
+  "name": "exobase-monorepo",
+  "version": "0.0.0",
   "private": true,
+  "workspaces": [
+    "packages/@exobase/*"
+  ],
   "scripts": {
-    "build": "lerna run build"
+    "bootstrap": "yarn && lerna bootstrap --use-workspaces && lerna exec yarn && lerna link",
+    "build": "lerna run build",
+    "clean": "yarn clean:packages && yarn clean:tld",
+    "clean:tld": "rm -rf node_modules && rm -rf coverage",
+    "clean:packages": "yarn clean:packages:nm && yarn clean:packages:dist && yarn clean:packages:coverage",
+    "clean:packages:nm": "lerna exec -- rm -rf node_modules",
+    "clean:packages:dist": "lerna exec -- rm -rf dist",
+    "clean:packages:coverage": "lerna exec -- rm -rf coverage",
+    "test": "jest --coverage",
+    "format": "prettier --write \"**/*.{ts,md}\"",
+    "format:check": "prettier --check \"**/*.ts\" --ignore-unknown",
+    "docs:build": "ts-node ./documentation/build.ts",
+    "docs:watch": "nodemon --ext md,mdx --ignore site/ --exec \"yarn docs:build\""
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "@jest/globals": "^29.1.2",
+    "@rollup/plugin-typescript": "^9.0.2",
+    "@types/glob": "^8.0.0",
+    "esbuild": "^0.15.13",
+    "glob": "^8.0.3",
+    "jest": "^29.1.2",
+    "lerna": "^4.0.0",
+    "minimist": "^1.2.7",
+    "nodemon": "^2.0.20",
+    "prettier": "latest",
+    "prettier-plugin-organize-imports": "^3.1.1",
+    "rollup": "^3.3.0",
+    "rollup-plugin-dts": "^5.0.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "rollup-plugin-node-externals": "^5.0.2",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
   },
-  "commands": {
-    "publish": {
-      "ignoreChanges": [
-        "**/*.md",
-        "**/example/**",
-        "**/*.test.ts"
-      ]
-    }
+  "engines": {
+    "node": ">=18.0.0"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "packageManager": "yarn@1.22.19"
 }
