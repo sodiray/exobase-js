@@ -235,7 +235,6 @@ export function TheLibrary() {
           <CodeWindow className="!h-auto max-h-[none] w-full">
             <CodeWindow.Code2 lines={endpointCode.lines.length}>
               {endpointCode.lines.map((tokens, lineIndex) => {
-                console.log(tokens, lineIndex)
                 return (
                   <div key={lineIndex}>
                     {tokens.map((token, tokenIndex) => {
