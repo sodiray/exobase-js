@@ -6,7 +6,7 @@ type AsyncFunction = (...args: any[]) => Promise<any>
 type LogIntercepter = Awaited<ReturnType<typeof initLogIntercepter>>
 
 declare global {
-  var _useLoggerIntercepter: LogIntercepter
+  var _useConsoleInterceptIntercepter: LogIntercepter
 }
 
 export interface Logger {
@@ -16,7 +16,7 @@ export interface Logger {
   debug: LogFunction
 }
 
-export type UseInitLoggerOptions = {
+export type UseConsoleInterceptOptions = {
   /**
    * Sometimes you want your logger disabled, this
    * is an easy to use flag. Set it to true and no
@@ -50,7 +50,7 @@ export type UseInitLoggerOptions = {
    *
    * @default true
    */
-  reuseLogger?: boolean
+  reuseConsoleIntercept?: boolean
   /**
    * The logger that console log invocations should
    * be dispatched to.
@@ -62,7 +62,7 @@ export const initLogIntercepter = async ({
   logger: makeLogger,
   passthrough = true,
   target = console
-}: UseInitLoggerOptions & {
+}: UseConsoleInterceptOptions & {
   target?: typeof console
 }) => {
   const queue: Record<string, Promise<any>> = {}
@@ -110,19 +110,19 @@ export const initLogIntercepter = async ({
   }
 }
 
-const withInitLogger = async (
+const withLogger = async (
   func: AsyncFunction,
-  options: UseInitLoggerOptions,
+  options: UseConsoleInterceptOptions,
   args: any[]
 ) => {
   const intercepter = await (async () => {
-    if (options.reuseLogger) {
-      const existing = globalThis._useLoggerIntercepter
+    if (options.reuseConsoleIntercept) {
+      const existing = globalThis._useConsoleInterceptIntercepter
       if (existing) {
         return existing
       }
       const newIntercepter = await initLogIntercepter(options)
-      globalThis._useLoggerIntercepter = newIntercepter
+      globalThis._useConsoleInterceptIntercepter = newIntercepter
       return newIntercepter
     }
     return await initLogIntercepter(options)
@@ -135,9 +135,7 @@ const withInitLogger = async (
   return result
 }
 
-export const useInitLogger: (
-  options: UseInitLoggerOptions
+export const useConsoleIntercept: (
+  options: UseConsoleInterceptOptions
 ) => (func: AsyncFunction) => AsyncFunction = options => func =>
-  options.disable === true
-    ? func
-    : (...args) => withInitLogger(func, options, args)
+  options.disable === true ? func : (...args) => withLogger(func, options, args)

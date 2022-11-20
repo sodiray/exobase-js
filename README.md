@@ -158,7 +158,7 @@ type InitHook = (options?) => (func) => (...args: any[]) => Promise<any>
 An init hook should take in `...args: any[]` and pass them on to the function composition. It's important that init hooks do not do any framework specific work.
 
 ```ts
-const useLogger =
+const useConsoleIntercept =
   () =>
   func =>
   async (...args: any[]) => {

@@ -1,107 +1,239 @@
 ---
-title: "Getting Started"
-description: "Welcome to Radash"
-group: "Getting Started"
-location: "documentation/gettings-started.mdx"
+title: 'Getting Started'
+description: 'Welcome to Exobase'
+group: 'Getting Started'
+location: 'documentation/gettings-started.mdx'
+order: -1
 ---
 
-## Getting Started
+## Install Dependencies
 
-### Welcome to 2020s
+First, install the Exobase core and hooks package.
 
-Radash is the next library you can't live without. First and foremost, it's powerful. With those 
-powerful functions, you get strong types and zero dependencies. If you can step out in a bit of 
-faith and try the functions out, I have no doubt you'll find yourself falling in love.
-
-### Featured Functions
-
-Come, dip your toe in the water. Here are a few functions we can't live without anymore.
-Hopefully, you'll find them useful as well.
-
-#### try
-The `_.try` function abstracts the logical fork of a try/catch and provides an _error
-first callback_ reminiscent response.
-
-```ts
-const [err, response] = await _.try(api.gods.create)({ name: 'Ra' })
-if (err) {
-  throw new Error('Your god is weak and could not be created')
-}
+```sh
+yarn add @exobase/core @exobase/hooks
 ```
 
-#### range
-The `_.range` function returns a generator that can be used for iterating. This means you'll
-never have to write a `for (let i)` loop again -- and you shouldn't.
+Next, install the root hook that matches the framework you're using. If you're using Express.js install the `useExpress` hook.
 
-```ts
-for (const i of _.range(0, 4)) {
-  console.log(i) // 0, 1, 2, 3, 4
-}
-
-for (const i of _.range(10, 20, 2)) {
-  console.log(i) // 10, 12, 14, 16, 18, 20
-}
+```sh
+yarn add @exobase/use-express
 ```
 
-#### select
-The `_.select` function takes a mapper and filter function and runs them together for you in
-a single iteration. No more writing a reduce because you need to map and filter, and you don't
-want to implement them separately for performance's sake.
+## Compose an Endpoint
+
+Use the hooks you now have to compose an endpoint.
 
 ```ts
-const superPoweredGodsFromEgypt = _.select(
-  gods, 
-  g => ({ ...g, power: g.power * g.power }), 
-  g => g.culture === 'egypt'
-)
-```
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import express from 'express'
 
-#### defer
-The `_.defer` function lets you register functions to run as cleanup while running an async function. It's 
-like a try/finally, but you can register the finally block at specific times.
+const listBooksEndpoint = async (props: Props) => {
+  return [
+    {
+      title: 'Exobase for Dummies',
+      publisher: 'EPH - Exobase Publishing House',
+      author: 'Tom Chen'
+    }
+  ]
+}
 
-```ts
-await _.defer(async (defer) => {
-  await api.builds.updateStatus('in-progress')
-  defer((err) => {
-    api.builds.updateStatus(err ? 'failed' : 'success')
-  })
+const listBooks = compose(useExpress(), listBooksEndpoint)
 
-  fs.mkdir('build')
-  defer(() => {
-    fs.unlink('build')
-  })
+const port = 3000
+const app = express()
 
-  await build()
+app.get('/library/books', listBooks)
+app.listen(port, () => {
+  console.log(`Exobase API listening on port ${port}`)
 })
 ```
 
-#### objectify
-The `_.objectify` function helps you convert a list to an object in one step. Typically, we either do this
-in two steps or write a reduce.
+## Using Hooks
+
+The endpoint we created is a bit static but we can wire in hooks to give it more realistic behavior.
+
+### Database
+
+We can use the `useServices` hook to wire a database into our function.
 
 ```ts
-const godsByCulture = _.objectify(gods, g => g.name, g => g.culture)
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import { useServices } from '@exobase/hooks'
+
+const database = {
+  books: {
+    list: async () => {
+      // Implement against your database
+    }
+  }
+}
+
+type Services = {
+  db: typeof database
+}
+
+const listBooksEndpoint = async ({ services }: Props<{}, Services>) => {
+  const { db } = services
+  return await db.books.list()
+}
+
+const listBooks = compose(
+  useExpress(),
+  useServices<Services>({
+    db: database
+  }),
+  listBooksEndpoint
+)
 ```
 
-## Love and Hate
+### Path Parameters
 
-### Lodash
+Let's add an endpoint to our API that finds a book by id. We'll accept the `id` via a path param.
 
-Lodash was incredible. When JavaScript was still maturing, it provided the power to things you couldn't
-easily do in the vanilla. That was last decade. In this decade, the needs are different. The goal with Radash
-is to provide the powerful functions you need, not the ones the runtimes now provide, and to do it with great types
-and source code that's easy to read and understand.
+```ts
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import { useServices, usePathParams } from '@exobase/hooks'
 
-#### Saying No
+type Args = {
+  id: string
+}
 
-Radash does not provide `_.map` or `_.filter` functions. They were helpful before optional chaining and nullish coalescing.
-Now, there really isn't a need.  
+type Services = {
+  db: typeof database
+}
 
-In the last ten years, the JavaScript community as a whole, and the Typescript community specifically, has moved
-closer to some key values: **deterministic is good, polymorphic is bad, strong types are everything**. A part of Lodash's
-charm was that it let you pass different types to a function and get other behavior based on the type. An example 
-is the `_.map` function, which can take a collection or an object and map over either. Radash doesn't provide that
-kind of polymorphic behavior.  
+const findBookEndpoint = async ({ args, services }: Props<Args, Services>) => {
+  const { db } = services
+  const { id } = args
+  return await db.books.find(id)
+}
 
-Sorry, not sorry.
+const findBook = compose(
+  useExpress(),
+  usePathParams('/library/books/{id}'),
+  useServices<Services>({
+    db: database
+  }),
+  findBookEndpoint
+)
+
+app.get('/library/books/:id', findBook)
+```
+
+### Json Body
+
+Let's add an endpoint to our API that creates a new book given properties from the POST body.
+
+```ts
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import { useServices, useJsonArgs } from '@exobase/hooks'
+
+type Args = {
+  title: string
+  publisher: string
+  author: string
+}
+
+type Services = {
+  db: typeof database
+}
+
+const createBookEndpoint = async ({
+  args,
+  services
+}: Props<Args, Services>) => {
+  const { db } = services
+  const { title, publisher, author } = args
+  return await db.books.create({
+    title,
+    publisher,
+    author
+  })
+}
+
+app.get(
+  '/library/books/:id',
+  compose(
+    useExpress(),
+    useJsonArgs<Args>(z => ({
+      title: z.string(),
+      publisher: z.string(),
+      author: z.string()
+    })),
+    useServices<Services>({
+      db: database
+    }),
+    createBookEndpoint
+  )
+)
+```
+
+### Routing
+
+A core belief of Exobase is that relying directly on framework features creates an application that is not nimble and difficult to change. Instead of using the Express routing, we can use the `useRoute` hook to do the routing ourselves. This will make it easier for us to move to another framework (like Lambda) if we ever need to.
+
+```ts
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import { useRoute, usePathParams } from '@exobase/hooks'
+import express from 'express'
+
+//
+// List Books
+//
+const listBooksEndpoint = async (props: Props) => {
+  return [
+    {
+      title: 'Exobase for Dummies',
+      publisher: 'EPH - Exobase Publishing House',
+      author: 'Tom Chen'
+    }
+  ]
+}
+
+const listBooks = compose(
+  useExpress(),
+  listBooksEndpoint
+)
+
+//
+// Find Books
+//
+const findBookEndpoint = async (props: Props) => {
+  return [
+    {
+      title: 'Exobase for Dummies',
+      publisher: 'EPH - Exobase Publishing House',
+      author: 'Tom Chen'
+    }
+  ]
+}
+
+const findBook = compose(
+  useExpress(),
+  usePathParams('/library/books/{id}')
+  findBookEndpoint
+)
+
+const port = 3000
+const app = express()
+
+app.all('*', compose(
+  useExpress()
+  useRoute('/library/books', listBooks),
+  useRoute('/library/books/*', findBook)
+))
+app.listen(port, () => {
+  console.log(`Exobase API listening on port ${port}`)
+})
+```

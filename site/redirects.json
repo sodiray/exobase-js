@@ -1,4 +1,7 @@
 [
-  { "source": "/", "destination": "/docs/getting-started", "permanent": true },
-  { "source": "/docs", "destination": "/docs/getting-started", "permanent": false }
+  {
+    "source": "/docs",
+    "destination": "/docs/getting-started",
+    "permanent": false
+  }
 ]

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, jest, test } from '@jest/globals'
 import { sleep, tryit } from 'radash'
-import { useInitLogger } from '../index'
+import { useConsoleIntercept } from '../index'
 
 const original = {
   log: console.log.bind(console),
@@ -9,7 +9,7 @@ const original = {
   debug: console.debug.bind(console)
 }
 
-describe('useInitLogger hook', () => {
+describe('useConsoleIntercept hook', () => {
   afterEach(() => {
     console.log = original.log
     console.warn = original.warn
@@ -23,9 +23,9 @@ describe('useInitLogger hook', () => {
       error: jest.fn(),
       debug: jest.fn(() => sleep(1000))
     }
-    const sut = useInitLogger({
+    const sut = useConsoleIntercept({
       logger: () => logger,
-      reuseLogger: true,
+      reuseConsoleIntercept: true,
       awaitFlush: true
     })
     const result = await sut(async () => {
@@ -49,10 +49,10 @@ describe('useInitLogger hook', () => {
       error: jest.fn(),
       debug: jest.fn(() => sleep(1000))
     }
-    const sut = useInitLogger({
+    const sut = useConsoleIntercept({
       logger,
       passthrough: false,
-      reuseLogger: false
+      reuseConsoleIntercept: false
     })
     const [err] = await tryit(
       sut(async () => {

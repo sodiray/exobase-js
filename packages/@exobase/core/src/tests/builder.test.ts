@@ -137,7 +137,7 @@ const useAuth: <
   })
 }
 
-const useLogger =
+const useConsoleIntercept =
   () =>
   (func: (...args: any[]) => Promise<any>) =>
   async (...args: any[]) => {
@@ -222,7 +222,7 @@ const useLambdaLogger: <
 describe('exo function builder', () => {
   test('fully built function builds correct types', async () => {
     const handler = exo()
-      .init(useLogger())
+      .init(useConsoleIntercept())
       .root(useLambda())
       .hook(useLambdaLogger('lambda.logger'))
       .hook(

@@ -60,3 +60,7 @@ export const responseFromError = (error: any): t.Response => {
     }
   }
 }
+
+export const response = (error: any, result: any) => {
+  return error ? responseFromError(error) : responseFromResult(result)
+}

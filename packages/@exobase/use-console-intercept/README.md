@@ -1,6 +1,6 @@
-An Exobase init hook that proxies calls to the global standard console functions (log, warn, error, debug) to a logger you specify.
+An Exobase init hook that intercepts calls made to the console functions (log, warn, error, debug) and proxies them to a logger you specify.
 
-Some engineers or teams may not be a fan of this. Thats ok. This is a hook I (@rayepps) have used a lot and now can't live without. Locally, we use a simple environment variable check to disable the customer logger which gives us beautiful/readable logs as engineers. In production, we have the assurance of knowing that no log can possibly escape our logger because we've proxied the console.log functions.
+Some engineers or teams may aginst this. Thats ok! This is a hook I (@rayepps) have used a lot and it's worked incredibly well. Locally, we use a simple environment variable check to disable the intercept which gives us beautiful/readable logs in our terminals. In production, we have the assurance of knowing that no log can possibly escape our logger because we've proxied the console.log functions directly.
 
 I highly recommend 👍
 
@@ -9,13 +9,13 @@ I highly recommend 👍
 Yarn
 
 ```sh
-yarn add @exobase/use-init-logger
+yarn add @exobase/use-console-intercept
 ```
 
 then
 
 ```ts
-import { useLogger } from '@exobase/use-init-logger'
+import { useConsoleIntercept } from '@exobase/use-console-intercept'
 ```
 
 or, install with the hooks package
@@ -27,7 +27,12 @@ yarn add @exobase/hooks
 then
 
 ```ts
-import { useLogger, useServices, useJsonArgs, useCors } from '@exobase/hooks'
+import {
+  useConsoleIntercept,
+  useServices,
+  useJsonArgs,
+  useCors
+} from '@exobase/hooks'
 ```
 
 ## Usage
@@ -38,7 +43,7 @@ This is a hook you'll probably use on every endpoint in the same way so you'll w
 import { compose, isObject } from 'radash'
 import type { Props } from '@exobase/core'
 import { useLambda } from '@exobase/lambda'
-import { useLogger } from '@exobase/hooks'
+import { useConsoleIntercept } from '@exobase/hooks'
 import fs from 'fs'
 
 const endpoint = (props: Props) => {
@@ -46,18 +51,18 @@ const endpoint = (props: Props) => {
 }
 
 export default compose(
-  useLogger({
-    logger: FileLogger('endpoint.log')
+  useConsoleIntercept({
+    logger: JsonFileLogger('endpoint.log')
   }),
   useLambda(),
   endpoint
 )
 ```
 
-Here's the file logger
+Here's the `JsonFileLogger` logger
 
 ```ts
-const FileLogger = (file: string) => {
+const JsonFileLogger = (file: string) => {
   const stream = fs.createWriteStream(file, { flags: 'a' })
   const log =
     (level: 'log' | 'warn' | 'error' | 'debug') =>
@@ -82,17 +87,17 @@ const FileLogger = (file: string) => {
 
 ### LogTail Example
 
-We have deep love for log tail. This is how we use LogTail with the `useLogger` hook. First, we compose the hook in a `hook/useLogger` file in our project so we don't have to do the setup in every endpoint.
+We have deep love for LogTail. This is how we use LogTail with the `useConsoleIntercept` hook. First, we compose the hook in a `hook/useConsoleIntercept` file in our project so we don't have to do the setup in every endpoint.
 
 ```ts
-// ~/hooks/useLogger.ts
-import { useLogger as exobaseUseLogger } from '@exobase/use-init-logger'
+// ~/hooks/useIntercept.ts
+import { useConsoleIntercept } from '@exobase/use-console-intercept'
 
-export const useLogger = () =>
-  exobaseUseLogger({
+export const useIntercept = () =>
+  useConsoleIntercept({
     logger: LogTailLogger(),
     awaitFlush: true,
-    reuseLogger: true,
+    reuseConsoleIntercept: true,
     passthrough: true,
     disable: process.env.ENV_NAME === 'local'
   })
@@ -118,10 +123,10 @@ const LogTailLogger = () => {
 }
 ```
 
-Lastly, in our endpoint, we import our own `useLogger` instead of the Exobase `useLogger` hook directly.
+Lastly, in our endpoint, we import our own `useIntercept` instead of the Exobase `useConsoleIntercept` hook directly.
 
 ```ts
-import { useLogger } from '~/hooks/useLogger'
+import { useIntercept } from '~/hooks/useIntercept'
 
-export default compose(useLogger(), useLambda(), endpoint)
+export default compose(useIntercept(), useLambda(), endpoint)
 ```

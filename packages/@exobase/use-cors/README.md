@@ -11,7 +11,7 @@ yarn add @exobase/use-cors
 then
 
 ```ts
-import { useLogger } from '@exobase/use-cors'
+import { useConsoleIntercept } from '@exobase/use-cors'
 ```
 
 or, install with the hooks package
@@ -23,7 +23,7 @@ yarn add @exobase/hooks
 then
 
 ```ts
-import { useCors, useLogger, useServices, useJsonArgs } from '@exobase/hooks'
+import { useCors, useConsoleIntercept, useServices, useJsonArgs } from '@exobase/hooks'
 ```
 
 ## Usage

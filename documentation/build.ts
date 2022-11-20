@@ -1,8 +1,8 @@
-import fs from 'fs'
+import fs from 'fs/promises'
 import glob from 'glob'
 import parse from 'minimist'
 import { join } from 'path'
-import { parallel, sift, tryit } from 'radash'
+import { omit, parallel, sift, sort, toInt, tryit } from 'radash'
 
 type Args = {
   debug?: boolean
@@ -21,7 +21,8 @@ export const groups = [
 ]
 
 const run = async ({ debug = false }: Args) => {
-  await tryit(fs.promises.mkdir)('site/src/pages/docs')
+  await tryit(fs.mkdir)('site/src/pages/docs')
+  await tryit(clean)('site/src/pages/docs')
   const packageDocs = await parallel(
     6,
     glob.sync('packages/@exobase/*/*.{md,mdx}'),
@@ -48,7 +49,7 @@ ${footer()}
       if (debug) {
         console.log({ dest }, `\n${md}`)
       } else {
-        await fs.promises.writeFile(dest, md, 'utf-8')
+        await fs.writeFile(dest, md, 'utf-8')
       }
 
       return {
@@ -67,22 +68,26 @@ ${footer()}
       if (debug) {
         console.log({ dest }, `\n${content}`)
       } else {
-        await fs.promises.writeFile(dest, content, 'utf-8')
+        await fs.writeFile(dest, content, 'utf-8')
       }
-      const group = /group:\s"(.+?)"/.exec(content)?.[1]
+      const group = /group:\s["'](.+?)["']/.exec(content)?.[1]
+      const order = toInt(/order:\s(.+?)\n/.exec(content)?.[1], 0)
       if (!group) {
         throw `The mdx doc ${p.fileName} requires a group`
       }
       return {
         group,
-        file: p.fileName
+        file: p.fileName,
+        order
       }
     }
   )
 
+  const otherDocs = sort(docDocs, d => d.order).map(d => omit(d, ['order']))
+
   const manifest = {
     groups,
-    files: sift([...packageDocs, ...docDocs]).reduce(
+    files: sift([...packageDocs, ...otherDocs]).reduce(
       (acc, doc) => ({
         ...acc,
         [doc.group]: [...(acc[doc.group] ?? []), doc.file]
@@ -91,7 +96,7 @@ ${footer()}
     )
   }
 
-  await fs.promises.writeFile(
+  await fs.writeFile(
     join(process.cwd(), 'site/src/pages/docs/manifest.json'),
     JSON.stringify(manifest, null, 2),
     'utf-8'
@@ -132,7 +137,7 @@ const Path = (relPath: string) => {
     absPath,
     isLicense: () => fileName.toLowerCase() === 'license.md',
     package: async () => {
-      const str = await fs.promises.readFile(
+      const str = await fs.readFile(
         absPath.replace(fileName, 'package.json'),
         'utf-8'
       )
@@ -142,8 +147,14 @@ const Path = (relPath: string) => {
       return absPath.replace(/\/exobase\-js\/.+/, `/exobase-js/${relDocsPath}`)
     },
     read: async () => {
-      return await fs.promises.readFile(absPath, 'utf-8')
+      return await fs.readFile(absPath, 'utf-8')
     }
+  }
+}
+
+const clean = async (dir: string) => {
+  for (const file of await fs.readdir(dir)) {
+    await fs.unlink(join(dir, file))
   }
 }
 
