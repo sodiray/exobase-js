@@ -5,7 +5,7 @@ Provides a hook to parse and validate request arguments from the json body.
 Yarn
 
 ```sh
-yarn add @exobase/use-json-args
+yarn add @exobase/use-json-body
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ If you're writing Exobase endpoints in Typescript you'll want to import the `Pro
 ```ts
 import { compose } from 'radash'
 import type { Props } from '@exobase/core'
-import { useJsonArgs } from '@exobase/use-json-args'
+import { useJsonBody } from '@exobase/use-json-body'
 import { useLambda } from '@exobase/use-lambda'
 
 type Args = {
@@ -30,17 +30,15 @@ const createAccount = async ({ args }: Props) => {
   // })
 }
 
-const STRONG =
-  /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$/
+const STRONG = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/
 
 export default compose(
   useLambda(),
-  useJsonArgs(yup => ({
-    username: yup.string().required(),
-    password: yup
-      .string()
-      .matches(STRONG, { message: 'Password is too weak' })
-      .required()
+  useJsonBody(z => ({
+    username: z.string(),
+    password: z.string().refine(p => STRONG.test(p), {
+      message: 'Password is too weak'
+    })
   })),
   createAccount
 )
