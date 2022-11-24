@@ -42,10 +42,6 @@ export const isMatch = (
   if (routeRule !== '*') {
     const pathParts = trim(request.path, '/').split('/')
     const ruleParts = trim(routeRule, '/').split('/')
-    console.log({
-      pathParts,
-      ruleParts
-    })
     if (ruleParts.length > pathParts.length) {
       return false
     }
