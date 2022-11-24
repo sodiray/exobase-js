@@ -27,14 +27,12 @@ describe('isMatch', () => {
   test('returns true for matching requests and keys', async () => {
     expect(isMatch(request, '*', '*')).toBe(true)
     expect(isMatch(request, '*', '/**')).toBe(true)
-    expect(isMatch(request, '*', '/*/to')).toBe(true)
     expect(isMatch(request, '*', '/go/*/dinner')).toBe(true)
     expect(isMatch(request, '*', '/go/**')).toBe(true)
     expect(isMatch(request, '*', '/go/to/*')).toBe(true)
     expect(isMatch(request, '*', '/*/*/*')).toBe(true)
     expect(isMatch(request, '*', '/go/to/dinner')).toBe(true)
   })
-
   test('returns false for requests and keys that do not match', () => {
     expect(isMatch(request, '*', '/back/**')).toBe(false)
     expect(isMatch(request, '*', '/go/*/lunch')).toBe(false)
@@ -43,5 +41,7 @@ describe('isMatch', () => {
     expect(isMatch(request, '*', '/go/to/dinner/next')).toBe(false)
     expect(isMatch(request, '*', '/go/to/dinner/**')).toBe(false)
     expect(isMatch(request, 'GET', '*')).toBe(false)
+    expect(isMatch(request, 'POST', '/go/to')).toBe(false)
+    expect(isMatch(request, '*', '/*/to')).toBe(false)
   })
 })
