@@ -5,10 +5,10 @@ Provides a hook to parse and validate query string values in the request.
 Yarn
 
 ```sh
-yarn add @exobase/use-query-args
+yarn add @exobase/use-query-string
 ```
 
-or install `useQueryArgs` with all other Exobase provided hooks:
+or install `useQueryString` with all other Exobase provided hooks:
 
 ```sh
 yarn add @exobase/hooks
@@ -19,7 +19,7 @@ yarn add @exobase/hooks
 ```ts
 import { compose } from 'radash'
 import type { Props } from '@exobase/core'
-import { useQueryArgs } from '@exobase/use-query-args'
+import { useQueryString } from '@exobase/use-query-string'
 import { useLambda } from '@exobase/use-lambda'
 
 type Args = {
@@ -37,7 +37,7 @@ const getAccount = async ({ args }: Props) => {
 
 export default compose(
   useLambda(),
-  useQueryArgs(z => ({
+  useQueryString(z => ({
     id: zod.string(),
     format: zod.string()
   })),

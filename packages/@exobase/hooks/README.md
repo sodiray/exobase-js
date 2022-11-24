@@ -14,8 +14,7 @@ import {
   useRoute,
   useServices,
   useHeaderArgs,
-  useJsonArgs,
-  useQueryArgs,
-  useValidation
+  useJsonBody,
+  useQueryString
 } from '@exobase/hooks'
 ```

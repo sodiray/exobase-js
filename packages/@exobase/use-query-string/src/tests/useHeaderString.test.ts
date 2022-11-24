@@ -1,12 +1,12 @@
 import type { Request } from '@exobase/core'
 import { describe, expect, jest, test } from '@jest/globals'
 import zod from 'zod'
-import { useQueryArgs } from '../index'
-import { withQueryArgs } from '../useQueryArgs'
+import { useQueryString } from '../index'
+import { withQueryString } from '../useQueryString'
 
-describe('useQueryArgs hook', () => {
+describe('useQueryString hook', () => {
   test('parses query and adds to args', async () => {
-    const sut = useQueryArgs(z => ({
+    const sut = useQueryString(z => ({
       id: z.string(),
       format: z.string()
     }))
@@ -26,7 +26,7 @@ describe('useQueryArgs hook', () => {
   })
 })
 
-describe('withQueryArgs function', () => {
+describe('withQueryString function', () => {
   test('applies model attributes to args', async () => {
     const endpointMock = jest.fn(p => p)
     const props: any = {
@@ -37,7 +37,7 @@ describe('withQueryArgs function', () => {
         }
       } as unknown as Request
     }
-    const result = await withQueryArgs(
+    const result = await withQueryString(
       endpointMock,
       zod.object({
         id: zod.string(),

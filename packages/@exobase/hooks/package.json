@@ -36,7 +36,7 @@
     "@exobase/use-jwt-auth": "^1.0.0-rc.12",
     "@exobase/use-lambda-tracer": "^1.0.0-rc.6",
     "@exobase/use-path-params": "^1.0.0-rc.11",
-    "@exobase/use-query-args": "^1.0.0-rc.3",
+    "@exobase/use-query-string": "^1.0.0-rc.3",
     "@exobase/use-route": "^1.0.0-rc.12",
     "@exobase/use-services": "^1.0.0-rc.11"
   },

@@ -13,7 +13,7 @@ const validationFailed = (extra: { info: string; key: string }) =>
     ...extra
   })
 
-export const withQueryArgs = async (
+export const withQueryString = async (
   func: Handler,
   model: AnyZodObject | ZodArray<any>,
   name: string | null,
@@ -40,7 +40,7 @@ export const withQueryArgs = async (
   })
 }
 
-export const useQueryArgs: <TArgs extends {}, TProps extends Props = Props>(
+export const useQueryString: <TArgs extends {}, TProps extends Props = Props>(
   shapeMaker: (z: Zod) => KeyOfType<TArgs, any>
 ) => (
   func: Handler<
@@ -50,5 +50,5 @@ export const useQueryArgs: <TArgs extends {}, TProps extends Props = Props>(
   >
 ) => Handler<TProps> = shapeMaker => func => {
   const model = zod.object(shapeMaker(zod))
-  return props => withQueryArgs(func as Handler, model, null, props)
+  return props => withQueryString(func as Handler, model, null, props)
 }

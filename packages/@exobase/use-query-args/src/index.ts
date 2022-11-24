@@ -1,1 +1,0 @@
-export { useQueryArgs } from './useQueryArgs'
