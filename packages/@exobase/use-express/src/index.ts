@@ -1,2 +1,2 @@
 export { useExpress } from './useExpress'
-export type { UseExpressOptions } from './useExpress'
+export type { ExpressFramework, UseExpressOptions } from './useExpress'
