@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-node-http",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "Exobase root hook to handle function running on a raw Node HTTP/S server",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
