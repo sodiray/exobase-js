@@ -37,7 +37,7 @@
     "@exobase/use-lambda-tracer": "^1.0.0-rc.6",
     "@exobase/use-path-params": "^1.0.0-rc.11",
     "@exobase/use-query-string": "^1.0.0-rc.4",
-    "@exobase/use-route": "^1.0.0-rc.13",
+    "@exobase/use-router": "^1.0.0-rc.0",
     "@exobase/use-services": "^1.0.0-rc.11"
   },
   "exobaseDocs": {

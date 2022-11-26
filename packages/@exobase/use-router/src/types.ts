@@ -1,0 +1,10 @@
+export type HttpPath = `/${string}` | '*'
+export type HttpMethod =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'OPTIONS'
+  | 'HEAD'
+  | 'PATCH'
+  | '*'
