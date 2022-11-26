@@ -68,7 +68,7 @@ import { useExpress } from '@exobase/use-express'
 import {
   useJsonArgs,
   useQueryArgs,
-  useHeaderArgs,
+  useHeaders,
   usePathParams
 } from '@exobase/hooks'
 
@@ -90,7 +90,7 @@ const handler = compose(
   useQueryArgs(z => ({
     id: z.string()
   })),
-  useHeaderArgs(z => ({
+  useHeaders(z => ({
     'x-trace-id': z.string()
   })),
   usePathParams('/endpoint/{segment}'),

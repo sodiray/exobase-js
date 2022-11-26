@@ -31,7 +31,7 @@
     "@exobase/use-cached-response": "^1.0.0-rc.5",
     "@exobase/use-console-intercept": "^1.0.0-rc.2",
     "@exobase/use-cors": "^1.0.0-rc.12",
-    "@exobase/use-header-args": "^1.0.0-rc.3",
+    "@exobase/use-headers": "^1.0.0-rc.3",
     "@exobase/use-json-body": "^1.0.0-rc.4",
     "@exobase/use-jwt-auth": "^1.0.0-rc.12",
     "@exobase/use-lambda-tracer": "^1.0.0-rc.6",

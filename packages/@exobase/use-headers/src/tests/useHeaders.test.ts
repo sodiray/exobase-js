@@ -1,11 +1,11 @@
 import { describe, expect, jest, test } from '@jest/globals'
 import zod from 'zod'
-import { useHeaderArgs } from '../index'
-import { withHeaderArgs } from '../useHeaderArgs'
+import { useHeaders } from '../index'
+import { withHeaders } from '../useHeaders'
 
-describe('useHeaderArgs hook', () => {
+describe('useHeaders hook', () => {
   test('parses headers and adds to args', async () => {
-    const sut = useHeaderArgs(zod => ({
+    const sut = useHeaders(zod => ({
       'x-request-id': zod.string(),
       'x-api-key': zod.string()
     }))
@@ -27,7 +27,7 @@ describe('useHeaderArgs hook', () => {
   })
 })
 
-describe('withHeaderArgs function', () => {
+describe('withHeaders function', () => {
   test('applies model attributes to args', async () => {
     const endpointMock = jest.fn(p => p)
     const props = {
@@ -38,7 +38,7 @@ describe('withHeaderArgs function', () => {
         }
       }
     }
-    const result = await withHeaderArgs(
+    const result = await withHeaders(
       endpointMock,
       zod.object({
         'x-request-id': zod.string(),

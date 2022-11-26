@@ -20,7 +20,7 @@ export const withJsonBody = async (
       message: 'Json body validation failed',
       status: 400,
       info: zerr.issues
-        .map(e => `${e.path.join('.')} ${e.message.toLowerCase()}`)
+        .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
         .join(', '),
       key: 'err.json-body.failed'
     })

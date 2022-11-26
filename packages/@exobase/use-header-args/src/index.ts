@@ -1,1 +1,0 @@
-export { useHeaderArgs } from './useHeaderArgs'

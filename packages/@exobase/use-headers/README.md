@@ -5,7 +5,20 @@ Provides a hook to parse and validate headers in the request.
 Yarn
 
 ```sh
-yarn add @exobase/use-header-args
+yarn add @exobase/use-headers
+```
+
+or install with the exobase hooks package
+
+```sh
+yarn add @exobase/hooks
+```
+
+## Import
+
+```ts
+import { useHeaders } from '@exobase/use-headers'
+import { useHeaders } from '@exobase/hooks'
 ```
 
 ## Usage
@@ -13,7 +26,7 @@ yarn add @exobase/use-header-args
 ```ts
 import { compose } from 'radash'
 import type { Props } from '@exobase/core'
-import { useHeaderArgs } from '@exobase/use-header-args'
+import { useHeaders } from '@exobase/use-headers'
 import { useLambda } from '@exobase/use-lambda'
 
 type Args = {
@@ -30,7 +43,7 @@ const createAccount = async ({ args }: Props) => {
 
 export default compose(
   useLambda(),
-  useHeaderArgs(z => ({
+  useHeaders(z => ({
     'x-request-timestamp': zod.number(),
     'x-api-key': zod.string()
   })),

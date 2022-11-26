@@ -13,7 +13,7 @@ import {
   usePathParams,
   useRoute,
   useServices,
-  useHeaderArgs,
+  useHeaders,
   useJsonBody,
   useQueryString
 } from '@exobase/hooks'

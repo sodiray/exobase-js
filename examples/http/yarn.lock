@@ -50,7 +50,7 @@
     "@exobase/use-cached-response" "^1.0.0-rc.5"
     "@exobase/use-console-intercept" "^1.0.0-rc.2"
     "@exobase/use-cors" "^1.0.0-rc.12"
-    "@exobase/use-header-args" "^1.0.0-rc.3"
+    "@exobase/use-headers" "^1.0.0-rc.3"
     "@exobase/use-json-body" "^1.0.0-rc.4"
     "@exobase/use-jwt-auth" "^1.0.0-rc.12"
     "@exobase/use-lambda-tracer" "^1.0.0-rc.6"
@@ -97,9 +97,9 @@
   dependencies:
     "@exobase/core" "^1.0.0-rc.12"
 
-"@exobase/use-header-args@^1.0.0-rc.3":
+"@exobase/use-headers@^1.0.0-rc.3":
   version "1.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@exobase/use-header-args/-/use-header-args-1.0.0-rc.3.tgz#3c01a986fd07f31a77e798cfcfc1324f7ac8226c"
+  resolved "https://registry.yarnpkg.com/@exobase/use-headers/-/use-headers-1.0.0-rc.3.tgz#3c01a986fd07f31a77e798cfcfc1324f7ac8226c"
   integrity sha512-WbmjWEDjXshnVZyu71zHuTY7JzGWWmEPHSFVjj9zE13gE5V4+yCbE+hRiZdG4m0+HqZ15nwUEmAIuhyjmPZ7XA==
   dependencies:
     "@exobase/core" "^1.0.0-rc.12"
