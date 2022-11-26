@@ -7,11 +7,11 @@ import https from 'https'
 import { error } from '@exobase/core'
 import { compose, toInt } from 'radash'
 import { useRouter } from '@exobase/hooks'
-import { useNodeHttp } from './useNodeHttp'
+import { useNode } from '@exobase/use-node-http'
 
 const server = https.createServer(
   compose(
-    useNodeHttp(),
+    useNode(),
     useRouter(router => router
       .on(['GET', 'POST'], '/ping', ping)
       put('/v1/library/book/*/return', returnBook),

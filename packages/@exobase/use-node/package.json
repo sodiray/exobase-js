@@ -1,5 +1,5 @@
 {
-  "name": "@exobase/use-node-http",
+  "name": "@exobase/use-node",
   "version": "1.0.0-rc.1",
   "description": "Exobase root hook to handle function running on a raw Node HTTP/S server",
   "main": "dist/cjs/index.cjs",
@@ -36,7 +36,7 @@
   },
   "exobaseDocs": {
     "group": "Root Hooks",
-    "name": "useNodeHttp"
+    "name": "useNode"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
 }

@@ -5,7 +5,13 @@ An Exobase root hook for a raw Node HTTP/S server
 Yarn
 
 ```sh
-yarn add @exobase/use-node-http
+yarn add @exobase/use-node
+```
+
+## Import
+
+```ts
+import { useNode } from '@exobsae/use-node'
 ```
 
 ## Usage
@@ -15,11 +21,11 @@ import https from 'https'
 import { error } from '@exobase/core'
 import { compose, toInt } from 'radash'
 import { useRouter } from '@exobase/hooks'
-import { useNodeHttp } from './useNodeHttp'
+import { useNode } from '@exobase/use-node'
 
 const server = https.createServer(
   compose(
-    useNodeHttp(),
+    useNode(),
     useRouter(router => router
       .on(['GET', 'POST'], '/ping', pingEndpoint)
       put('/v1/library/book/*/return', returnBookEndpoint),

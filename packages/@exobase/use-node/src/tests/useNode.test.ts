@@ -1,12 +1,12 @@
 import { describe, expect, jest, test } from '@jest/globals'
-import { useNodeHttp } from '../index'
+import { useNode } from '../index'
 
-describe('useNodeHttp function', () => {
+describe('useNode function', () => {
   test('applys result to response', async () => {
     const endpoint = jest.fn(() => ({ message: 'done' }))
     const writeHead = jest.fn()
     const end = jest.fn()
-    const sut = useNodeHttp()
+    const sut = useNode()
     await sut(endpoint as any)(
       {
         headers: {},

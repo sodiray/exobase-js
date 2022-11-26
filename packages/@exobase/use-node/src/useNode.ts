@@ -5,18 +5,17 @@ import qs from 'querystring'
 import { lowerize, tryit } from 'radash'
 import url from 'url'
 
-export type UseNodeHttpOptions = {}
-
-export type NodeHttpFramework = {
+export type UseNodeOptions = {}
+export type NodeFramework = {
   req: IncomingMessage
   res: ServerResponse<IncomingMessage> & {
     req: IncomingMessage
   }
 }
 
-export async function withNodeHttp(
-  func: Handler<Props & { framework: NodeHttpFramework }>,
-  options: UseNodeHttpOptions,
+export async function withNode(
+  func: Handler<Props & { framework: NodeFramework }>,
+  options: UseNodeOptions,
   req: IncomingMessage,
   res: ServerResponse<IncomingMessage> & {
     req: IncomingMessage
@@ -37,15 +36,15 @@ export async function withNodeHttp(
   setResponse(res, response(error, result))
 }
 
-export const useNodeHttp: (options?: UseNodeHttpOptions) => (
-  func: Handler<Props & { framework: NodeHttpFramework }>
+export const useNode: (options?: UseNodeOptions) => (
+  func: Handler<Props & { framework: NodeFramework }>
 ) => (
   req: IncomingMessage,
   res: ServerResponse<IncomingMessage> & {
     req: IncomingMessage
   }
 ) => Promise<any> = options => func => (req, res) =>
-  withNodeHttp(func, options ?? {}, req, res)
+  withNode(func, options ?? {}, req, res)
 
 export function setResponse(
   res: ServerResponse<IncomingMessage> & {
