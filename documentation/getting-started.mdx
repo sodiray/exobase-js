@@ -185,7 +185,7 @@ A core belief of Exobase is that relying directly on framework features creates 
 import { compose } from 'radash'
 import type { Props } from '@exobase/core'
 import { useExpress } from '@exobase/use-express'
-import { useRoute, usePathParams } from '@exobase/hooks'
+import { useRouter, usePathParams } from '@exobase/hooks'
 import express from 'express'
 
 //
@@ -230,8 +230,10 @@ const app = express()
 
 app.all('*', compose(
   useExpress()
-  useRoute('/library/books', listBooks),
-  useRoute('/library/books/*', findBook)
+  useRouter(router => router
+    .get('/library/books', listBooks),
+    .get('/library/books/*', findBook)
+  )
 ))
 app.listen(port, () => {
   console.log(`Exobase API listening on port ${port}`)

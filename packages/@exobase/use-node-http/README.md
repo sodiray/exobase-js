@@ -14,17 +14,19 @@ yarn add @exobase/use-node-http
 import https from 'https'
 import { error } from '@exobase/core'
 import { compose, toInt } from 'radash'
-import { useRoute } from '@exobase/hooks'
+import { useRouter } from '@exobase/hooks'
 import { useNodeHttp } from './useNodeHttp'
 
 const server = https.createServer(
   compose(
     useNodeHttp(),
-    useRoute('*', '/ping', pingEndpoint),
-    useRoute('PUT', '/v1/library/book/*/return', returnBookEndpoint),
-    useRoute('POST', '/v1/library/book', createBookEndpoint),
-    useRoute('GET', '/v1/library/book/*', findBookEndpoint),
-    useRoute('GET', '/v1/library/book', listBooksEndpoint),
+    useRouter(router => router
+      .on(['GET', 'POST'], '/ping', pingEndpoint)
+      put('/v1/library/book/*/return', returnBookEndpoint),
+      post('/v1/library/book', createBookEndpoint),
+      get('/v1/library/book/*', findBookEndpoint),
+      get('/v1/library/book', listBooksEndpoint),
+    ),
     async () => {
       throw error({
         status: 404,

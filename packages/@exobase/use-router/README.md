@@ -1,27 +1,36 @@
-Provides an Exobase hook that will do simple method/route routing to differnet endpoint functions.
+Provides an Exobase hook that does method + url routing using a trie based on the given url path.
 
 ## Usage
 
 ```ts
-import { compose } from 'radash'
-import type { Props } from '@exobase/core'
-import { useNext } from '@exobase/use-next'
-import { useRoute } from '@exobase/use-route'
+import https from 'https'
+import { error } from '@exobase/core'
+import { compose, toInt } from 'radash'
+import { useRouter } from '@exobase/hooks'
+import { useNodeHttp } from './useNodeHttp'
 
-export const listLibraries = async (props: Props) => {
-  return db.libraries.list()
-}
-
-export const listBooks = async (props: Props) => {
-  return db.books.list()
-}
-
-export default compose(
-  useNext(),
-  useRoute('GET', '/library', listLibraries)
-  useRoute('GET', '/library/books', listBooks)
-  async () => {
-    throw new Error('404 Not found')
-  }
+const server = https.createServer(
+  compose(
+    useNodeHttp(),
+    useRouter(router => router
+      .on(['GET', 'POST'], '/ping', ping)
+      put('/v1/library/book/*/return', returnBook),
+      post('/v1/library/book', createBook),
+      get('/v1/library/book/*', findBook),
+      get('/v1/library/book', listBooks),
+    ),
+    async () => {
+      throw error({
+        status: 404,
+        message: 'Not found'
+      })
+    }
+  )
 )
+
+const port = toInt(process.env.PORT, 8500)
+
+server.listen(port, () => {
+  console.log(`API listening on port ${port}`)
+})
 ```

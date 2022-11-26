@@ -1,5 +1,5 @@
 import { error } from '@exobase/core'
-import { useRoute } from '@exobase/hooks'
+import { useRouter } from '@exobase/hooks'
 import http from 'http'
 import { compose, toInt } from 'radash'
 import superagent from 'superagent'
@@ -17,12 +17,16 @@ const port = toInt(process.env.PORT, 8500)
 const server = http.createServer(
   compose(
     useHttp(),
-    useRoute('*', '/ping', ping),
-    useRoute('PUT', '/v1/timeout/*/clear', clearTimeout),
-    useRoute('POST', '/v1/timeout', createTimeout),
-    useRoute('GET', '/v1/timeout/*', findTimeout),
-    useRoute('GET', '/v1/timeout', listTimeouts),
-    useRoute('POST', '/cron/call-callbacks', callCallbacks),
+    useRouter(router =>
+      router
+        .get('/ping', ping)
+        .post('/ping', ping)
+        .put('/v1/timeout/*/clear', clearTimeout)
+        .post('/v1/timeout', createTimeout)
+        .get('/v1/timeout/*', findTimeout)
+        .get('/v1/timeout', listTimeouts)
+        .post('/cron/call-callbacks', callCallbacks)
+    ),
     async () => {
       throw error({
         status: 404,
