@@ -4,7 +4,7 @@ import {
   responseFromError,
   responseFromResult
 } from '../response'
-import { AbstractError } from '../types'
+import { JsonError } from '../types'
 
 describe('responseFromResult function', () => {
   test('returns input when input is already an abstract response', () => {
@@ -32,10 +32,10 @@ describe('responseFromError function', () => {
   })
   test('returns wrapped error when input is not an abstract response', () => {
     const error = {
-      type: '@error:json',
+      format: '@json',
       status: 499,
       key: 'exo.err.test'
-    } as AbstractError
+    } as JsonError
     const result = responseFromError(error)
     expect(result.status).toBe(499)
     expect(result.body.error.key).toBe('exo.err.test')

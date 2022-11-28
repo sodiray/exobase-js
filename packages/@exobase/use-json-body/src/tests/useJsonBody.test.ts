@@ -48,7 +48,7 @@ describe('useJsonBody hooks', () => {
     ]
     expect(error).not.toBeNull()
     expect(error.status).toBe(400)
-    expect(error.info).toBe('name required')
+    expect(error.info).toBe('name: required')
   })
 })
 

@@ -1,0 +1,33 @@
+{
+  "name": "@exobase/use-authorization",
+  "version": "1.0.0-rc.0",
+  "description": "Exobase hook to check if a request is authorized for a given resource",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.mjs",
+    "require": "./dist/cjs/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "rayepps",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn tsc --noEmit && yarn rollup -c",
+    "test": "jest --coverage",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  },
+  "dependencies": {
+    "@exobase/core": "^1.0.0-rc.12",
+    "radash": "^9.5.0"
+  },
+  "exobaseDocs": {
+    "group": "Hooks",
+    "name": "useAuthorization"
+  },
+  "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
+}

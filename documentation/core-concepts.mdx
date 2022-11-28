@@ -141,7 +141,7 @@ One of the goals of Exobase is to isolate the business logic, bring it to the fr
 
 ## Auth
 
-Like `args` and `services` the `auth` property on the `Props` is a placholder object you can use to store authentication data about the current request. Auth hooks (like `useJWTAuth`, `useBasicAuth`, and `useApiKey`) do not populate the args, they populate the `auth` property.
+Like `args` and `services` the `auth` property on the `Props` is a placholder object you can use to store authentication data about the current request. Auth hooks (like `useTokenAuth`, `useBasicAuth`, and `useApiKey`) do not populate the args, they populate the `auth` property.
 
 ```ts
 import { compose } from 'radash'

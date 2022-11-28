@@ -2919,6 +2919,11 @@ duplexer@^0.1.1:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz#3abe43aef3835f8ae077d136ddce0f276b0400e6"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
+durhuman@^0.0.0-alpha.1:
+  version "0.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/durhuman/-/durhuman-0.0.0-alpha.1.tgz#c0af3a846e99638210913a7eb519a7949981180b"
+  integrity sha512-DHP2p47hafcw5AwMtvVkBV3iLMOPoZkrtqyYTNTqLsGT9p3P5dubr2iOsLYCui2ItRYcytLPV5jTwGCcYtaBgw==
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"

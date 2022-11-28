@@ -53,7 +53,7 @@
     "@exobase/use-api-key" "^1.0.0-rc.4"
     "@exobase/use-basic-auth" "^1.0.0-rc.5"
     "@exobase/use-cors" "^1.0.0-rc.5"
-    "@exobase/use-jwt-auth" "^1.0.0-rc.5"
+    "@exobase/use-token-auth" "^1.0.0-rc.5"
     "@exobase/use-path-params" "^1.0.0-rc.4"
     "@exobase/use-route" "^1.0.0-rc.4"
     "@exobase/use-services" "^1.0.0-rc.4"
@@ -81,9 +81,9 @@
   dependencies:
     "@exobase/core" "^1.0.0-rc.6"
 
-"@exobase/use-jwt-auth@^1.0.0-rc.5":
+"@exobase/use-token-auth@^1.0.0-rc.5":
   version "1.0.0-rc.5"
-  resolved "https://registry.yarnpkg.com/@exobase/use-jwt-auth/-/use-jwt-auth-1.0.0-rc.5.tgz#edc4f8e78332fcd21921778ea1681c0c633c4ed6"
+  resolved "https://registry.yarnpkg.com/@exobase/use-token-auth/-/use-token-auth-1.0.0-rc.5.tgz#edc4f8e78332fcd21921778ea1681c0c633c4ed6"
   integrity sha512-Uj4c6mTtAMoHNb6+VrK9Ipzli4NGiXEouJPRbvd8QzNh80EBiFu6V+F0HqaPledhcsBqZx9BOcc7D0umtmTmRA==
   dependencies:
     "@exobase/core" "^1.0.0-rc.6"

@@ -13,7 +13,7 @@ export const withHeaders = async (
   props: Props
 ) => {
   const [zerr, args] = (await tryit(model.parseAsync)(
-    props.request.body
+    props.request.headers
   )) as unknown as [ZodError, any]
   if (zerr) {
     throw error({

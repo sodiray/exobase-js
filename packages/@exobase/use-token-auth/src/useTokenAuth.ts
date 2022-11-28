@@ -1,19 +1,17 @@
 import type { Handler, Props } from '@exobase/core'
 import { error } from '@exobase/core'
 import * as jwt from 'jsonwebtoken'
+import { isFunction, tryit } from 'radash'
 import { Token } from './token'
 
-export interface UseJWTAuthOptions {
+export interface UseTokenAuthOptions {
   type?: 'id' | 'access'
   iss?: string
   aud?: string
-  permission?: string
-  scope?: string
-  secret: string
 }
 
-export type JWTAuth<ExtraData = Record<string, string>> = {
-  token: Token<ExtraData>
+export type TokenAuth<TExtraData = {}> = {
+  token: Token<TExtraData>
 }
 
 const forbidden = (extra: { info: string; key: string }) => {
@@ -32,25 +30,8 @@ const unauthorized = (extra: { info: string; key: string }) => {
   })
 }
 
-const validateClaims = (decoded: Token, options: UseJWTAuthOptions) => {
-  const { type, iss, aud, permission, scope } = options
-  if (permission) {
-    if (!decoded.permissions || !decoded.permissions.includes(permission)) {
-      throw forbidden({
-        info: 'Given token does not have required permissions',
-        key: 'exo.err.jwt.capricornus'
-      })
-    }
-  }
-
-  if (scope) {
-    if (!decoded.scopes || !decoded.scopes.includes(scope)) {
-      throw forbidden({
-        info: 'Given token does not have required scope',
-        key: 'exo.err.jwt.caprinaught'
-      })
-    }
-  }
+const validateClaims = (decoded: Token, options: UseTokenAuthOptions) => {
+  const { type, iss, aud } = options
 
   if (type) {
     if (!decoded.type || decoded.type !== type) {
@@ -80,19 +61,18 @@ const validateClaims = (decoded: Token, options: UseJWTAuthOptions) => {
   }
 }
 
-const verifyToken = async (
-  token: string,
-  secret: string
-): Promise<{ err: Error | null; decoded: Token }> => {
-  const [err, decoded] = (await new Promise(res => {
-    jwt.verify(token, secret, (e, d) => res([e, d as Token]))
-  })) as [Error | null, Token]
-  return { err, decoded }
+const verifyToken = async (token: string, secret: string): Promise<Token> => {
+  return await new Promise((resolve, reject) => {
+    jwt.verify(token, secret, (err, decoded) =>
+      err ? reject(err) : resolve(decoded as Token)
+    )
+  })
 }
 
-export async function withJWTAuth<TProps extends Props>(
-  func: Handler<TProps & { auth: TProps['auth'] & JWTAuth }>,
-  options: UseJWTAuthOptions,
+export async function withTokenAuth<TProps extends Props>(
+  func: Handler<TProps & { auth: TProps['auth'] & TokenAuth }>,
+  secret: string | ((props: Props) => string | Promise<string>),
+  options: UseTokenAuthOptions,
   props: TProps
 ) {
   const header = props.request.headers['authorization'] as string
@@ -112,7 +92,8 @@ export async function withJWTAuth<TProps extends Props>(
 
   const bearerToken = header.replace('Bearer ', '')
 
-  const { err, decoded } = await verifyToken(bearerToken, options.secret)
+  const s = isFunction(secret) ? await Promise.resolve(secret(props)) : secret
+  const [err, decoded] = await tryit(verifyToken)(bearerToken, s)
 
   if (err) {
     console.error('Inavlid token', { err }, 'r.log.jwt.beiyn')
@@ -139,9 +120,13 @@ export async function withJWTAuth<TProps extends Props>(
   })
 }
 
-export const useJWTAuth: <TProps extends Props>(
-  options: UseJWTAuthOptions
+export const useTokenAuth: <TProps extends Props>(
+  secret: string | ((props: Props) => string | Promise<string>),
+  options?: UseTokenAuthOptions
 ) => (
-  func: Handler<TProps & { auth: TProps['auth'] & JWTAuth }>
-) => Handler<TProps> = options => func => props =>
-  withJWTAuth(func, options, props)
+  func: Handler<TProps & { auth: TProps['auth'] & TokenAuth }>
+) => Handler<TProps> =
+  (secret, options = {}) =>
+  func =>
+  props =>
+    withTokenAuth(func, secret, options, props)

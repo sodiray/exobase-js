@@ -9,7 +9,7 @@ import {
   useApiKey,
   useBasicAuth,
   useCors,
-  useJWTAuth,
+  useTokenAuth,
   usePathParams,
   useRoute,
   useServices,

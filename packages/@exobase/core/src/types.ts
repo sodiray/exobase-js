@@ -1,25 +1,17 @@
-export interface AbstractError {
+/**
+ * Any object that is thrown, and matches this interface,
+ * having a format property equal to '@json' will be
+ * treated as a known error by the root hook.
+ *
+ * If a 'status' property exists it will be used to set
+ * the HTTP status on the response.
+ */
+export interface JsonError {
   /**
-   * Always @error:json when thrown by a
-   * exobase hook
+   * Always '@json' when thrown by an exobase hook
    */
-  type: '@error:json'
-  status: number
+  format: '@json'
 }
-
-export interface ErrorResult {
-  error: AbstractError
-  result: null
-  status: number
-}
-
-export interface SuccessResult<T> {
-  error: null
-  result: T
-  status: number
-}
-
-export type Result<T> = ErrorResult | SuccessResult<T>
 
 export type Request = {
   headers: Record<string, string | string[]>

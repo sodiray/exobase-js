@@ -10,8 +10,8 @@ export const isResponse = (res: any): res is t.Response => {
   return (res as t.Response)?.type === '@exobase:response'
 }
 
-export const isAbstractError = (err: any): err is t.AbstractError => {
-  return (err as t.AbstractError)?.type === '@error:json'
+export const isJsonError = (err: any): err is t.JsonError => {
+  return (err as t.JsonError)?.format === '@json'
 }
 
 export const defaultResponse: t.Response = {
@@ -49,8 +49,8 @@ export const responseFromError = (error: any): t.Response => {
     body: {
       result: null,
       status: error.status ?? 500,
-      error: isAbstractError(error)
-        ? omit(error, ['type'])
+      error: isJsonError(error)
+        ? omit(error, ['format'])
         : {
             key: 'err.unknown',
             status: 500,

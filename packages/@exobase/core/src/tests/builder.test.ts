@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
-import exo from '../builder'
+import exo from '../index'
 import { Props, Request, Response } from '../types'
 
 // First ~220 lines here are just mocking out fake

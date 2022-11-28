@@ -1,21 +1,20 @@
 import { describe, expect, test } from '@jest/globals'
-import { createToken, useJWTAuth } from '../index'
-import { withJWTAuth } from '../useJWTAuth'
+import { sleep } from 'radash'
+import { createToken, useTokenAuth } from '../index'
+import { withTokenAuth } from '../useTokenAuth'
 
 const SECRET = 'unknown'
 
-describe('useJWTAuth hook function', () => {
-  test('executes withJWTAuth function', async () => {
-    const token = createToken({
-      secret: SECRET,
+describe('useTokenAuth hook function', () => {
+  test('executes withTokenAuth function', async () => {
+    const token = createToken(SECRET, {
       sub: 'test',
       type: 'id',
       aud: 'test',
-      iss: 'test'
+      iss: 'test',
+      ttl: '3 hours'
     })
-    const sut = useJWTAuth({
-      secret: SECRET
-    })
+    const sut = useTokenAuth(SECRET)
     const result = await sut(async () => 'success')({
       request: {
         headers: {
@@ -27,42 +26,36 @@ describe('useJWTAuth hook function', () => {
   })
 })
 
-describe('withJWTAuth function', () => {
+describe('withTokenAuth function', () => {
   test('returns func result for success', async () => {
-    const token = createToken({
-      secret: SECRET,
+    const token = createToken(SECRET, {
       sub: 'test',
       type: 'id',
       aud: 'test',
-      iss: 'test'
+      iss: 'test',
+      ttl: '3 hours'
     })
-    const result = await withJWTAuth(
-      async () => 'success',
-      {
-        secret: SECRET
-      },
-      {
-        request: {
-          headers: {
-            authorization: `Bearer ${token}`
-          }
-        } as any
+    const result = await withTokenAuth(async () => 'success', SECRET, {}, {
+      request: {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
       } as any
-    )
+    } as any)
     expect(result).toBe('success')
   })
   test('returns func result for matching validation', async () => {
-    const token = createToken({
-      secret: SECRET,
+    const token = createToken(SECRET, {
       sub: 'test',
       type: 'id',
       aud: 'test',
-      iss: 'test'
+      iss: 'test',
+      ttl: '3 hours'
     })
-    const result = await withJWTAuth(
+    const result = await withTokenAuth(
       async () => 'success',
+      SECRET,
       {
-        secret: SECRET,
         type: 'id',
         aud: 'test',
         iss: 'test'
@@ -78,19 +71,19 @@ describe('withJWTAuth function', () => {
     expect(result).toBe('success')
   })
   test('throws error when token is expired', async () => {
-    const token = createToken({
-      secret: SECRET,
-      ttl: -10000,
+    const token = createToken(SECRET, {
       sub: 'test',
       type: 'id',
       aud: 'test',
-      iss: 'test'
+      iss: 'test',
+      ttl: '0 seconds'
     })
+    await sleep(100)
     try {
-      await withJWTAuth(
+      await withTokenAuth(
         async () => 'success',
+        SECRET,
         {
-          secret: SECRET,
           type: 'id',
           aud: 'test',
           iss: 'test'
@@ -108,7 +101,7 @@ describe('withJWTAuth function', () => {
       return
     }
     throw new Error(
-      'Expected withJWTAuth to throw exception for timeout but it did not'
+      'Expected withTokenAuth to throw exception for timeout but it did not'
     )
   })
 })

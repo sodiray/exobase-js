@@ -284,6 +284,4 @@ export const chain = <
   }
 })
 
-const exo = () => pick(chain(), ['init', 'root'])
-
-export default exo
+export const exo = () => pick(chain(), ['init', 'root'])

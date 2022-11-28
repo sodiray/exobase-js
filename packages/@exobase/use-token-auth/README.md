@@ -5,7 +5,7 @@ Provides an Exobase hook to parse and validate a JWT token in a request. It also
 ```ts
 import { compose } from 'radash'
 import type { Props } from '@exobase/core'
-import { useJWTAuth } from '@exobase/use-jwt-auth'
+import { useTokenAuth } from '@exobase/use-token-auth'
 
 const endpoint = (props: Props) => {
   console.log(props)
@@ -13,7 +13,7 @@ const endpoint = (props: Props) => {
 
 export default compose(
   useExpress(),
-  useJWTAuth({
+  useTokenAuth({
     type: 'id',
     secret: 'my-little-secret'
   }),
