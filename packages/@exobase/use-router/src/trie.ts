@@ -8,12 +8,6 @@ export type TrieNode = {
   handlers: Partial<Record<HttpMethod, Function>>
 }
 
-export const empty: Trie = {
-  path: '/',
-  handlers: {},
-  children: []
-}
-
 export const addNode = (
   trie: Trie,
   method: HttpMethod,

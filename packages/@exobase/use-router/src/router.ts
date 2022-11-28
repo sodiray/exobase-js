@@ -1,7 +1,7 @@
 import type { Handler } from '@exobase/core'
 import { isString } from 'radash'
 import type { Trie } from './trie'
-import { addNode, empty, search } from './trie'
+import { addNode, search } from './trie'
 import type { HttpMethod, HttpPath } from './types'
 
 export type Router = {
@@ -20,7 +20,7 @@ export type Router = {
   lookup: (req: { method: HttpMethod; path: HttpPath }) => Handler | null
 }
 
-export const createRouter = (current: Trie = empty): Router => {
+export const createRouter = (current?: Trie): Router => {
   const on = (
     method: HttpMethod | HttpMethod[],
     path: HttpPath,
@@ -29,7 +29,11 @@ export const createRouter = (current: Trie = empty): Router => {
     const methods = isString(method) ? [method] : method
     const newTrie = methods.reduce(
       (acc, m) => addNode(acc, m, path, handler),
-      current
+      current ?? {
+        path: '/',
+        handlers: {},
+        children: []
+      }
     )
     return createRouter(newTrie)
   }
@@ -43,6 +47,7 @@ export const createRouter = (current: Trie = empty): Router => {
     options: (path, handler) => on('OPTIONS', path, handler),
     head: (path, handler) => on('HEAD', path, handler),
     lookup: req => {
+      if (!current) return null
       return search(current, req.method, req.path) as Handler | null
     }
   }

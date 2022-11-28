@@ -1,19 +1,19 @@
 import { describe, expect, test } from '@jest/globals'
-import { withExpress } from '../useExpress'
+import { mockRequest, mockResponse } from 'mock-req-res'
+import { useExpress } from '../index'
 
-describe('withExpress function', () => {
+describe('useExpress hook', () => {
   test('applys result to response', async () => {
     let status: any = null
     let headers: any = null
     let json: any = null
-    await withExpress(
-      async () => ({
-        message: 'success'
-      }),
-      {
-        skipJson: true,
-        skipCompression: true
-      },
+    const sut = useExpress({
+      skipJson: true,
+      skipCompression: true
+    })
+    await sut(async () => ({
+      message: 'success'
+    }))(
       {
         headers: {},
         originalUrl: '',
@@ -40,21 +40,20 @@ describe('withExpress function', () => {
     let status: any = null
     let headers: any = null
     let json: any = null
-    await withExpress(
-      async ({ response }) => ({
-        ...response,
-        headers: {
-          'request-id': 'abc'
-        },
-        status: 301,
-        body: {
-          message: 'content moved'
-        }
-      }),
-      {
-        skipJson: true,
-        skipCompression: true
+    const sut = useExpress({
+      skipJson: true,
+      skipCompression: true
+    })
+    await sut(async ({ response }) => ({
+      ...response,
+      headers: {
+        'request-id': 'abc'
       },
+      status: 301,
+      body: {
+        message: 'content moved'
+      }
+    }))(
       {
         headers: {},
         originalUrl: '',
@@ -76,5 +75,11 @@ describe('withExpress function', () => {
       'request-id': 'abc'
     })
     expect(json).toEqual({ message: 'content moved' })
+  })
+  test('does not fail when using middleware', async () => {
+    const sut = useExpress()
+    await sut(async () => ({
+      message: 'success'
+    }))(mockRequest(), mockResponse())
   })
 })

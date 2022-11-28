@@ -1,7 +1,6 @@
 import { describe, expect, jest, test } from '@jest/globals'
-import zod from 'zod'
+import { tryit } from 'radash'
 import { useHeaders } from '../index'
-import { withHeaders } from '../useHeaders'
 
 describe('useHeaders hook', () => {
   test('parses headers and adds to args', async () => {
@@ -25,31 +24,23 @@ describe('useHeaders hook', () => {
     )
     expect(result.args['x-api-key']).toBe(props.request.headers['x-api-key'])
   })
-})
-
-describe('withHeaders function', () => {
-  test('applies model attributes to args', async () => {
+  test('throws bad request when validation fails', async () => {
+    const sut = useHeaders(zod => ({
+      'x-request-id': zod.string(),
+      'x-api-key': zod.string()
+    }))
     const endpointMock = jest.fn(p => p)
     const props = {
       request: {
         headers: {
-          'x-request-id': 'a22',
-          'x-api-key': 'mock-nmame'
+          'x-request-id': 'abc'
+          // 'x-api-key': 'secret'
         }
       }
     }
-    const result = await withHeaders(
-      endpointMock,
-      zod.object({
-        'x-request-id': zod.string(),
-        'x-api-key': zod.string()
-      }),
-      null,
-      props as any
-    )
-    expect(result.args['x-request-id']).toBe(
-      props.request.headers['x-request-id']
-    )
-    expect(result.args['x-api-key']).toBe(props.request.headers['x-api-key'])
+    const [err] = await tryit(sut(endpointMock as any))(props as any)
+    expect(err).not.toBeNull()
+    expect(endpointMock).toBeCalledTimes(0)
+    expect(err!.message).toBe('Header validation failed')
   })
 })

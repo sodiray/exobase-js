@@ -1,5 +1,5 @@
 import type { Handler, Props, Response } from '@exobase/core'
-import { responseFromError, responseFromResult } from '@exobase/core'
+import { response as toResponse } from '@exobase/core'
 import { sort, tryit, unique } from 'radash'
 import URL from 'url'
 
@@ -25,7 +25,7 @@ const Tokens = (
     },
     status: () => `${response.status}`,
     referrer: () => `${request.headers.referer || request.headers.referrer}`,
-    'remove-address': () => request.ip,
+    ip: () => request.ip,
     'http-version': () => request.httpVersion,
     protocol: () => request.protocol,
     'user-agent': () => `${request.headers['user-agent'] ?? ''}`
@@ -147,18 +147,19 @@ export async function withLogging<TProps extends Props>(
   props: TProps
 ) {
   const [err, result] = await tryit(func)(props)
-  const response = err ? responseFromError(err) : responseFromResult(result)
+  const response = toResponse(err, result)
   const defaultTokens = Tokens(props, err, response)
   const tokens = {
     ...defaultTokens,
     ...options.tokens(defaultTokens, props, err, response)
   }
-  const log = LogEngine.template(template, LogEngine.parse(template), tokens)
-  if (err) {
-    options?.logger.error(log)
-    throw err
-  }
-  options?.logger.log(log)
+  const message = LogEngine.template(
+    template,
+    LogEngine.parse(template),
+    tokens
+  )
+  if (err) options.logger.error(message)
+  else options.logger.log(message)
   return response
 }
 

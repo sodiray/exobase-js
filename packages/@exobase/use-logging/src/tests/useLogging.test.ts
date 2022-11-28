@@ -28,6 +28,57 @@ describe('useLogging hook', () => {
     expect(result).toEqual(defaultResponse)
     expect(mockLog).toBeCalledWith('200 /ping myself')
   })
+  test('does not fail when endpoint throws', async () => {
+    const mockLog = jest.fn()
+    const mockError = jest.fn()
+    const sut = useLogging(':status :path', {
+      logger: {
+        log: mockLog,
+        error: mockError
+      }
+    })
+    const result = await sut(async () => {
+      throw 'failure'
+    })({
+      request: {
+        method: 'POST',
+        startedAt: Date.now() - 1000,
+        url: 'exobase.dev',
+        path: '/ping'
+      },
+      response: defaultResponse
+    } as any)
+    expect(result.status).toEqual(500)
+    expect(mockError).toBeCalledWith('500 /ping')
+  })
+  test('works with all builtin tokens', async () => {
+    const mockLog = jest.fn()
+    const mockError = jest.fn()
+    const all =
+      ':url :domain :path :method :elapsed(ms) :elapsed(s) :elapsed :date(iso) :date :status :referrer :ip :http-version :protocol :user-agent'
+    const sut = useLogging(all, {
+      logger: {
+        log: mockLog,
+        error: mockError
+      }
+    })
+    const result = await sut(async () => defaultResponse)({
+      request: {
+        method: 'POST',
+        startedAt: Date.now() - 1000,
+        url: 'exobase.dev',
+        path: '/ping',
+        headers: {
+          referrer: 'myself',
+          'user-agent': 'chrome'
+        }
+      },
+      response: defaultResponse
+    } as any)
+    expect(result).toEqual(defaultResponse)
+    expect(mockError).toBeCalledTimes(0)
+    expect(mockLog).toBeCalledTimes(1)
+  })
 })
 
 describe('LogEngine object', () => {

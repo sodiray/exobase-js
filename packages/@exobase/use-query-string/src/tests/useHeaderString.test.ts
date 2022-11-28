@@ -1,8 +1,7 @@
 import type { Request } from '@exobase/core'
 import { describe, expect, jest, test } from '@jest/globals'
-import zod from 'zod'
+import { tryit } from 'radash'
 import { useQueryString } from '../index'
-import { withQueryString } from '../useQueryString'
 
 describe('useQueryString hook', () => {
   test('parses query and adds to args', async () => {
@@ -24,29 +23,23 @@ describe('useQueryString hook', () => {
     expect(result.args.id).toBe(props.request.query.id)
     expect(result.args.format).toBe(props.request.query.format)
   })
-})
 
-describe('withQueryString function', () => {
-  test('applies model attributes to args', async () => {
+  test('throws bad request error when validation fails', async () => {
     const endpointMock = jest.fn(p => p)
     const props: any = {
       request: {
         query: {
-          id: 'a22',
-          format: 'mock-nmame'
+          id: 'a22'
+          // format: 'mock-nmame'
         }
       } as unknown as Request
     }
-    const result = await withQueryString(
-      endpointMock,
-      zod.object({
-        id: zod.string(),
-        format: zod.string()
-      }),
-      null,
-      props
-    )
-    expect(result.args.id).toBe(props.request.query.id)
-    expect(result.args.name).toBe(props.request.query.name)
+    const sut = useQueryString(z => ({
+      id: z.string(),
+      format: z.string()
+    }))
+    const [err] = await tryit(sut(endpointMock))(props)
+    expect(err).not.toBeNull()
+    expect(err!.message).toBe('Query string validation failed')
   })
 })

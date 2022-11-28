@@ -4,6 +4,7 @@ import { isFunction, objectify, parallel } from 'radash'
 type ServiceMap<TServices> = {
   -readonly [Key in keyof TServices]:
     | TServices[Key]
+    | Promise<TServices[Key]>
     | ((props: Props) => Promise<TServices[Key]>)
     | ((props: Props) => TServices[Key])
 }
@@ -20,9 +21,11 @@ export async function withServices<TServices, TProps extends Props>(
       const serviceOrFunction = serviceFunctionsByKey[key]
       return {
         key,
-        value: isFunction(serviceOrFunction)
-          ? await Promise.resolve(serviceOrFunction(props))
-          : serviceOrFunction
+        value: await Promise.resolve(
+          isFunction(serviceOrFunction)
+            ? serviceOrFunction(props)
+            : serviceOrFunction
+        )
       }
     }
   )

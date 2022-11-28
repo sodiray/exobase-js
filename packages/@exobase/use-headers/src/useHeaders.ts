@@ -9,7 +9,6 @@ type KeyOfType<T, Value> = { [P in keyof T]: Value }
 export const withHeaders = async (
   func: Handler,
   model: AnyZodObject | ZodArray<any>,
-  name: string | null,
   props: Props
 ) => {
   const [zerr, args] = (await tryit(model.parseAsync)(
@@ -27,15 +26,10 @@ export const withHeaders = async (
   }
   return await func({
     ...props,
-    args: name
-      ? {
-          ...props.args,
-          [name]: args
-        }
-      : {
-          ...props.args,
-          ...args
-        }
+    args: {
+      ...props.args,
+      ...args
+    }
   })
 }
 
@@ -49,5 +43,5 @@ export const useHeaders: <TArgs extends {}, TProps extends Props = Props>(
   >
 ) => Handler<TProps> = shapeMaker => func => {
   const model = zod.object(shapeMaker(zod))
-  return props => withHeaders(func as Handler, model, null, props)
+  return props => withHeaders(func as Handler, model, props)
 }

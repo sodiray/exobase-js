@@ -1,42 +1,35 @@
 import type { Handler, Props } from '@exobase/core'
 import { error } from '@exobase/core'
 import { tryit } from 'radash'
-import zod, { AnyZodObject, ZodArray } from 'zod'
+import zod, { AnyZodObject, ZodError } from 'zod'
 
 type Zod = typeof zod
 type KeyOfType<T, Value> = { [P in keyof T]: Value }
 
-const validationFailed = (extra: { info: string; key: string }) =>
-  error({
-    message: 'Query validation failed',
-    status: 400,
-    ...extra
-  })
-
 export const withQueryString = async (
   func: Handler,
-  model: AnyZodObject | ZodArray<any>,
-  name: string | null,
+  model: AnyZodObject,
   props: Props
 ) => {
-  const [err, args] = await tryit(model.parse)(props.request.query)
-  if (err) {
-    throw validationFailed({
-      info: err?.message ?? '',
-      key: 'err.use-query-args.failed'
+  const [zerr, args] = (await tryit(model.parse)(
+    props.request.query
+  )) as unknown as [ZodError, any]
+  if (zerr) {
+    throw error({
+      message: 'Query string validation failed',
+      status: 400,
+      info: zerr.issues
+        .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
+        .join(', '),
+      key: 'err.query-string.failed'
     })
   }
   return await func({
     ...props,
-    args: name
-      ? {
-          ...props.args,
-          [name]: args
-        }
-      : {
-          ...props.args,
-          ...args
-        }
+    args: {
+      ...props.args,
+      ...args
+    }
   })
 }
 
@@ -50,5 +43,5 @@ export const useQueryString: <TArgs extends {}, TProps extends Props = Props>(
   >
 ) => Handler<TProps> = shapeMaker => func => {
   const model = zod.object(shapeMaker(zod))
-  return props => withQueryString(func as Handler, model, null, props)
+  return props => withQueryString(func as Handler, model, props)
 }

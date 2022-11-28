@@ -40,7 +40,16 @@ describe('useCachedResponse hook', () => {
     })
     const result = await sut(endpointMock as any)({
       args: {
-        id: 'x.test.abc'
+        id: 'x.test.abc',
+        child: {
+          name: null,
+          value: undefined,
+          children: [
+            {
+              id: '32'
+            }
+          ]
+        }
       },
       services: {
         cache: {
@@ -89,5 +98,30 @@ describe('useCachedResponse hook', () => {
     expect(setMock).not.toHaveBeenCalled()
     expect(endpointMock).toHaveBeenCalledTimes(1)
     expect(result).toEqual({ message: 'success' })
+  })
+  test('handles cache functions that throw errors', async () => {
+    const getMock = jest.fn(() => {
+      throw 'get failed '
+    })
+    const setMock = jest.fn(() => {
+      throw 'set failed '
+    })
+    const endpointMock = jest.fn(() => ({ message: 'success' }))
+    const sut = useCachedResponse({
+      key: '',
+      ttl: '10 seconds'
+    })
+    const result = await sut(endpointMock as any)({
+      services: {
+        cache: {
+          get: getMock,
+          set: setMock
+        }
+      },
+      response: defaultResponse
+    } as any)
+    expect(getMock).toHaveBeenCalled()
+    expect(setMock).toHaveBeenCalled()
+    expect(endpointMock).toHaveBeenCalledTimes(1)
   })
 })

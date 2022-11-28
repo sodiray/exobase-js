@@ -88,7 +88,7 @@ const makeReq = (req: ExpressRequest): Request => ({
   body: req.body,
   method: req.method,
   query: req.query as Record<string, string>,
-  ip: `${req.socket.remoteAddress}`,
+  ip: `${req.socket?.remoteAddress}`,
   startedAt: Date.now(),
   protocol: req.protocol,
   httpVersion: req.httpVersion

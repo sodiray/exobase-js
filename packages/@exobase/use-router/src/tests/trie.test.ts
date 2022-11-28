@@ -1,5 +1,5 @@
 import { describe, expect, jest, test } from '@jest/globals'
-import { addNode, empty, Trie } from '../trie'
+import { addNode, Trie } from '../trie'
 
 describe('trie module', () => {
   describe('addNode function', () => {
@@ -86,7 +86,16 @@ describe('trie module', () => {
     })
     test('adds node to empty trie correctly', () => {
       const handler = jest.fn()
-      const result = addNode(empty, 'GET', '/repos/*/*/stars', handler)
+      const result = addNode(
+        {
+          path: '/',
+          children: [],
+          handlers: {}
+        },
+        'GET',
+        '/repos/*/*/stars',
+        handler
+      )
       const expected: Trie = {
         path: '/',
         handlers: {},
