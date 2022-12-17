@@ -34,8 +34,6 @@ describe('useNode function', () => {
       } as any
     )
     expect(endpoint).toBeCalled()
-    expect(end).toHaveBeenCalledWith(
-      JSON.stringify({ result: { message: 'done' }, status: 200, error: null })
-    )
+    expect(end).toHaveBeenCalledWith(JSON.stringify({ message: 'done' }))
   })
 })

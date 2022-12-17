@@ -30,9 +30,7 @@ describe('useNext hook', () => {
     )
     expect(status).toBe(200)
     expect(headers).toBeNull()
-    expect(json.result).toEqual({ message: 'success' })
-    expect(json.error).toBeNull()
-    expect(json.status).toBe(200)
+    expect(json).toEqual({ message: 'success' })
   })
 })
 
@@ -65,9 +63,7 @@ describe('withNext function', () => {
     )
     expect(status).toBe(200)
     expect(headers).toBeNull()
-    expect(json.result).toEqual({ message: 'success' })
-    expect(json.error).toBeNull()
-    expect(json.status).toBe(200)
+    expect(json).toEqual({ message: 'success' })
   })
   test('applys response object', async () => {
     let status: any = null
