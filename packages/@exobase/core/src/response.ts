@@ -3,11 +3,11 @@ import * as t from './types'
 
 /**
  * There is a 1 in 1,000,000,000 chance that someone may
- * return an object with _type equal to '@exobase:response'
+ * return an object with _type equal to '@response'
  * and this will break. Nobody do that...
  */
 export const isResponse = (res: any): res is t.Response => {
-  return (res as t.Response)?.type === '@exobase:response'
+  return (res as t.Response)?.type === '@response'
 }
 
 export const isJsonError = (err: any): err is t.JsonError => {
@@ -15,12 +15,10 @@ export const isJsonError = (err: any): err is t.JsonError => {
 }
 
 export const defaultResponse: t.Response = {
-  type: '@exobase:response',
+  type: '@response',
   status: 200,
   headers: {},
-  body: {
-    message: 'success'
-  }
+  body: {}
 }
 
 export const responseFromResult = (result: any): t.Response => {
@@ -31,11 +29,7 @@ export const responseFromResult = (result: any): t.Response => {
   // returned as the json body response
   return {
     ...defaultResponse,
-    body: {
-      result: !result ? defaultResponse.body : result,
-      status: defaultResponse.status,
-      error: null
-    }
+    body: !result ? defaultResponse.body : result
   }
 }
 
@@ -46,18 +40,12 @@ export const responseFromError = (error: any): t.Response => {
   return {
     ...defaultResponse,
     status: error.status ?? 500,
-    body: {
-      result: null,
-      status: error.status ?? 500,
-      error: isJsonError(error)
-        ? omit(error, ['format'])
-        : {
-            key: 'err.unknown',
-            status: 500,
-            message: 'Unknown Error',
-            info: 'The issue has been logged and our development team will be working on a fix asap.'
-          }
-    }
+    body: isJsonError(error)
+      ? omit(error, ['format'])
+      : {
+          status: 500,
+          message: 'Unknown Error'
+        }
   }
 }
 

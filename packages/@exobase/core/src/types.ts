@@ -30,7 +30,7 @@ export type Request = {
 }
 
 export type Response = {
-  type: '@exobase:response'
+  type: '@response'
   headers: Record<string, string | string[]>
   status: number
   body: any

@@ -1,5 +1,5 @@
 import type { Handler, Props, Request, Response } from '@exobase/core'
-import { props, responseFromError, responseFromResult } from '@exobase/core'
+import { props, response } from '@exobase/core'
 import makeCompressionMiddleware from 'compression'
 import type {
   NextFunction,
@@ -49,19 +49,15 @@ export async function withExpress(
   res: ExpressResponse
 ) {
   const middleware = composeMiddleware(...makeMiddleware(options))
-  const reqAfterMiddlware = await middleware(req, res)
-
+  const requestAfterMiddlware = await middleware(req, res)
   const [error, result] = await tryit(func)({
-    ...props(makeReq(reqAfterMiddlware)),
+    ...props(makeRequest(requestAfterMiddlware)),
     framework: {
       req,
       res
     }
   })
-  if (error) console.error(error)
-
-  const response = error ? responseFromError(error) : responseFromResult(result)
-  setResponse(res, response)
+  setResponse(res, response(error, result))
 }
 
 export const useExpress: (
@@ -81,7 +77,7 @@ export function setResponse(res: ExpressResponse, response: Response) {
   res.json(body)
 }
 
-const makeReq = (req: ExpressRequest): Request => ({
+const makeRequest = (req: ExpressRequest): Request => ({
   headers: req.headers as Record<string, string | string[]>,
   url: req.originalUrl,
   path: req.path,

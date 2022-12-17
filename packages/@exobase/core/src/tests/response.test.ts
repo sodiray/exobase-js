@@ -15,7 +15,7 @@ describe('responseFromResult function', () => {
     const result = responseFromResult({
       message: 'success'
     })
-    expect(result.body.result).toEqual({ message: 'success' })
+    expect(result.body).toEqual({ message: 'success' })
   })
 })
 
@@ -28,7 +28,7 @@ describe('responseFromError function', () => {
     const error = new Error('BrokenPipe')
     const result = responseFromError(error)
     expect(result.status).toBe(500)
-    expect(result.body.error.key).toBe('err.unknown')
+    expect(result.body.message).toBe('Unknown Error')
   })
   test('returns wrapped error when input is not an abstract response', () => {
     const error = {
@@ -38,8 +38,7 @@ describe('responseFromError function', () => {
     } as JsonError
     const result = responseFromError(error)
     expect(result.status).toBe(499)
-    expect(result.body.error.key).toBe('exo.err.test')
-    expect(result.body.error.status).toBe(499)
-    expect(result.body.error.type).toBeUndefined()
+    expect(result.body.status).toBe(499)
+    expect(result.body.format).toBeUndefined()
   })
 })

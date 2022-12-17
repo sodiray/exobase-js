@@ -1,5 +1,5 @@
 import type { Handler, Props, Request } from '@exobase/core'
-import { props, responseFromError, responseFromResult } from '@exobase/core'
+import { props, response } from '@exobase/core'
 import { isString, lowerize, try as tryit } from 'radash'
 
 export type UseLambdaOptions = {}
@@ -22,21 +22,16 @@ export async function withLambda(
       context
     }
   })
-  if (error) {
-    console.error(error)
-  }
-
-  const response = error ? responseFromError(error) : responseFromResult(result)
-
-  // @link https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
+  const r = response(error, result)
+  // https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
   return {
-    body: JSON.stringify(response.body ?? {}),
+    body: JSON.stringify(r.body ?? {}),
     isBase64Encoded: false,
     headers: {
       'content-type': 'application/json',
-      ...response.headers
+      ...r.headers
     },
-    statusCode: response.status
+    statusCode: r.status
   }
 }
 

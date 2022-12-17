@@ -1,5 +1,5 @@
 import type { Handler, Props, Request, Response } from '@exobase/core'
-import { props, responseFromError, responseFromResult } from '@exobase/core'
+import { props, response } from '@exobase/core'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { try as tryit } from 'radash'
 
@@ -20,11 +20,7 @@ export async function withNext(
     ...props(makeReq(req)),
     framework: { req, res }
   })
-  if (error) {
-    console.error(error)
-  }
-  const response = error ? responseFromError(error) : responseFromResult(result)
-  setResponse(res, response)
+  setResponse(res, response(error, result))
 }
 
 export const useNext: (

@@ -30,9 +30,6 @@ export async function withNode(
     ...props(makeRequest(req, data)),
     framework: { req, res }
   })
-  if (error) {
-    console.error(error)
-  }
   setResponse(res, response(error, result))
 }
 
