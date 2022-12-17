@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-authorization",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "Exobase hook to check if a request is authorized for a given resource",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -22,7 +22,7 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.13",
+    "@exobase/core": "^1.0.0-rc.14",
     "radash": "^9.5.0"
   },
   "exobaseDocs": {
