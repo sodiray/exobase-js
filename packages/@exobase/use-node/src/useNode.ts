@@ -81,6 +81,7 @@ const makeRequest = (req: IncomingMessage, data: string): Request => {
     protocol: req.httpVersion.toLowerCase().includes('https')
       ? 'https'
       : 'http',
-    httpVersion: req.httpVersion
+    httpVersion: req.httpVersion,
+    params: {}
   }
 }

@@ -1,6 +1,6 @@
 import type { Handler, Props } from '@exobase/core'
-import { responseFromError, responseFromResult } from '@exobase/core'
-import { try as tryit } from 'radash'
+import { response } from '@exobase/core'
+import { tryit } from 'radash'
 
 export const DEFAULT_CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -28,14 +28,11 @@ export async function withCors<TProps extends Props>(
     }
   }
   const [err, result] = await tryit(func)(props)
-  if (err) {
-    console.error(err)
-  }
-  const response = err ? responseFromError(err) : responseFromResult(result)
+  const r = response(err, result)
   return {
-    ...response,
+    ...r,
     headers: {
-      ...response.headers,
+      ...r.headers,
       ...headersToApply
     }
   }

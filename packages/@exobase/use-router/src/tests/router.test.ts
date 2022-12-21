@@ -1,5 +1,5 @@
 import { describe, expect, jest, test } from '@jest/globals'
-import { createRouter } from '../router'
+import { router } from '../router'
 
 describe('router', () => {
   const mocks = {
@@ -21,85 +21,85 @@ describe('router', () => {
       any: jest.fn(() => 'config.any')
     }
   }
-  const router = createRouter()
+  const sut = router()
     .on(
       ['OPTIONS', 'HEAD', 'GET'],
-      '/repos/*/*/stars',
+      '/repos/{owner}/{repo}/stars',
       mocks.stars.listOrOptionsOrHead as any
     )
-    .post('/repos/*/*/stars', mocks.stars.add as any)
-    .delete('/repos/*/*/stars', mocks.stars.delete as any)
-    .post('/repos/*', mocks.repos.create as any)
-    .delete('/repos/*/*', mocks.repos.delete as any)
-    .patch('/repos/*/*/settings', mocks.repos.settings.patch as any)
-    .put('/repos/*/*/settings', mocks.repos.settings.put as any)
+    .post('/repos/{owner}/{repo}/stars', mocks.stars.add as any)
+    .delete('/repos/{owner}/{repo}/stars', mocks.stars.delete as any)
+    .post('/repos/{owner}', mocks.repos.create as any)
+    .delete('/repos/{owner}/{repo}', mocks.repos.delete as any)
+    .patch('/repos/{owner}/{repo}/settings', mocks.repos.settings.patch as any)
+    .put('/repos/{owner}/{repo}/settings', mocks.repos.settings.put as any)
     .on('*', '/repos/config', mocks.config.any as any)
   test('returns correct handler given props', () => {
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/rayepps/exobase-js/stars',
         method: 'GET'
-      })
+      }).handler
     ).toBe(mocks.stars.listOrOptionsOrHead)
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/rayepps/exobase-js/stars',
         method: 'OPTIONS'
-      })
+      }).handler
     ).toBe(mocks.stars.listOrOptionsOrHead)
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/rayepps/exobase-js/stars',
         method: 'HEAD'
-      })
+      }).handler
     ).toBe(mocks.stars.listOrOptionsOrHead)
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/rayepps/exobase-js/stars',
         method: 'POST'
-      })
+      }).handler
     ).toBe(mocks.stars.add)
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/rayepps/exobase-js/stars',
         method: 'DELETE'
-      })
+      }).handler
     ).toBe(mocks.stars.delete)
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/rayepps',
         method: 'POST'
-      })
+      }).handler
     ).toBe(mocks.repos.create)
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/rayepps/exobase-js',
         method: 'DELETE'
-      })
+      }).handler
     ).toBe(mocks.repos.delete)
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/config',
         method: 'PATCH'
-      })
+      }).handler
     ).toBe(mocks.config.any)
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/config',
         method: '*'
-      })
+      }).handler
     ).toBe(mocks.config.any)
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/unknown',
         method: 'PUT'
-      })
+      }).handler
     ).toBeNull()
     expect(
-      router.lookup({
+      sut.lookup({
         path: '/repos/rayepps/exobase-js/unknown/path/1',
         method: '*'
-      })
+      }).handler
     ).toBeNull()
   })
 })

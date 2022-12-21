@@ -7,17 +7,17 @@ import https from 'https'
 import { error } from '@exobase/core'
 import { compose, toInt } from 'radash'
 import { useRouter } from '@exobase/hooks'
-import { useNode } from '@exobase/use-node-http'
+import { useNode } from '@exobase/use-node'
 
 const server = https.createServer(
   compose(
     useNode(),
-    useRouter(router => router
-      .on(['GET', 'POST'], '/ping', ping)
-      put('/v1/library/book/*/return', returnBook),
-      post('/v1/library/book', createBook),
-      get('/v1/library/book/*', findBook),
-      get('/v1/library/book', listBooks),
+    useRouter(router =>
+      router
+        .put('/v1/library/book/{id}/return', returnBook)
+        .post('/v1/library/book', createBook)
+        .get('/v1/library/book/{id}', findBook)
+        .get('/v1/library/book', listBooks)
     ),
     async () => {
       throw error({

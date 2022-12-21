@@ -1,52 +1,51 @@
 import { describe, expect, jest, test } from '@jest/globals'
+import { tryit } from 'radash'
 import { usePathParams } from '../index'
-import { parsePathParams as parse } from '../usePathParams'
 
-describe('usePathParams hook', () => {
-  test('calls endpoint with parsed path param', async () => {
-    const sut = usePathParams('/library/books/{id}')
-    const mockEndpoint = jest.fn(props => ({ book: { id: props.args.id } }))
-    const result = await sut(mockEndpoint as any)({
+describe('usePathParams hooks', () => {
+  test('parses params and applies values to args', async () => {
+    const sut = usePathParams(z => ({
+      id: z.string().transform(s => parseInt(s)),
+      name: z.string()
+    }))
+    const endpointMock = jest.fn(p => p)
+    const props = {
       request: {
-        path: '/library/books/x.book.abc123'
-      }
-    } as any)
-    expect(result.book.id).toBe('x.book.abc123')
-  })
-})
-
-describe('parsePathParams', () => {
-  const workspace = 'w1'
-  const account = 'a1'
-
-  const request = {
-    path: `/v1/show/${workspace}/account/${account}/details`
-  }
-
-  test('returns parsed params', async () => {
-    expect(
-      parse(request, '/v1/show/{workspace}/account/{account}/details')
-    ).toStrictEqual({
-      workspace,
-      account
-    })
-  })
-
-  test('throws error when path does not match', () => {
-    const caught =
-      (func: Function) =>
-      (path: string): any => {
-        try {
-          func(request, path)
-        } catch (err) {
-          return err
+        params: {
+          id: '22',
+          name: 'mock-name'
         }
-        return null
       }
-    const p = caught(parse)
-    expect(p('/v1/show/{workspace}/account/{account}')?.key).not.toBeNull()
-    expect(p('/v1/show/{workspace}')?.key).not.toBeNull()
-    expect(p('/v1/show/{workspace}/account')?.key).not.toBeNull()
-    expect(p('/v1/show')?.key).not.toBeNull()
+    }
+    const result = await sut(endpointMock as any)(props as any)
+    expect(endpointMock).toBeCalled()
+    expect(result.args.id).toBe(22)
+    expect(result.args.name).toBe('mock-name')
+  })
+  test('throws correct error when validation fails', async () => {
+    const sut = usePathParams(z => ({
+      id: z.string().transform(s => parseInt(s)),
+      name: z.string()
+    }))
+    const endpointMock = jest.fn(p => p)
+    const props = {
+      request: {
+        params: {
+          id: '22'
+          // name: 'mock-name'
+        }
+      }
+    }
+    const [error] = (await tryit(sut(endpointMock as any))(
+      props as any
+    )) as unknown as [
+      {
+        status: number
+        info: string
+      }
+    ]
+    expect(error).not.toBeNull()
+    expect(error.status).toBe(400)
+    expect(error.info).toBe('name: required')
   })
 })

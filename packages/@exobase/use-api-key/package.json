@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@exobase/core": "^1.0.0-rc.14",
-    "radash": "^9.0.1"
+    "radash": "^10.3.0"
   },
   "exobaseDocs": {
     "group": "Hooks",

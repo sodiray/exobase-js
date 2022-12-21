@@ -1,7 +1,7 @@
 {
-  "name": "@exobase/use-authorization",
-  "version": "1.0.0-rc.2",
-  "description": "Exobase hook to check if a request is authorized for a given resource",
+  "name": "@exobase/use-catch",
+  "version": "1.0.0-rc.0",
+  "description": "Exobase hook for catching and mapping errors",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
   "types": "dist/index.d.ts",
@@ -22,12 +22,10 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.14",
-    "radash": "^10.3.0"
+    "@exobase/core": "^1.0.0-rc.14"
   },
   "exobaseDocs": {
     "group": "Hooks",
-    "name": "useAuthorization"
-  },
-  "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
+    "name": "useCatch"
+  }
 }

@@ -6006,25 +6006,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-radash@^9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/radash/-/radash-9.0.1.tgz#3ac8967f72a71ddbe84998237d397b1ed047e57c"
-  integrity sha512-fkyeC97QsYT+YVzpF6Gb0wYWFMMZ36VWzCt5wW8oG+NCn/e1hiz/7oiBX1s2+hC5oLAlBZtEh3Jmw1Yq0Txfsg==
-
-radash@^9.0.2:
-  version "9.0.2"
-  resolved "https://registry.yarnpkg.com/radash/-/radash-9.0.2.tgz#d82cd0087e3b08c131e515e0aecf7d1177f1bf83"
-  integrity sha512-jh8z5ow4wCzPKHrh4Kf8LXwTGmSoaGOHC6oyDC/nJXjVnZGF5YMbLk/QIgO5AFfw/T3zp9SBAfcoWJOfnQvhtw==
-
-radash@^9.3.0:
-  version "9.3.0"
-  resolved "https://registry.yarnpkg.com/radash/-/radash-9.3.0.tgz#eb80a05cde13adcc55ef53ec4ce5c02b9f83ed34"
-  integrity sha512-gfu0xNrIIMWH1SjzRR9ICY7O5QpNtw77Bc5DKDPrI0cvLpIlYjewhKMVaPECxnCECjEr4aqXLI/uvU1RCqrEPw==
-
-radash@^9.5.0:
-  version "9.5.0"
-  resolved "https://registry.yarnpkg.com/radash/-/radash-9.5.0.tgz#d1c26bc0eb8db3c0e97aff52e79a194ca59a094d"
-  integrity sha512-t0s8BJlvrk8YPaOS8X0J2xzqAsBlXAUkDEjoBXwlzaXsXNCpBILjT9OvWlabLa2KB/r4XrhThdXjxMs7SiCyIw==
+radash@^10.3.0:
+  version "10.3.0"
+  resolved "https://registry.yarnpkg.com/radash/-/radash-10.3.0.tgz#ee161da6518fe9a9266cdd682d0a30101fabc1d7"
+  integrity sha512-ALTB1mg2/ATLYH/Ru/Or0ohg1R1YQ7aJA/DV/4PQAEhp4gBlCpx+XmJMeNkdF3kCVOTpZ+8Jj6fYpjZeboGyzA==
 
 range-parser@~1.2.1:
   version "1.2.1"

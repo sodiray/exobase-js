@@ -20,6 +20,7 @@ export type Request = {
   body: Record<string, any> | string | null
   method: string
   query: Record<string, string>
+  params: Record<string, string>
   ip: string
   /**
    * Milliseconds timestamp when the request started

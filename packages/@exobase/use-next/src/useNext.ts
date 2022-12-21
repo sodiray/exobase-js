@@ -1,7 +1,7 @@
 import type { Handler, Props, Request, Response } from '@exobase/core'
 import { props, response } from '@exobase/core'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { try as tryit } from 'radash'
+import { tryit } from 'radash'
 
 export type UseNextOptions = {}
 
@@ -46,7 +46,11 @@ const makeReq = (req: NextApiRequest): Request => ({
   body: req.body,
   path: req.url ?? '/',
   method: req.method ?? 'ANY',
+  // NOTE: In Next.js they put both query and path
+  // params in the same object (query) so we
+  // duplicate that object into both attributes.
   query: req.query as Record<string, string>,
+  params: req.query as Record<string, string>,
   ip: req.socket.remoteAddress ?? '',
   startedAt: Date.now(),
   protocol: req.httpVersion.toLowerCase().includes('https') ? 'https' : 'http',

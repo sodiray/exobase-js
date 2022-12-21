@@ -39,7 +39,9 @@
     "@exobase/use-query-string": "^1.0.0-rc.6",
     "@exobase/use-router": "^1.0.0-rc.3",
     "@exobase/use-services": "^1.0.0-rc.13",
-    "@exobase/use-token-auth": "^1.0.0-rc.14"
+    "@exobase/use-token-auth": "^1.0.0-rc.14",
+    "@exobase/use-catch": "^1.0.0-rc.0",
+    "@exobase/use-path-parser": "^1.0.0-rc.0"
   },
   "exobaseDocs": {
     "group": "Packages",

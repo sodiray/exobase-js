@@ -17,10 +17,13 @@ export type Router = {
   delete: (path: HttpPath, handler: Handler) => Router
   options: (path: HttpPath, handler: Handler) => Router
   head: (path: HttpPath, handler: Handler) => Router
-  lookup: (req: { method: HttpMethod; path: HttpPath }) => Handler | null
+  lookup: (req: { method: HttpMethod; path: HttpPath }) => {
+    handler: Handler | null
+    params: Record<string, string>
+  }
 }
 
-export const createRouter = (current?: Trie): Router => {
+export const router = (current?: Trie): Router => {
   const on = (
     method: HttpMethod | HttpMethod[],
     path: HttpPath,
@@ -32,10 +35,11 @@ export const createRouter = (current?: Trie): Router => {
       current ?? {
         path: '/',
         handlers: {},
-        children: []
+        children: [],
+        parser: null
       }
     )
-    return createRouter(newTrie)
+    return router(newTrie)
   }
   return {
     on,
@@ -47,8 +51,12 @@ export const createRouter = (current?: Trie): Router => {
     options: (path, handler) => on('OPTIONS', path, handler),
     head: (path, handler) => on('HEAD', path, handler),
     lookup: req => {
-      if (!current) return null
-      return search(current, req.method, req.path) as Handler | null
+      if (!current) return { handler: null, params: {} }
+      const result = search(current, req.method, req.path)
+      return {
+        handler: result.handler as Handler | null,
+        params: result.parser?.parse(req.path) ?? {}
+      }
     }
   }
 }

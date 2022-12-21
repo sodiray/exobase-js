@@ -1,6 +1,6 @@
 import type { Handler, Props } from '@exobase/core'
 import { error } from '@exobase/core'
-import { tryit } from 'radash'
+import { isFunction, tryit } from 'radash'
 import zod, { AnyZodObject, ZodArray, ZodError } from 'zod'
 
 type Zod = typeof zod
@@ -9,7 +9,7 @@ type KeyOfType<T, Value> = { [P in keyof T]: Value }
 export const withJsonBody = async (
   func: Handler,
   model: AnyZodObject | ZodArray<any>,
-  name: string | null,
+  mapper: (validatedData: any) => any,
   props: Props
 ) => {
   const [zerr, args] = (await tryit(model.parseAsync)(
@@ -27,38 +27,38 @@ export const withJsonBody = async (
   }
   return await func({
     ...props,
-    args: name
-      ? {
-          ...props.args,
-          [name]: args
-        }
-      : {
-          ...props.args,
-          ...args
-        }
+    args: {
+      ...props.args,
+      ...mapper(args)
+    }
   })
 }
 
 export const useJsonBody: <TArgs extends {}, TProps extends Props = Props>(
-  shapeMaker: (z: Zod) => KeyOfType<TArgs, any>
+  shapeMaker: AnyZodObject | ((z: Zod) => KeyOfType<TArgs, any>),
+  mapper?: (validatedData: TArgs) => any
 ) => (
   func: Handler<
     TProps & {
       args: TProps['args'] & TArgs
     }
   >
-) => Handler<TProps> = shapeMaker => func => {
-  const model = zod.object(shapeMaker(zod))
-  return props => withJsonBody(func as Handler, model, null, props)
-}
+) => Handler<TProps> =
+  (shapeMaker, mapper = x => x) =>
+  func => {
+    const model = isFunction(shapeMaker)
+      ? zod.object(shapeMaker(zod))
+      : shapeMaker
+    return props => withJsonBody(func as Handler, model, mapper, props)
+  }
 
 export const useJsonArrayBody: <
   TArgs extends {},
   TName extends string | number | symbol = string,
   TProps extends Props = Props
 >(
-  name: string,
-  shapeMaker: (z: Zod) => KeyOfType<TArgs, any>
+  shapeMaker: AnyZodObject | ((z: Zod) => KeyOfType<TArgs, any>),
+  mapper: (validatedData: TArgs[]) => any
 ) => (
   func: Handler<
     TProps & {
@@ -67,7 +67,9 @@ export const useJsonArrayBody: <
       }
     }
   >
-) => Handler<TProps> = (name, shapeMaker) => func => {
-  const model = zod.array(zod.object(shapeMaker(zod)))
-  return props => withJsonBody(func as Handler, model, name, props)
+) => Handler<TProps> = (shapeMaker, mapper) => func => {
+  const model = isFunction(shapeMaker)
+    ? zod.array(zod.object(shapeMaker(zod)))
+    : zod.array(shapeMaker)
+  return props => withJsonBody(func as Handler, model, mapper, props)
 }

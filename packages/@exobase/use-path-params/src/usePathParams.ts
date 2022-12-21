@@ -1,62 +1,53 @@
-import type { Handler, Props, Request } from '@exobase/core'
+import type { Handler, Props } from '@exobase/core'
 import { error } from '@exobase/core'
+import { isFunction, tryit } from 'radash'
+import zod, { AnyZodObject, ZodArray, ZodError } from 'zod'
 
-export const parsePathParams = (
-  request: Pick<Request, 'path'>,
-  path: string
-): Record<string, string> => {
-  const badPathError = (extra: { info: string; key: string }) => {
-    return error({
+type Zod = typeof zod
+type KeyOfType<T, Value> = { [P in keyof T]: Value }
+
+export const withPathParams = async (
+  func: Handler,
+  model: AnyZodObject | ZodArray<any>,
+  mapper: (validatedData: any) => any,
+  props: Props
+) => {
+  const [zerr, args] = (await tryit(model.parseAsync)(
+    props.request.params
+  )) as unknown as [ZodError, any]
+  if (zerr) {
+    throw error({
+      message: 'Path parameter validation failed',
       status: 400,
-      note: `This function can only be called with a path matching ${path}`,
-      ...extra
+      info: zerr.issues
+        .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
+        .join(', '),
+      key: 'err.path-params.invalid'
     })
   }
-  const pathParts = request.path.split('/')
-  const requiredParts = path.split('/')
-  if (pathParts.length !== requiredParts.length) {
-    throw badPathError({
-      info: 'Endpoint called with invalid path',
-      key: 'tk.error.path-param'
-    })
-  }
-  const zipped = requiredParts.map((x, i) => [x, pathParts[i]])
-  const params: Record<string, string> = {}
-  for (const [requiredPart, pathPart] of zipped) {
-    const isVar = requiredPart.match(/^{[^\/]+}$/)
-    if (isVar) {
-      const name = requiredPart.substring(1, requiredPart.length - 1)
-      params[name] = pathPart
-      continue
-    }
-    if (requiredPart !== pathPart) {
-      throw badPathError({
-        info: 'Endpoint called with invalid path',
-        key: 'tk.error.path-param'
-      })
-    }
-  }
-  return params
-}
-
-export async function withPathParams<TProps extends Props>(
-  func: Handler<TProps & { args: TProps['args'] & Record<string, string> }>,
-  path: string,
-  props: TProps
-) {
-  const params = parsePathParams(props.request, path)
   return await func({
     ...props,
     args: {
       ...props.args,
-      ...params
+      ...mapper(args)
     }
   })
 }
 
-export const usePathParams: <TProps extends Props>(
-  path: string
+export const usePathParams: <TArgs extends {}, TProps extends Props = Props>(
+  shapeMaker: AnyZodObject | ((z: Zod) => KeyOfType<TArgs, any>),
+  mapper?: (validatedData: TArgs) => any
 ) => (
-  func: Handler<TProps & { args: TProps['args'] & Record<string, string> }>
-) => Handler<TProps> = path => func => props =>
-  withPathParams(func, path, props)
+  func: Handler<
+    TProps & {
+      args: TProps['args'] & TArgs
+    }
+  >
+) => Handler<TProps> =
+  (shapeMaker, mapper = x => x) =>
+  func => {
+    const model = isFunction(shapeMaker)
+      ? zod.object(shapeMaker(zod))
+      : shapeMaker
+    return props => withPathParams(func as Handler, model, mapper, props)
+  }

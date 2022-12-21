@@ -9,25 +9,30 @@ describe('trie module', () => {
       const current: Trie = {
         path: '/',
         handlers: {},
+        parser: null,
         children: [
           {
             path: 'repos',
             handlers: {},
+            parser: null,
             children: [
               {
                 path: '*',
                 handlers: {},
+                parser: null,
                 children: [
                   {
                     path: '*',
                     handlers: {},
+                    parser: null,
                     children: [
                       {
                         path: 'stars',
                         handlers: {
                           GET: getStars
                         },
-                        children: []
+                        children: [],
+                        parser: null
                       }
                     ]
                   }
@@ -41,27 +46,32 @@ describe('trie module', () => {
       const result = addNode(
         current,
         'GET',
-        '/repos/*/*/contributors',
+        '/repos/{owner}/{repo}/contributors',
         getContributors
       )
       const expected: Trie = {
         path: '/',
         handlers: {},
+        parser: null,
         children: [
           {
             path: 'repos',
             handlers: {},
+            parser: null,
             children: [
               {
                 path: '*',
                 handlers: {},
+                parser: null,
                 children: [
                   {
                     path: '*',
                     handlers: {},
+                    parser: null,
                     children: [
                       {
                         path: 'stars',
+                        parser: expect.any(Object) as any,
                         handlers: {
                           GET: getStars
                         },
@@ -69,6 +79,7 @@ describe('trie module', () => {
                       },
                       {
                         path: 'contributors',
+                        parser: expect.any(Object) as any,
                         handlers: {
                           GET: getContributors
                         },
@@ -90,30 +101,36 @@ describe('trie module', () => {
         {
           path: '/',
           children: [],
-          handlers: {}
+          handlers: {},
+          parser: null
         },
         'GET',
-        '/repos/*/*/stars',
+        '/repos/{owner}/{repo}/stars',
         handler
       )
       const expected: Trie = {
         path: '/',
         handlers: {},
+        parser: null,
         children: [
           {
             path: 'repos',
             handlers: {},
+            parser: null,
             children: [
               {
                 path: '*',
                 handlers: {},
+                parser: null,
                 children: [
                   {
                     path: '*',
                     handlers: {},
+                    parser: null,
                     children: [
                       {
                         path: 'stars',
+                        parser: expect.any(Object) as any,
                         handlers: {
                           GET: handler
                         },

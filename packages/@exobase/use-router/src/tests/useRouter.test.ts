@@ -22,11 +22,11 @@ describe('usePathParams hook', () => {
     const mock = mocks()
     const sut = useRouter(router =>
       router
-        .get('/repos/*/*/stars', mock.stars.list as any)
-        .post('/repos/*/*/stars', mock.stars.add as any)
-        .delete('/repos/*/*/stars', mock.stars.delete as any)
-        .post('/repos/*', mock.repos.create as any)
-        .delete('/repos/*/*', mock.repos.delete as any)
+        .get('/repos/{owner}/{repo}/stars', mock.stars.list as any)
+        .post('/repos/{owner}/{repo}/stars', mock.stars.add as any)
+        .delete('/repos/{owner}/{repo}/stars', mock.stars.delete as any)
+        .post('/repos/{owner}', mock.repos.create as any)
+        .delete('/repos/{owner}/{repo}', mock.repos.delete as any)
         .on('*', '/repos/config', mock.config.any as any)
     )
     const result = await sut(mock.endpoint as any)({
@@ -42,11 +42,11 @@ describe('usePathParams hook', () => {
     const mock = mocks()
     const sut = useRouter(router =>
       router
-        .get('/repos/*/*/stars', mock.stars.list as any)
-        .post('/repos/*/*/stars', mock.stars.add as any)
-        .delete('/repos/*/*/stars', mock.stars.delete as any)
-        .post('/repos/*', mock.repos.create as any)
-        .delete('/repos/*/*', mock.repos.delete as any)
+        .get('/repos/{owner}/{repo}/stars', mock.stars.list as any)
+        .post('/repos/{owner}/{repo}/stars', mock.stars.add as any)
+        .delete('/repos/{owner}/{repo}/stars', mock.stars.delete as any)
+        .post('/repos/{owner}', mock.repos.create as any)
+        .delete('/repos/{owner}/{repo}', mock.repos.delete as any)
         .on('*', '/repos/config', mock.config.any as any)
     )
     const result = await sut(mock.endpoint as any)({
