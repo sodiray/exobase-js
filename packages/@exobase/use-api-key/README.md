@@ -2,15 +2,9 @@ Exobase hook function that provides authentication by way of validating the `x-a
 
 ## Install
 
-You can install this package directly
-
 ```sh
 yarn add @exobase/use-api-key
-```
-
-or use the `useApiKey` hook through the `@exobase/hook` package
-
-```sh
+# or
 yarn add @exobase/hooks
 ```
 

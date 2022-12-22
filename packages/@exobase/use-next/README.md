@@ -6,6 +6,12 @@ Exobase root hook to handle function running on Next.js api functions
 yarn add @exobase/use-next
 ```
 
+## Import
+
+```ts
+import { useNext } from '@exobase/use-next'
+```
+
 ## Usage
 
 ```ts

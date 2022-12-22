@@ -1,5 +1,21 @@
 An Exobase hook that validates path parameters in the request.
 
+## Install
+
+```sh
+yarn add @exobase/use-path-params
+# or
+yarn add @exobase/hooks
+```
+
+## Import
+
+```ts
+import { usePathParams } from '@exobase/use-path-params'
+// or
+import { usePathParams } from '@exobase/hooks'
+```
+
 ## Usage
 
 ```ts

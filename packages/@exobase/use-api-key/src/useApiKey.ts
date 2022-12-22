@@ -1,46 +1,65 @@
 import type { Handler, Props } from '@exobase/core'
 import { error } from '@exobase/core'
-import { isFunction } from 'radash'
-
-type PropsGetter<TProps extends Props, TResult> = (
-  props: TProps
-) => Promise<TResult>
+import { isFunction, tryit } from 'radash'
 
 export type ApiKeyAuth = {
   apiKey: string
 }
 
-const unauthorized = (extra: { info: string; key: string }) =>
-  error({
-    message: 'Not Authenticated',
-    status: 401,
-    ...extra
-  })
-
 export async function withApiKey<TProps extends Props>(
   func: Handler<TProps & { auth: TProps['auth'] & ApiKeyAuth }>,
-  keyFunc: string | PropsGetter<TProps, string>,
+  keyFunc: string | ((props: TProps) => Promise<string>),
   props: TProps
 ) {
   const header = props.request.headers['x-api-key'] as string
-
-  const key = !isFunction(keyFunc)
-    ? keyFunc
-    : await (keyFunc as PropsGetter<TProps, string>)(props)
-
   if (!header) {
-    throw unauthorized({
+    throw error({
+      message: 'Not Authenticated',
+      status: 401,
       info: 'This function requires an api key',
-      key: 'exo.err.core.auth.canes-venarias'
+      key: 'exo.api-key.missing-header'
     })
   }
 
-  const providedKey = header.startsWith('Key ') && header.replace('Key ', '')
-
-  if (!key || !providedKey || providedKey !== key) {
-    throw unauthorized({
+  // If a `Key ` prefix exists, remove it
+  const providedKey = header.replace(/^[Kk]ey\s/, '')
+  if (!providedKey) {
+    throw error({
       info: 'Invalid api key',
-      key: 'exo.err.core.auth.balefeign'
+      message: 'Not Authenticated',
+      status: 401,
+      key: 'exo.api-key.missing-key'
+    })
+  }
+
+  const [err, key] = await tryit(async () => {
+    return isFunction(keyFunc) ? await keyFunc(props) : keyFunc
+  })()
+
+  if (err) {
+    throw error({
+      info: 'Server cannot authenticate',
+      message: 'Not Authenticated',
+      status: 401,
+      key: 'exo.api-key.key-error'
+    })
+  }
+
+  if (!key) {
+    throw error({
+      info: 'Server cannot authenticate',
+      message: 'Not Authenticated',
+      status: 401,
+      key: 'exo.api-key.key-not-found'
+    })
+  }
+
+  if (providedKey !== key) {
+    throw error({
+      info: 'Invalid api key',
+      message: 'Not Authenticated',
+      status: 401,
+      key: 'exo.api-key.mismatch'
     })
   }
 
@@ -54,7 +73,7 @@ export async function withApiKey<TProps extends Props>(
 }
 
 export const useApiKey: <TProps extends Props>(
-  keyOrFunc: string | PropsGetter<TProps, string>
+  keyOrFunc: string | ((props: TProps) => Promise<string>)
 ) => (
   func: Handler<TProps & { auth: TProps['auth'] & ApiKeyAuth }>
 ) => Handler<TProps> = keyOrFunc => func => props =>

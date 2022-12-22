@@ -2,8 +2,6 @@ An Exobase root hook for a raw Node HTTP/S server
 
 ## Install
 
-Yarn
-
 ```sh
 yarn add @exobase/use-node
 ```

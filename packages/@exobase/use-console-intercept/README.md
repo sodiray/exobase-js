@@ -6,33 +6,18 @@ I highly recommend 👍
 
 ## Install
 
-Yarn
-
 ```sh
 yarn add @exobase/use-console-intercept
-```
-
-then
-
-```ts
-import { useConsoleIntercept } from '@exobase/use-console-intercept'
-```
-
-or, install with the hooks package
-
-```sh
+# or
 yarn add @exobase/hooks
 ```
 
-then
+## Import
 
 ```ts
-import {
-  useConsoleIntercept,
-  useServices,
-  useJsonArgs,
-  useCors
-} from '@exobase/hooks'
+import { useConsoleIntercept } from '@exobase/use-console-intercept'
+// or
+import { useConsoleIntercept } from '@exobase/hooks'
 ```
 
 ## Usage

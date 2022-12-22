@@ -1,20 +1,24 @@
 import { Tracer } from '@aws-lambda-powertools/tracer'
 import type { Handler, Props } from '@exobase/core'
 import type { Segment } from 'aws-xray-sdk-core'
-import { tryit } from 'radash'
+import { isFunction, tryit } from 'radash'
 
-export type UseLambdaTracerOptions = {
-  serviceName?: string
+export type UseLambdaTracerOptions<TProps extends Props = Props> = {
   captureResponse?: boolean
-  tracer?: Tracer
+  tracer?: Tracer | ((props: TProps) => Promise<Tracer> | Tracer)
 }
 
 export async function withLambdaTracer<TProps extends Props>(
   func: Handler<TProps & { services: TProps['services'] & { tracer: Tracer } }>,
-  options: UseLambdaTracerOptions | undefined,
-  tracer: Tracer,
+  options: UseLambdaTracerOptions<TProps> | undefined,
   props: TProps
 ) {
+  const tracer = !options?.tracer
+    ? new Tracer()
+    : isFunction(options.tracer)
+    ? await options.tracer(props)
+    : options.tracer
+
   const enabled = tracer.isTracingEnabled()
 
   if (!enabled)
@@ -61,16 +65,9 @@ export async function withLambdaTracer<TProps extends Props>(
 }
 
 export const useLambdaTracer: <TProps extends Props>(
-  options?: UseLambdaTracerOptions
+  options?: UseLambdaTracerOptions<TProps>
 ) => (
   func: Handler<TProps>
 ) => Handler<TProps & { services: TProps['services'] & { tracer: Tracer } }> =
-  (
-    { captureResponse = true, serviceName, tracer }: UseLambdaTracerOptions = {
-      captureResponse: true
-    }
-  ) =>
-  func => {
-    const tr = tracer ?? new Tracer({ serviceName })
-    return props => withLambdaTracer(func, { captureResponse }, tr, props)
-  }
+  options => func => props =>
+    withLambdaTracer(func, options, props)

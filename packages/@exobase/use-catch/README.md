@@ -2,28 +2,18 @@ An Exobase hook that catches errors and gives you a chance to log them, map them
 
 ## Install
 
-Yarn
-
 ```sh
 yarn add @exobase/use-catch
-```
-
-then
-
-```ts
-import { useCatch } from '@exobase/use-catch'
-```
-
-or, install with the hooks package
-
-```sh
+# or
 yarn add @exobase/hooks
 ```
 
-then
+## Import
 
 ```ts
-import { useCatch, useCors, useServices, useJsonArgs } from '@exobase/hooks'
+import { useCatch } from '@exobase/use-catch'
+// or
+import { useCatch } from '@exobase/hooks'
 ```
 
 ## Usage

@@ -1,5 +1,21 @@
 Provides an Exobase hook that does method + url routing using a trie based on the given url path.
 
+## Install
+
+```sh
+yarn add @exobase/use-router
+# or
+yarn add @exobase/hooks
+```
+
+## Import
+
+```ts
+import { useRouter } from '@exobase/use-router'
+// or
+import { useRouter } from '@exobase/hooks'
+```
+
 ## Usage
 
 ```ts

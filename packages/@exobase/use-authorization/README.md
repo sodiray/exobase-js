@@ -2,15 +2,9 @@ Exobase hook to check if a request is authorized for a given resource
 
 ## Install
 
-You can install this package directly
-
 ```sh
 yarn add @exobase/use-authorization
-```
-
-or install the hook through the `@exobase/hook` package
-
-```sh
+# or
 yarn add @exobase/hooks
 ```
 
@@ -18,6 +12,7 @@ yarn add @exobase/hooks
 
 ```ts
 import { useAuthorization } from '@exobase/use-authorization'
+// or
 import { useAuthorization } from '@exobase/hooks'
 ```
 

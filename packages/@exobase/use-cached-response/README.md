@@ -1,5 +1,21 @@
 An Exobase hook that will check incoming request argument for a match in the cache, if one exists it will be returned without executing the endpoint function.
 
+## Install
+
+```sh
+yarn add @exobase/use-cached-response
+# or
+yarn add @exobase/hooks
+```
+
+## Import
+
+```ts
+import { useCachedResponse } from '@exobase/use-cached-response'
+// or
+import { useCachedResponse } from '@exobase/hooks'
+```
+
 ## Usage
 
 ```ts

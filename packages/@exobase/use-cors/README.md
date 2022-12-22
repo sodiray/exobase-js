@@ -2,30 +2,19 @@ An Exobase hook that automatically responds to `OPTIONS` requests with standard 
 
 ## Install
 
-Yarn
-
 ```sh
 yarn add @exobase/use-cors
-```
-
-then
-
-```ts
-import { useConsoleIntercept } from '@exobase/use-cors'
-```
-
-or, install with the hooks package
-
-```sh
+# or
 yarn add @exobase/hooks
 ```
 
-then
+## Import
 
 ```ts
-import { useCors, useConsoleIntercept, useServices, useJsonArgs } from '@exobase/hooks'
+import { useCors } from '@exobase/use-cors'
+// or
+import { useCors } from '@exobase/hooks'
 ```
-
 ## Usage
 
 Add the `useCors` hook anywhere before your endpoint. When an `OPTIONS` request is handled the `useCors` hook will resopnd with the configured (or default) CORS headers and will not call your endpoint function.

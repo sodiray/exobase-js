@@ -2,6 +2,22 @@ Provides an Exobase hook that will log information about the request given a str
 
 This module inspired by [morgan](https://github.com/expressjs/morgan), the logging middleware library for Express.
 
+## Install
+
+```sh
+yarn add @exobase/use-logging
+# or
+yarn add @exobase/hooks
+```
+
+## Import
+
+```ts
+import { useLogging } from '@exobase/use-logging'
+// or
+import { useLogging } from '@exobase/hooks'
+```
+
 ## Usage
 
 ```ts

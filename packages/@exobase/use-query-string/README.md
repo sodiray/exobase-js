@@ -2,16 +2,18 @@ Provides a hook to parse and validate query string values in the request.
 
 ## Install
 
-Yarn
-
 ```sh
 yarn add @exobase/use-query-string
+# or
+yarn add @exobase/hooks
 ```
 
-or install `useQueryString` with all other Exobase provided hooks:
+## Import
 
-```sh
-yarn add @exobase/hooks
+```ts
+import { useQueryString } from '@exobase/use-query-string'
+// or
+import { useQueryString } from '@exobase/hooks'
 ```
 
 ## Usage

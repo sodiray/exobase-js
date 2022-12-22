@@ -2,8 +2,6 @@ An Exobase root hook for the ExpressJS framework
 
 ## Install
 
-Yarn
-
 ```sh
 yarn add @exobase/use-express
 ```

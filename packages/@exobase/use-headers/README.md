@@ -2,16 +2,18 @@ Provides a hook to parse and validate headers in the request.
 
 ## Install
 
-Yarn
-
 ```sh
 yarn add @exobase/use-headers
+# or
+yarn add @exobase/hooks
 ```
 
-or install with the exobase hooks package
+## Import
 
-```sh
-yarn add @exobase/hooks
+```ts
+import { useHeaders } from '@exobase/use-headers'
+// or
+import { useHeaders } from '@exobase/hooks'
 ```
 
 ## Import

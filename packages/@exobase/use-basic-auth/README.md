@@ -4,15 +4,9 @@ _NOTE: This hook does not validate the values it parses, you'll need to do that 
 
 ## Install
 
-You can install this package directly
-
 ```sh
 yarn add @exobase/use-basic-auth
-```
-
-or use the `useBasicAuth` hook through the `@exobase/hook` package
-
-```sh
+# or
 yarn add @exobase/hooks
 ```
 

@@ -5,6 +5,22 @@ An Exobase hook that will parse path params and set them on the request. This ho
 
 This hook does not validate the params, it only looks at the template path you give and the path of the current request and parses out the variable segments. To do validation, use `usePathParams`.
 
+## Install
+
+```sh
+yarn add @exobase/use-path-parser
+# or
+yarn add @exobase/hooks
+```
+
+## Import
+
+```ts
+import { usePathParser } from '@exobase/use-path-parser'
+// or
+import { usePathParser } from '@exobase/hooks'
+```
+
 ## Usage
 
 ```ts

@@ -2,16 +2,18 @@ Provides an Exobase hook that allows for pseudo dependency injection of endpoint
 
 ## Install
 
-Yarn
-
 ```sh
 yarn add @exobase/use-services
+# or
+yarn add @exobase/hooks
 ```
 
-or, if you want to install all hooks:
+## Import
 
-```sh
-yarn add @exobase/hooks
+```ts
+import { useServices } from '@exobase/use-services'
+// or
+import { useServices } from '@exobase/hooks'
 ```
 
 ## Usage

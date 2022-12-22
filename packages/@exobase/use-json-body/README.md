@@ -2,10 +2,18 @@ Provides a hook to parse and validate request arguments from the json body.
 
 ## Install
 
-Yarn
-
 ```sh
 yarn add @exobase/use-json-body
+# or
+yarn add @exobase/hooks
+```
+
+## Import
+
+```ts
+import { useJsonBody } from '@exobase/use-json-body'
+// or
+import { useJsonBody } from '@exobase/hooks'
 ```
 
 ## Usage
