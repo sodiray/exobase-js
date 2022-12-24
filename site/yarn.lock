@@ -1042,9 +1042,10 @@
   version "9.2.1"
   resolved "https://registry.npmjs.org/@hapi/hoek/-/hoek-9.2.1.tgz"
 
-"@headlessui/react@^0.0.0-insiders.336faab":
-  version "0.0.0-insiders.336faab"
-  resolved "https://registry.npmjs.org/@headlessui/react/-/react-0.0.0-insiders.336faab.tgz"
+"@headlessui/react@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-0.3.2.tgz#fa8600fa669fe704b84e9256855fb39092b6e233"
+  integrity sha512-N8XpYJNEP1jH5V8qq2cX8pnipOd93UJNKky1B7Ac3/yFFehB/0C4k5kOHt8ShHsmcohrZUB4sOl4+m0CjQpXng==
 
 "@juggle/resize-observer@^3.2.0":
   version "3.3.1"
