@@ -3,7 +3,7 @@
   "favicon": "docs/favicon.ico",
   "domain": "https://exobase-js.vercel.app",
   "index": "docs/getting-started",
-  "theme": "blue-400",
+  "theme": "blue-600",
   "description": "Typescript Framework for Node Web Services and APIs",
   "repo": "https://github.com/rayepps/exobase-js",
   "branch": "master",
