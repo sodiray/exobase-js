@@ -13,8 +13,8 @@
   },
   "pages": [
     "docs/**/*.mdx",
-    "./packages/@exobase/*/*.md",
-    "!./packages/@exobase/*/LICENSE.md"
+    "./packages/*/*.md",
+    "!./packages/*/LICENSE.md"
   ],
   "sidebar": {
     "links": [

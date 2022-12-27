@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "workspaces": [
-    "packages/@exobase/*"
+    "packages/*"
   ],
   "scripts": {
     "bootstrap": "yarn && lerna bootstrap --use-workspaces && lerna exec yarn && lerna link",
