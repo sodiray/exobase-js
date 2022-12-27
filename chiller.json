@@ -1,0 +1,28 @@
+{
+  "name": "Exobase",
+  "favicon": "docs/favicon.ico",
+  "domain": "https://exobase-js.vercel.app",
+  "index": "docs/getting-started",
+  "theme": "blue-400",
+  "description": "Typescript Framework for Node Web Services and APIs",
+  "repo": "https://github.com/rayepps/exobase-js",
+  "branch": "master",
+  "logo": {
+    "light": "docs/logo-light.png",
+    "dark": "docs/logo-dark.png"
+  },
+  "pages": [
+    "docs/**/*.mdx",
+    "./packages/@exobase/*/*.md",
+    "!./packages/@exobase/*/LICENSE.md"
+  ],
+  "sidebar": {
+    "links": [
+      {
+        "url": "/docs/getting-started",
+        "icon": "book",
+        "label": "Documentation"
+      }
+    ]
+  }
+}

@@ -1,3 +1,9 @@
+---
+title: 'usePathParser'
+description: 'A hook to parse url path params'
+group: 'Hooks'
+---
+
 An Exobase hook that will parse path params and set them on the request. This hook is a bit unusual because it makes a change to the `request` to add the parsed path parameters. There are not many cases where you'll need this. Either
 
 - The framework + root hook your running will parse the path params (Next.js is an example of this) and set them in the request

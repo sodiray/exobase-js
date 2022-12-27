@@ -1,3 +1,8 @@
+---
+title: 'core'
+description: 'The core Exobase library package'
+group: 'Packages'
+---
 
 Provides the core types and functions to implement the Abstract & Compose design pattern with the Exobase library.
 

@@ -1,3 +1,9 @@
+---
+title: 'useCors'
+description: 'A hook to automatically add CORS headers'
+group: 'Hooks'
+---
+
 An Exobase hook that automatically responds to `OPTIONS` requests with standard CORS headers. Also allows you to extends and override the headers with your own values as needed.
 
 ## Install

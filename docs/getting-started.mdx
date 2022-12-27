@@ -1,0 +1,239 @@
+---
+title: 'Getting Started'
+description: 'Welcome to Exobase'
+group: 'Getting Started'
+---
+
+## Install Dependencies
+
+First, install the Exobase core and hooks package.
+
+```sh
+yarn add @exobase/core @exobase/hooks
+```
+
+Next, install the root hook that matches the framework you're using. If you're using Express.js install the `useExpress` hook.
+
+```sh
+yarn add @exobase/use-express
+```
+
+## Compose an Endpoint
+
+Use the hooks you now have to compose an endpoint.
+
+```ts
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import express from 'express'
+
+const listBooksEndpoint = async (props: Props) => {
+  return [
+    {
+      title: 'Exobase for Dummies',
+      publisher: 'EPH - Exobase Publishing House',
+      author: 'Tom Chen'
+    }
+  ]
+}
+
+const listBooks = compose(useExpress(), listBooksEndpoint)
+
+const port = 3000
+const app = express()
+
+app.get('/library/books', listBooks)
+app.listen(port, () => {
+  console.log(`Exobase API listening on port ${port}`)
+})
+```
+
+## Using Hooks
+
+The endpoint we created is a bit static but we can wire in hooks to give it more realistic behavior.
+
+### Database
+
+We can use the `useServices` hook to wire a database into our function.
+
+```ts
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import { useServices } from '@exobase/hooks'
+
+const database = {
+  books: {
+    list: async () => {
+      // Implement against your database
+    }
+  }
+}
+
+type Services = {
+  db: typeof database
+}
+
+const listBooksEndpoint = async ({ services }: Props<{}, Services>) => {
+  const { db } = services
+  return await db.books.list()
+}
+
+const listBooks = compose(
+  useExpress(),
+  useServices<Services>({
+    db: database
+  }),
+  listBooksEndpoint
+)
+```
+
+### Path Parameters
+
+Let's add an endpoint to our API that finds a book by id. We'll accept the `id` via a path param.
+
+```ts
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import { useServices, usePathParams } from '@exobase/hooks'
+
+type Args = {
+  id: string
+}
+
+type Services = {
+  db: typeof database
+}
+
+const findBookEndpoint = async ({ args, services }: Props<Args, Services>) => {
+  const { db } = services
+  const { id } = args
+  return await db.books.find(id)
+}
+
+const findBook = compose(
+  useExpress(),
+  usePathParams('/library/books/{id}'),
+  useServices<Services>({
+    db: database
+  }),
+  findBookEndpoint
+)
+
+app.get('/library/books/:id', findBook)
+```
+
+### Json Body
+
+Let's add an endpoint to our API that creates a new book given properties from the POST body.
+
+```ts
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import { useServices, useJsonArgs } from '@exobase/hooks'
+
+type Args = {
+  title: string
+  publisher: string
+  author: string
+}
+
+type Services = {
+  db: typeof database
+}
+
+const createBookEndpoint = async ({
+  args,
+  services
+}: Props<Args, Services>) => {
+  const { db } = services
+  const { title, publisher, author } = args
+  return await db.books.create({
+    title,
+    publisher,
+    author
+  })
+}
+
+app.get(
+  '/library/books/:id',
+  compose(
+    useExpress(),
+    useJsonArgs<Args>(z => ({
+      title: z.string(),
+      publisher: z.string(),
+      author: z.string()
+    })),
+    useServices<Services>({
+      db: database
+    }),
+    createBookEndpoint
+  )
+)
+```
+
+### Routing
+
+A core belief of Exobase is that relying directly on framework features creates an application that is not nimble and difficult to change. Instead of using the Express routing, we can use the `useRoute` hook to do the routing ourselves. This will make it easier for us to move to another framework (like Lambda) if we ever need to.
+
+```ts
+import { compose } from 'radash'
+import type { Props } from '@exobase/core'
+import { useExpress } from '@exobase/use-express'
+import { useRouter, usePathParams } from '@exobase/hooks'
+import express from 'express'
+
+//
+// List Books
+//
+const listBooksEndpoint = async (props: Props) => {
+  return [
+    {
+      title: 'Exobase for Dummies',
+      publisher: 'EPH - Exobase Publishing House',
+      author: 'Tom Chen'
+    }
+  ]
+}
+
+const listBooks = compose(
+  useExpress(),
+  listBooksEndpoint
+)
+
+//
+// Find Books
+//
+const findBookEndpoint = async (props: Props) => {
+  return [
+    {
+      title: 'Exobase for Dummies',
+      publisher: 'EPH - Exobase Publishing House',
+      author: 'Tom Chen'
+    }
+  ]
+}
+
+const findBook = compose(
+  useExpress(),
+  usePathParams('/library/books/{id}')
+  findBookEndpoint
+)
+
+const port = 3000
+const app = express()
+
+app.all('*', compose(
+  useExpress()
+  useRouter(router => router
+    .get('/library/books', listBooks),
+    .get('/library/books/*', findBook)
+  )
+))
+app.listen(port, () => {
+  console.log(`Exobase API listening on port ${port}`)
+})
+```

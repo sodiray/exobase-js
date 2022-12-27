@@ -25,9 +25,5 @@
     "@exobase/core": "^1.0.0-rc.15",
     "zod": "^3.19.1"
   },
-  "exobaseDocs": {
-    "group": "Hooks",
-    "name": "useHeaders"
-  },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
 }

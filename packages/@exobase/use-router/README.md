@@ -1,3 +1,9 @@
+---
+title: 'useRouter'
+description: 'A hook to route requests to Exobase handlers'
+group: 'Hooks'
+---
+
 Provides an Exobase hook that does method + url routing using a trie based on the given url path.
 
 ## Install

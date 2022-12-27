@@ -1,3 +1,9 @@
+---
+title: 'useJsonBody'
+description: 'A hook to parse and validate a request body'
+group: 'Hooks'
+---
+
 Provides a hook to parse and validate request arguments from the json body.
 
 ## Install

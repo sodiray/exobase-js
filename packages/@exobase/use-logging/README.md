@@ -1,3 +1,9 @@
+---
+title: 'useLogging'
+description: 'A hook to log request and response information'
+group: 'Hooks'
+---
+
 Provides an Exobase hook that will log information about the request given a string of tokens.
 
 This module inspired by [morgan](https://github.com/expressjs/morgan), the logging middleware library for Express.

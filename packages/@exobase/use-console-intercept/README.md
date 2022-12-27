@@ -1,3 +1,9 @@
+---
+title: 'useConsoleIntercept'
+description: 'A hook to proxy all calls to the console'
+group: 'Init Hooks'
+---
+
 An Exobase init hook that intercepts calls made to the console functions (log, warn, error, debug) and proxies them to a logger you specify.
 
 Some engineers or teams may aginst this. Thats ok! This is a hook I (@rayepps) have used a lot and it's worked incredibly well. Locally, we use a simple environment variable check to disable the intercept which gives us beautiful/readable logs in our terminals. In production, we have the assurance of knowing that no log can possibly escape our logger because we've proxied the console.log functions directly.

@@ -1,3 +1,9 @@
+---
+title: 'useLambdaTracer'
+description: 'A hook to capture AWS Lambda tracing data'
+group: 'Hooks'
+---
+
 Provides an Exobase hook that will capture tracing data in an AWS Lambda function.
 
 ## Install

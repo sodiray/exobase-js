@@ -1,3 +1,9 @@
+---
+title: 'useAuthorization'
+description: 'A role/permission authorization hook'
+group: 'Hooks'
+---
+
 Exobase hook to check if a request is authorized for a given resource
 
 ## Install

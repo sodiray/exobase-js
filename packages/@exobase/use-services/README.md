@@ -1,3 +1,9 @@
+---
+title: 'useServices'
+description: 'A hook inject needed services into an Exobase function'
+group: 'Hooks'
+---
+
 Provides an Exobase hook that allows for pseudo dependency injection of endpoint function dependencies into the `services` property of the `Props` argument.
 
 ## Install

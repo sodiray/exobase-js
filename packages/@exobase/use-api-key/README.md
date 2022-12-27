@@ -1,3 +1,9 @@
+---
+title: 'useApiKey'
+description: 'An API key authentication hook'
+group: 'Hooks'
+---
+
 Exobase hook function that provides authentication by way of validating the `x-api-key` header.
 
 ## Install

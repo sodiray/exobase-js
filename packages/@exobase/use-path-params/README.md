@@ -1,3 +1,9 @@
+---
+title: 'usePathParams'
+description: 'A hook to validate request path parameters'
+group: 'Hooks'
+---
+
 An Exobase hook that validates path parameters in the request.
 
 ## Install
