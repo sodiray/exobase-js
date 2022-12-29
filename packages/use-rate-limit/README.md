@@ -53,12 +53,12 @@ export default compose(
 )
 ```
 
-### Using with Redis
+### Using with Redis store
 
 Create a store module. Here I'm using redis, you can using anything by implementing your own `inc` and `reset` functions.
 
 ```ts
-// file: store.ts
+// file: redis-store.ts
 import { createClient } from 'redis'
 
 const redis = createClient({
@@ -70,8 +70,8 @@ const redis = createClient({
 redis.connect()
 
 // NOTE: This is not the most robust redis
-// implementation but it works and makes
-// for a simple example.
+// implementation but makes for a simple
+// example.
 export const store = {
   inc: async (key: string, timestamp: number) => {
     const created = await redis.setnx(`${key}:start`, `${timestamp}`)
@@ -98,30 +98,22 @@ You probably don't want to import the store in every endpoint function, you can 
 
 ```ts
 // file: useRateLimit.ts
-import { compose } from 'radash'
-import type { Props } from '@exobase/core'
-import { useRateLimit as useBaseRateLimit, useServices } from '@exobase/hooks'
-import type { UseRateLimitOptions } from '@exobase/hooks'
-import { store } from './store'
+import { useRateLimit } from '@exobase/hooks'
+import { store } from './redis-store'
 
 /**
  * All functions using this hook will use the
  * configured store and cap requests to a max
  * of 200 per 5 minutes.
  */
-export const useRateLimit = (key: string) => (func) =>
-  compose(
-    useServices({
-      store
-    }),
-    useBaseRateLimit({
-      key,
-      window: '5 minutes'
-      max: 200,
-      toIdentity: (props) => props.request.ip
-    }),
-    func
-  )
+export const useRedisRateLimit = (key: string) =>
+  useRateLimit({
+    key,
+    window: '5 minutes'
+    max: 200,
+    store,
+    toIdentity: (props) => props.request.ip
+  })
 ```
 
 ### Custom Identity using Authentication
@@ -129,19 +121,48 @@ export const useRateLimit = (key: string) => (func) =>
 The above examples all use an identity function that references the ip address. In many cases you'll want to identify a requester by their authentication. The `toIdentity` function has access to the full props object so you can use any request input to create an identity.
 
 ```ts
+import { useRateLimit } from '@exobase/hooks'
 import type { TokenAuth } from '@exobase/hooks'
+import type { Props } from '@exobase/core'
 
-export const useRateLimitByToken = (key: string) => (func) =>
-  compose(
-    useServices({
-      store
-    }),
-    useBaseRateLimit({
-      key,
-      window: '24 hours'
-      max: 1000,
-      toIdentity: (props: Props<{}, {}, TokenAuth>) => props.auth.token.sub
-    }),
-    func
-  )
+export const useRateLimitByToken = (key: string) =>
+  useRateLimit({
+    key,
+    window: '24 hours'
+    max: 1000,
+    toIdentity: (props: Props<{}, {}, TokenAuth>) => props.auth.token.sub
+  })
+```
+
+### Using with an in-memory store
+
+Create a store object that meets the `IRateLimitStore` interface and uses a simple variable in memory to track usage.
+
+```ts
+import { useRateLimit } from '@exobase/hooks'
+
+const db = {}
+
+export const store = {
+  inc: async (key: string, timestamp: number) => {
+    db[key] = db[key] ?? {
+      timestamp,
+      count: 0
+    }
+    db[key].count++
+    return db[key]
+  },
+  reset: async (key: string) => {
+    delete db[key]
+  }
+}
+
+export const useInMemoryRateLimit = (key) =>
+  useRateLimit({
+    key,
+    window: '5 minutes'
+    max: 200,
+    store,
+    toIdentity: (props) => props.request.ip
+  })
 ```
