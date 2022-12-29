@@ -1,5 +1,5 @@
 ---
-title: 'core'
+title: 'hooks'
 description: 'A kitchen sync package with all Exobase hooks'
 group: 'Packages'
 ---
