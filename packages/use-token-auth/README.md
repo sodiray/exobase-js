@@ -1,7 +1,7 @@
 ---
 title: 'useTokenAuth'
 description: 'A hook to validate id or access token authentication'
-group: 'Hooks'
+group: 'Auth'
 ---
 
 Provides an Exobase hook to parse and validate a JWT token in a request. It also includes a utility for generating JWT tokens.

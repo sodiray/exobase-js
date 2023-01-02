@@ -2,6 +2,7 @@
 title: 'useConsoleIntercept'
 description: 'A hook to proxy all calls to the console'
 group: 'Init Hooks'
+badge: 'Logging'
 ---
 
 An Exobase init hook that intercepts calls made to the console functions (log, warn, error, debug) and proxies them to a logger you specify.

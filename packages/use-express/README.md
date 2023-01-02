@@ -2,6 +2,7 @@
 title: 'useExpress'
 description: 'A root hook for the Express.js API framework'
 group: 'Root Hooks'
+badge: 'Express.js'
 ---
 
 An Exobase root hook for the ExpressJS framework

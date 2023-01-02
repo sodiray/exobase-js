@@ -2,6 +2,7 @@
 title: 'useCatch'
 description: 'A hook to handle errors'
 group: 'Hooks'
+badge: 'Error Handling'
 ---
 
 An Exobase hook that catches errors and gives you a chance to log them, map them, and return something user friendly.

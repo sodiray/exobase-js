@@ -2,6 +2,7 @@
 title: 'useQueryString'
 description: 'A hook to parse and validate a request query string'
 group: 'Hooks'
+badge: 'Validation'
 ---
 
 Provides a hook to parse and validate query string values in the request.

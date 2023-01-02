@@ -2,6 +2,7 @@
 title: 'useJsonBody'
 description: 'A hook to parse and validate a request body'
 group: 'Hooks'
+badge: 'Validation'
 ---
 
 Provides a hook to parse and validate request arguments from the json body.

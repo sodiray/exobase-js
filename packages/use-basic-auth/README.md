@@ -2,6 +2,7 @@
 title: 'useBasicAuth'
 description: 'A basic authentication hook'
 group: 'Hooks'
+badge: 'Auth'
 ---
 
 Provides a Exobase hook function that will parse out the client id and client secret of an incoming request

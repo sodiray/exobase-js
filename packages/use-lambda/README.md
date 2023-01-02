@@ -2,6 +2,7 @@
 title: 'useLambda'
 description: 'A root hook to handle the AWS Lambda serverless framework'
 group: 'Root Hooks'
+badge: 'AWS Lambda'
 ---
 
 Exobase root hook to handle function running on AWS Lambda. Built to support invocation from api gateway

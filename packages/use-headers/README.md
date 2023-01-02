@@ -2,6 +2,7 @@
 title: 'useHeaders'
 description: 'A hook to parse and validate request headers'
 group: 'Hooks'
+badge: 'Validation'
 ---
 
 Provides a hook to parse and validate headers in the request.

@@ -2,6 +2,7 @@
 title: 'useAuthorization'
 description: 'A role/permission authorization hook'
 group: 'Hooks'
+badge: 'Auth'
 ---
 
 Exobase hook to check if a request is authorized for a given resource

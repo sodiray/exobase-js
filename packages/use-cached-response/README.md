@@ -2,6 +2,7 @@
 title: 'useCachedResponse'
 description: 'A hook to cache API responses'
 group: 'Hooks'
+badge: 'Caching'
 ---
 
 An Exobase hook that will check incoming request argument for a match in the cache, if one exists it will be returned without executing the endpoint function.

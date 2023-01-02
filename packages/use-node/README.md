@@ -2,6 +2,7 @@
 title: 'useNode'
 description: 'A root hook to handle the standard Node.js http/https server framework'
 group: 'Root Hooks'
+badge: 'Node.js'
 ---
 
 An Exobase root hook for a raw Node HTTP/S server
