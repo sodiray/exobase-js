@@ -49,7 +49,7 @@ export class ApiError extends Error {
 //
 
 export class BadRequestError extends ApiError {
-  constructor(error: ErrorPropertiesWithoutStatus) {
+  constructor(error: ErrorPropertiesWithoutStatus = {}) {
     super({
       ...error,
       status: 400,
@@ -59,7 +59,7 @@ export class BadRequestError extends ApiError {
 }
 
 export class NotAuthenticatedError extends ApiError {
-  constructor(error: ErrorPropertiesWithoutStatus) {
+  constructor(error: ErrorPropertiesWithoutStatus = {}) {
     super({
       ...error,
       status: 401,
@@ -69,7 +69,7 @@ export class NotAuthenticatedError extends ApiError {
 }
 
 export class NotAuthorizedError extends ApiError {
-  constructor(error: ErrorPropertiesWithoutStatus) {
+  constructor(error: ErrorPropertiesWithoutStatus = {}) {
     super({
       ...error,
       status: 403,
@@ -79,7 +79,7 @@ export class NotAuthorizedError extends ApiError {
 }
 
 export class NotFoundError extends ApiError {
-  constructor(error: ErrorPropertiesWithoutStatus) {
+  constructor(error: ErrorPropertiesWithoutStatus = {}) {
     super({
       ...error,
       status: 404,
@@ -89,7 +89,7 @@ export class NotFoundError extends ApiError {
 }
 
 export class MethodNotAllowedError extends ApiError {
-  constructor(error: ErrorPropertiesWithoutStatus) {
+  constructor(error: ErrorPropertiesWithoutStatus = {}) {
     super({
       ...error,
       status: 405,
@@ -99,7 +99,7 @@ export class MethodNotAllowedError extends ApiError {
 }
 
 export class TooManyRequestsError extends ApiError {
-  constructor(error: ErrorPropertiesWithoutStatus) {
+  constructor(error: ErrorPropertiesWithoutStatus = {}) {
     super({
       ...error,
       status: 429,
