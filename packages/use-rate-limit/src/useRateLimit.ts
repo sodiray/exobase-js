@@ -1,5 +1,10 @@
-import type { Handler, Props, Request } from '@exobase/core'
-import { error } from '@exobase/core'
+import {
+  ApiError,
+  Handler,
+  Props,
+  Request,
+  TooManyRequestsError
+} from '@exobase/core'
 import type { Duration } from 'durhuman'
 import dur from 'durhuman'
 import { isFunction, tryit } from 'radash'
@@ -21,12 +26,7 @@ export interface IRateLimitLogger {
   error: (...args: any[]) => void
 }
 
-export type UseRateLimitOption<TProps extends Props = Props> = {
-  /**
-   * A string unique to the items you are using this hook to cache.
-   * You'll likely want to use a unique key in every endpoint
-   */
-  key: string
+export type UseRateLimitLimit = {
   /**
    * Time to live: The amount of time before we should consider an
    * item in the cache to be fresh. The hook will ignore an item in
@@ -38,6 +38,17 @@ export type UseRateLimitOption<TProps extends Props = Props> = {
    * during the window.
    */
   max: number
+}
+
+export type UseRateLimitOption<TProps extends Props = Props> = {
+  /**
+   * A string unique to the items you are using this hook to cache.
+   * You'll likely want to use a unique key in every endpoint
+   */
+  key: string
+  limit:
+    | UseRateLimitLimit
+    | ((props: TProps) => UseRateLimitLimit | Promise<UseRateLimitLimit>)
   /**
    * A mapping function to convert the args into an object that should
    * be used to generate the cache key.
@@ -61,8 +72,7 @@ export async function withRateLimiting<TProps extends Props>(
   func: Handler<TProps>,
   {
     key: prefix,
-    window,
-    max,
+    limit: limitFn,
     toIdentity,
     logger,
     store: storeFn
@@ -79,19 +89,22 @@ export async function withRateLimiting<TProps extends Props>(
         services: { store: services.store }
       }
     )
-    throw error({
+    throw new ApiError({
       status: 500,
       message: 'Server error',
       key: 'exo.rate-limit.misconfig'
     })
   }
+  const limit = await Promise.resolve(
+    isFunction(limitFn) ? limitFn(props) : limitFn
+  )
   const store = await Promise.resolve(
     storeFn ? (isFunction(storeFn) ? storeFn(props) : storeFn) : services.store!
   )
   const [err, record] = await tryit(store.inc)(key, Date.now())
   if (err) {
     logger?.error('[useRateLimit] Error on store.inc', { err, key })
-    throw error({
+    throw new ApiError({
       status: 500,
       message: 'Server error',
       key: 'exo.rate-limit.inc-issue'
@@ -99,7 +112,7 @@ export async function withRateLimiting<TProps extends Props>(
   }
   if (!record) {
     logger?.error('[useRateLimit] Store.inc returned nothing', { key })
-    throw error({
+    throw new ApiError({
       status: 500,
       message: 'Server error',
       key: 'exo.rate-limit.inc-empty'
@@ -107,20 +120,19 @@ export async function withRateLimiting<TProps extends Props>(
   }
   const { count, timestamp } = record
   const elapsed = Date.now() - timestamp
-  const windowHasPassed = elapsed > dur(window, 'milliseconds')
+  const windowHasPassed = elapsed > dur(limit.window, 'milliseconds')
   if (windowHasPassed) {
     await store.reset(key)
   } else {
-    if (count > max) {
+    if (count > limit.max) {
       logger?.log('[useRateLimit] Rate limit exceeded', {
         key,
         count,
         timestamp,
-        max,
-        window
+        max: limit.max,
+        window: limit.window
       })
-      throw error({
-        status: 429,
+      throw new TooManyRequestsError({
         message: 'Too Many Requests',
         key: 'exo.rate-limit.exceeded'
       })

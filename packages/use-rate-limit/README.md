@@ -45,8 +45,10 @@ export default compose(
   }),
   useRateLimit({
     key: 'library.book.by-id',
-    window: '5 minutes'
-    max: 200,
+    limit: {
+      window: '5 minutes'
+      max: 200,
+    }
     toIdentity: (props) => props.request.ip
   }),
   listLibraries
@@ -109,8 +111,10 @@ import { store } from './redis-store'
 export const useRedisRateLimit = (key: string) =>
   useRateLimit({
     key,
-    window: '5 minutes'
-    max: 200,
+    limit: {
+      window: '5 minutes'
+      max: 200,
+    },
     store,
     toIdentity: (props) => props.request.ip
   })
@@ -128,8 +132,10 @@ import type { Props } from '@exobase/core'
 export const useRateLimitByToken = (key: string) =>
   useRateLimit({
     key,
-    window: '24 hours'
-    max: 1000,
+    limit: {
+      window: '24 hours'
+      max: 1000,
+    },
     toIdentity: (props: Props<{}, {}, TokenAuth>) => props.auth.token.sub
   })
 ```
@@ -160,9 +166,31 @@ export const store = {
 export const useInMemoryRateLimit = (key) =>
   useRateLimit({
     key,
-    window: '5 minutes'
-    max: 200,
+    limit: {
+      window: '5 minutes'
+      max: 200,
+    },
     store,
     toIdentity: (props) => props.request.ip
   })
+```
+
+### Using with plan specific limits
+
+Many use cases have specific rate limit rules for a users plan. For example, a free user may be limited to 100 requests/hour while a paid user is limited to 10,000 requests/hour. To support this, you can pass `limit` as an async function that receives the props as an argument. Use the function form to lookup the limits for the current user.
+
+```ts
+useRateLimit({
+  key,
+  limit: async (props: Props<{}, {}, TokenAuth>) => {
+    const userId = props.auth.token.sub
+    const plan = await db.plans.findForUser(userId)
+    return {
+      window: '1 hour'
+      max: plan.type === 'paid' ? 10_000 : 1_000,
+    }
+  },
+  store,
+  toIdentity: (props) => props.request.ip
+})
 ```

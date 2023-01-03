@@ -49,7 +49,7 @@ describe('withBasicAuth function', () => {
         }
       } as any)
     } catch (err: any) {
-      expect(err.key).toBe('exo.err.basic.noheader')
+      expect(err.properties.key).toBe('exo.err.basic.noheader')
       return
     }
     throw new Error('Expected withBasicAuth to throw error')
@@ -64,7 +64,7 @@ describe('withBasicAuth function', () => {
         }
       } as any)
     } catch (err: any) {
-      expect(err.key).toBe('exo.err.basic.nobasic')
+      expect(err.properties.key).toBe('exo.err.basic.nobasic')
       return
     }
     throw new Error('Expected withBasicAuth to throw error')
@@ -80,7 +80,7 @@ describe('withBasicAuth function', () => {
         }
       } as any)
     } catch (err: any) {
-      expect(err.key).toBe('exo.err.basic.misformat')
+      expect(err.properties.key).toBe('exo.err.basic.misformat')
       return
     }
     throw new Error('Expected withBasicAuth to throw error')

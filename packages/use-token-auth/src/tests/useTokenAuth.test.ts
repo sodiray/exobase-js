@@ -97,7 +97,7 @@ describe('withTokenAuth function', () => {
         } as any
       )
     } catch (err: any) {
-      expect(err.key).toBe('exo.err.jwt.expired')
+      expect(err.properties.key).toBe('exo.err.jwt.expired')
       return
     }
     throw new Error(

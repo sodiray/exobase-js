@@ -1,4 +1,4 @@
-import { omit } from 'radash'
+import { isError } from './error'
 import * as t from './types'
 
 /**
@@ -8,10 +8,6 @@ import * as t from './types'
  */
 export const isResponse = (res: any): res is t.Response => {
   return (res as t.Response)?.type === '@response'
-}
-
-export const isJsonError = (err: any): err is t.JsonError => {
-  return (err as t.JsonError)?.format === '@json'
 }
 
 export const defaultResponse: t.Response = {
@@ -25,27 +21,34 @@ export const responseFromResult = (result: any): t.Response => {
   if (isResponse(result)) return result
   // If nothing was returned then return the default
   // success response
-  // Else, the func returned something that should be
+  if (!result) return defaultResponse
+  // Else, the function returned something that should be
   // returned as the json body response
   return {
     ...defaultResponse,
-    body: !result ? defaultResponse.body : result
+    body: result
   }
 }
 
 export const responseFromError = (error: any): t.Response => {
   if (isResponse(error)) return error
-  // Else its some generic error, wrap it in our
-  // error object as an unknown error
+  // If the error is an ApiError then return it's
+  // specified properties and status
+  if (isError(error))
+    return {
+      ...defaultResponse,
+      status: error.status,
+      body: error.properties
+    }
+  // Else its an error we're not equipped to handle
+  // return an unknown to the user.
   return {
     ...defaultResponse,
-    status: error.status ?? 500,
-    body: isJsonError(error)
-      ? omit(error, ['format'])
-      : {
-          status: 500,
-          message: 'Unknown Error'
-        }
+    status: 500,
+    body: {
+      status: 500,
+      message: 'Unknown Error'
+    }
   }
 }
 

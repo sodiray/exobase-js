@@ -1,5 +1,5 @@
 import type { Handler, Props } from '@exobase/core'
-import { error } from '@exobase/core'
+import { NotAuthenticatedError, NotAuthorizedError } from '@exobase/core'
 import * as jwt from 'jsonwebtoken'
 import { isFunction, tryit } from 'radash'
 import { Token } from './token'
@@ -14,28 +14,12 @@ export type TokenAuth<TExtraData = {}> = {
   token: Token<TExtraData>
 }
 
-const forbidden = (extra: { info: string; key: string }) => {
-  return error({
-    message: 'Not Authorized',
-    status: 403,
-    ...extra
-  })
-}
-
-const unauthorized = (extra: { info: string; key: string }) => {
-  return error({
-    message: 'Not Authenticated',
-    status: 401,
-    ...extra
-  })
-}
-
 const validateClaims = (decoded: Token, options: UseTokenAuthOptions) => {
   const { type, iss, aud } = options
 
   if (type) {
     if (!decoded.type || decoded.type !== type) {
-      throw forbidden({
+      throw new NotAuthorizedError({
         info: 'Given token does not have required type',
         key: 'exo.err.jwt.caprorilous'
       })
@@ -44,7 +28,7 @@ const validateClaims = (decoded: Token, options: UseTokenAuthOptions) => {
 
   if (iss) {
     if (!decoded.iss || decoded.iss !== iss) {
-      throw forbidden({
+      throw new NotAuthorizedError({
         info: 'Given token does not have required issuer',
         key: 'exo.err.jwt.caprisaur'
       })
@@ -53,7 +37,7 @@ const validateClaims = (decoded: Token, options: UseTokenAuthOptions) => {
 
   if (aud) {
     if (!decoded.aud || decoded.aud !== aud) {
-      throw forbidden({
+      throw new NotAuthorizedError({
         info: 'Given token does not have required audience',
         key: 'exo.err.jwt.halliphace'
       })
@@ -77,14 +61,14 @@ export async function withTokenAuth<TProps extends Props>(
 ) {
   const header = props.request.headers['authorization'] as string
   if (!header) {
-    throw unauthorized({
+    throw new NotAuthenticatedError({
       info: 'This function requires authentication via a token',
       key: 'exo.err.jwt.canes-venatici'
     })
   }
 
   if (!header.startsWith('Bearer ')) {
-    throw unauthorized({
+    throw new NotAuthenticatedError({
       info: 'This function requires an authentication via a token',
       key: 'exo.err.jwt.canes-veeticar'
     })
@@ -98,12 +82,12 @@ export async function withTokenAuth<TProps extends Props>(
   if (err) {
     console.error('Inavlid token', { err }, 'r.log.jwt.beiyn')
     if (err.name === 'TokenExpiredError') {
-      throw forbidden({
+      throw new NotAuthorizedError({
         info: 'Provided token is expired',
         key: 'exo.err.jwt.expired'
       })
     }
-    throw forbidden({
+    throw new NotAuthorizedError({
       info: 'Cannot call this function without a valid authentication token',
       key: 'exo.err.jwt.canis-major'
     })

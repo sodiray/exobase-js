@@ -1,17 +1,3 @@
-/**
- * Any object that is thrown, and matches this interface,
- * having a format property equal to '@json' will be
- * treated as a known error by the root hook.
- *
- * If a 'status' property exists it will be used to set
- * the HTTP status on the response.
- */
-export interface JsonError {
-  /**
-   * Always '@json' when thrown by an exobase hook
-   */
-  format: '@json'
-}
 
 export type Request = {
   headers: Record<string, string | string[]>

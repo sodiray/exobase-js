@@ -1,17 +1,9 @@
 import type { Handler, Props } from '@exobase/core'
-import { error } from '@exobase/core'
+import { NotAuthenticatedError } from '@exobase/core'
 
 export type BasicAuth = {
   clientId: string
   clientSecret: string
-}
-
-export const unauthenticated = (extra: { info: string; key: string }) => {
-  return error({
-    message: 'Not Authenticated',
-    status: 401,
-    ...extra
-  })
 }
 
 export async function withBasicAuth<TProps extends Props>(
@@ -20,7 +12,7 @@ export async function withBasicAuth<TProps extends Props>(
 ) {
   const header = props.request.headers['authorization'] as string
   if (!header) {
-    throw unauthenticated({
+    throw new NotAuthenticatedError({
       info: 'This function requires authentication via a token',
       key: 'exo.err.basic.noheader'
     })
@@ -28,7 +20,7 @@ export async function withBasicAuth<TProps extends Props>(
 
   const basicToken = header.startsWith('Basic ') && header.replace('Basic ', '')
   if (!basicToken) {
-    throw unauthenticated({
+    throw new NotAuthenticatedError({
       info: 'This function requires authentication via a token',
       key: 'exo.err.basic.nobasic'
     })
@@ -39,7 +31,7 @@ export async function withBasicAuth<TProps extends Props>(
     .split(':')
 
   if (!clientId || !clientSecret) {
-    throw unauthenticated({
+    throw new NotAuthenticatedError({
       info: 'Cannot call this function without a valid authentication token',
       key: 'exo.err.basic.misformat'
     })

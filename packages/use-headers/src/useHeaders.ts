@@ -1,5 +1,5 @@
 import type { Handler, Props } from '@exobase/core'
-import { error } from '@exobase/core'
+import { BadRequestError } from '@exobase/core'
 import { isFunction, tryit } from 'radash'
 import zod, { AnyZodObject, ZodArray, ZodError } from 'zod'
 
@@ -16,9 +16,8 @@ export const withHeaders = async (
     props.request.headers
   )) as unknown as [ZodError, any]
   if (zerr) {
-    throw error({
+    throw new BadRequestError({
       message: 'Header validation failed',
-      status: 400,
       info: zerr.issues
         .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
         .join(', '),

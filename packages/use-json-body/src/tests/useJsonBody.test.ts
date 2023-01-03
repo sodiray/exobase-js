@@ -1,3 +1,4 @@
+import { ApiError } from '@exobase/core'
 import { describe, expect, jest, test } from '@jest/globals'
 import { tryit } from 'radash'
 import { useJsonBody } from '../index'
@@ -38,14 +39,9 @@ describe('useJsonBody hooks', () => {
     }
     const [error] = (await tryit(sut(endpointMock as any))(
       props as any
-    )) as unknown as [
-      {
-        status: number
-        info: string
-      }
-    ]
+    )) as unknown as [ApiError]
     expect(error).not.toBeNull()
     expect(error.status).toBe(400)
-    expect(error.info).toBe('name: required')
+    expect(error.properties.info).toBe('name: required')
   })
 })

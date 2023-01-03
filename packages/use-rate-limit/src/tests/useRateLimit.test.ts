@@ -7,9 +7,11 @@ describe('useRateLimit hook', () => {
     const endpointMock = jest.fn(() => ({ message: 'success' }))
     const sut = useRateLimit({
       key: 'x',
-      window: '10 hours',
-      max: 100,
-      toIdentity: (a) => a.request.ip
+      limit: {
+        window: '10 hours',
+        max: 100
+      },
+      toIdentity: a => a.request.ip
     })
     const mockInc = jest.fn(() => ({
       timestamp: Date.now(),
