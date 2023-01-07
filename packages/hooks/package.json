@@ -1,6 +1,6 @@
 {
   "name": "@exobase/hooks",
-  "version": "1.0.0-rc.24",
+  "version": "1.0.0-rc.25",
   "description": "All the Exobase hooks",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -35,7 +35,7 @@
     "@exobase/use-headers": "^1.0.0-rc.9",
     "@exobase/use-json-body": "^1.0.0-rc.10",
     "@exobase/use-lambda-tracer": "^1.0.0-rc.12",
-    "@exobase/use-logging": "^1.0.0-rc.11",
+    "@exobase/use-logging": "^1.0.0-rc.12",
     "@exobase/use-path-params": "^1.0.0-rc.17",
     "@exobase/use-path-parser": "^1.0.0-rc.4",
     "@exobase/use-permission-authorization": "^1.0.0-rc.1",
