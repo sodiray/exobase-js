@@ -40,7 +40,7 @@ export const listLibraries = async (props: Props) => {
 export default compose(
   useNext(),
   useLogging(),
-  useLogging('[:method] :path at :date(iso) -> :status in :ms-elapsed'),
+  useLogging('[:method] :path at :date(iso) -> :status in :elapsed(ms'),
   useLogging('[:method] :request-id', {
     format: message => JSON.stringify({ message }),
     logger: console,

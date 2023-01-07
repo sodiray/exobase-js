@@ -18,7 +18,7 @@ const Tokens = (
     path: () => request.path,
     method: () => request.method,
     elapsed: (unit: 's' | 'ms' = 'ms') =>
-      unit === 'ms' ? `${milliseconds}` : `${seconds}`,
+      unit === 'ms' ? `${milliseconds}ms` : `${seconds}s`,
     date: (format: 'iso' | 'timestamp' = 'timestamp') => {
       if (format === 'iso') return new Date(milliseconds).toISOString()
       return `${milliseconds}`
@@ -135,7 +135,13 @@ export const LogEngine = {
     tokens: Record<string, TokenFunction>
   ): string => {
     return sort(parts, p => (p.calls ? 0 : 1)).reduce((acc, part) => {
-      return acc.replaceAll(part.raw, tokens[part.token](...part.args))
+      const fn = tokens[part.token]
+      if (!fn) {
+        throw new Error(
+          `[useLogging] Invalid configuration, unknown token: ${part.token}`
+        )
+      }
+      return acc.replaceAll(part.raw, fn(...part.args))
     }, template)
   }
 }
@@ -168,7 +174,7 @@ export const useLogging: <TProps extends Props>(
   options?: UseLoggingOptions
 ) => (func: Handler<TProps>) => Handler<TProps> =
   (
-    template = '[:method] :path at :date(iso) -> :status in :ms-elapsed',
+    template = '[:method] :path at :date(iso) -> :status in :elapsed(ms)',
     options = defaults
   ) =>
   func =>
