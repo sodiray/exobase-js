@@ -5,7 +5,7 @@ import cani, { CaniServices } from './cani'
 import * as perm from './permission'
 import type { Permission, PermissionKey } from './types'
 
-export type UseAuthorizationOptions<TProps extends Props> = {
+export type UsePermissionAuthorizationOptions<TProps extends Props> = {
   /**
    * A function that returns a list of permissions the current
    * user possess.
@@ -35,9 +35,9 @@ export type UseAuthorizationOptions<TProps extends Props> = {
         | Promise<PermissionKey[]>)
 }
 
-export async function withAuthorization<TProps extends Props>(
+export async function withPermissionAuthorization<TProps extends Props>(
   func: Handler<TProps & { auth: TProps['auth'] & CaniServices }>,
-  options: UseAuthorizationOptions<TProps>,
+  options: UsePermissionAuthorizationOptions<TProps>,
   props: TProps
 ) {
   const has = options.permissions(props)
@@ -55,7 +55,7 @@ export async function withAuthorization<TProps extends Props>(
         : required.name ?? perm.stringify(required)
       throw new NotAuthorizedError({
         info: `Missing required permission (${key}) to call this function`,
-        key: 'exo.err.authorization.failed'
+        key: 'exo.err.pauthz.failed'
       })
     }
   }
@@ -68,9 +68,9 @@ export async function withAuthorization<TProps extends Props>(
   })
 }
 
-export const useAuthorization: <TProps extends Props>(
-  options: UseAuthorizationOptions<TProps>
+export const usePermissionAuthorization: <TProps extends Props>(
+  options: UsePermissionAuthorizationOptions<TProps>
 ) => (
   func: Handler<TProps & { auth: TProps['auth'] & CaniServices }>
 ) => Handler<TProps> = options => func => props =>
-  withAuthorization(func, options, props)
+  withPermissionAuthorization(func, options, props)

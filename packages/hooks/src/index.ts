@@ -1,5 +1,6 @@
 export * from '@exobase/use-api-key'
-export * from '@exobase/use-authorization'
+export * from '@exobase/use-role-authorization'
+export * from '@exobase/use-permission-authorization'
 export * from '@exobase/use-basic-auth'
 export * from '@exobase/use-cached-response'
 export * from '@exobase/use-catch'

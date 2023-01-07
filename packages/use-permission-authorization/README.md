@@ -1,16 +1,16 @@
 ---
-title: 'useAuthorization'
-description: 'A role/permission authorization hook'
+title: 'usePermissionAuthorization'
+description: 'A permission authorization hook'
 group: 'Hooks'
 badge: 'Auth'
 ---
 
-Exobase hook to check if a request is authorized for a given resource
+Exobase hook to check if a request is authorized given the permissions that are attatched to it. 
 
 ## Install
 
 ```sh
-yarn add @exobase/use-authorization
+yarn add @exobase/use-permission-authorization
 # or
 yarn add @exobase/hooks
 ```
@@ -18,9 +18,9 @@ yarn add @exobase/hooks
 ## Import
 
 ```ts
-import { useAuthorization } from '@exobase/use-authorization'
+import { usePermissionAuthorization } from '@exobase/use-permission-authorization'
 // or
-import { useAuthorization } from '@exobase/hooks'
+import { usePermissionAuthorization } from '@exobase/hooks'
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ import { useAuthorization } from '@exobase/hooks'
 import { compose } from 'radash'
 import type { Props } from '@exobase/core'
 import { useNext } from '@exobase/use-next'
-import { useAuthorization, useTokenAuth } from '@exobase/hooks'
+import { usePermissionAuthorization, useTokenAuth } from '@exobase/hooks'
 import type { TokenAuth } from '@exobase/hooks'
 
 type Args = {
@@ -57,7 +57,7 @@ export default compose(
     price: z.number()
   })),
   useTokenAuth(config.auth.tokens.secret),
-  useAuthorization<Props<Args, {}, TokenAuth>>({
+  usePermissionAuthorization<Props<Args, {}, TokenAuth>>({
     permissions: ({ auth }) => auth.token.permissions,
     require: ({ args }) => `allow::write::com.craigslist/listings/${args.id}`
   }),
@@ -112,8 +112,8 @@ Using github as an example you'll notice the `uri` is very similar to the github
 ## Example Permissions
 
 ```ts
-import cani from '@exobase/use-authorization/cani'
-import type { PermissionKey } from '@exobase/use-authorization'
+import cani from '@exobase/use-permission-authorization/cani'
+import type { PermissionKey } from '@exobase/use-permission-authorization'
 
 const permissions: PermissionKey[] = [
   // Basic github user abilities
@@ -147,11 +147,11 @@ user.has('allow::create::github/repo') // => false
 
 ## Props Changes
 
-When using `useAuthorization` a service is added called `cani`. You can use this to do more permission checks on the user inside your endpoint or deeper (we don't recommend deeper per good design). You can also import the raw `cani` function from this module but the one attached to the services in the props has already built the URI prefix trie for the current users specific permission set and won't need to build it again (i.e. it's much faster)
+When using `usePermissionAuthorization` a service is added called `cani`. You can use this to do more permission checks on the user inside your endpoint or deeper (we don't recommend deeper per good design). You can also import the raw `cani` function from this module but the one attached to the services in the props has already built the URI prefix trie for the current users specific permission set and won't need to build it again (i.e. it's much faster)
 
 ```ts
 import { useLambda } from '@exobase/use-lambda'
-import { useTokenAuth, useAuthorization } from '@exobase/hooks'
+import { useTokenAuth, usePermissionAuthorization } from '@exobase/hooks'
 import type { Cani } from '@exobase/hooks'
 
 type Services = {
@@ -165,14 +165,14 @@ const endpoint = async ({ services }: Props<{}, Services>) => {
   }
 }
 
-// Using useAuthorization without the `require`
+// Using usePermissionAuthorization without the `require`
 // option will always pass the authorization check.
 // You can use `cani` in your endpoint to do your
 // own checks.
 export default compose(
   useLambda(),
   useTokanAuth('my-little-secret'),
-  useAuthorization({
+  usePermissionAuthorization({
     permissions: ({ auth }) => auth.token.permissions
   }),
   endpoint

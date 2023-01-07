@@ -1,10 +1,10 @@
 import { describe, expect, test } from '@jest/globals'
 import { tryit } from 'radash'
-import { useAuthorization } from '../index'
+import { usePermissionAuthorization } from '../index'
 
-describe('useAuthorization function', () => {
+describe('usePermissionAuthorization function', () => {
   test('calls endpoint when sufficent permissions exist', async () => {
-    const sut = useAuthorization({
+    const sut = usePermissionAuthorization({
       permissions: (p: any) => p.auth.user.permissions,
       require: 'allow::read::com.github/rayepps/exobase-js/settings'
     })
@@ -18,7 +18,7 @@ describe('useAuthorization function', () => {
     expect(result).toBe('success')
   })
   test('throws unauthorized error when permissions are not met', async () => {
-    const sut = useAuthorization({
+    const sut = usePermissionAuthorization({
       permissions: (p: any) => p.auth.user.permissions,
       require: 'allow::write::com.github/rayepps/exobase-js/settings'
     })

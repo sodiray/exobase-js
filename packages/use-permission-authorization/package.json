@@ -1,6 +1,6 @@
 {
-  "name": "@exobase/use-authorization",
-  "version": "1.0.0-rc.5",
+  "name": "@exobase/use-permission-authorization",
+  "version": "1.0.0-rc.0",
   "description": "Exobase hook to check if a request is authorized for a given resource",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",

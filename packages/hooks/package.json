@@ -27,7 +27,8 @@
   "dependencies": {
     "@exobase/core": "^1.0.0-rc.17",
     "@exobase/use-api-key": "^1.0.0-rc.16",
-    "@exobase/use-authorization": "^1.0.0-rc.5",
+    "@exobase/use-role-authorization": "^1.0.0-rc.0",
+    "@exobase/use-permission-authorization": "^1.0.0-rc.0",
     "@exobase/use-basic-auth": "^1.0.0-rc.17",
     "@exobase/use-cached-response": "^1.0.0-rc.10",
     "@exobase/use-catch": "^1.0.0-rc.3",
