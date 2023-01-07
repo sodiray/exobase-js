@@ -3,17 +3,21 @@ import {
   Handler,
   Props,
   Request,
-  TooManyRequestsError
+  Response,
+  response
 } from '@exobase/core'
 import type { Duration } from 'durhuman'
 import dur from 'durhuman'
 import { isFunction, tryit } from 'radash'
 
 export interface IRateLimitStore {
-  inc: (
-    key: string,
-    timestamp: number
-  ) => Promise<{
+  /**
+   * A function that should incrament the currently stored
+   * number of requests in the current window and return
+   * both the total number of requests made in the current
+   * window and the beginning timestamp of the window.
+   */
+  inc: (key: string) => Promise<{
     count: number
     timestamp: number
   }>
@@ -66,6 +70,13 @@ export type UseRateLimitOption<TProps extends Props = Props> = {
   store?:
     | IRateLimitStore
     | ((props: TProps) => IRateLimitStore | Promise<IRateLimitStore>)
+  /**
+   * Strict tells the rate limit hook if it should return an error
+   * to the user when an error is thrown while interacting with
+   * the store. If strict is false, errors will be ignored and the
+   * will be called.
+   */
+  strict?: boolean
 }
 
 export async function withRateLimiting<TProps extends Props>(
@@ -75,6 +86,7 @@ export async function withRateLimiting<TProps extends Props>(
     limit: limitFn,
     toIdentity,
     logger,
+    strict = true,
     store: storeFn
   }: UseRateLimitOption<TProps>,
   props: TProps
@@ -101,9 +113,10 @@ export async function withRateLimiting<TProps extends Props>(
   const store = await Promise.resolve(
     storeFn ? (isFunction(storeFn) ? storeFn(props) : storeFn) : services.store!
   )
-  const [err, record] = await tryit(store.inc)(key, Date.now())
+  const [err, record] = await tryit(store.inc)(key)
   if (err) {
     logger?.error('[useRateLimit] Error on store.inc', { err, key })
+    if (strict === false) return await func(props)
     throw new ApiError({
       status: 500,
       message: 'Server error',
@@ -112,6 +125,7 @@ export async function withRateLimiting<TProps extends Props>(
   }
   if (!record) {
     logger?.error('[useRateLimit] Store.inc returned nothing', { key })
+    if (strict === false) return await func(props)
     throw new ApiError({
       status: 500,
       message: 'Server error',
@@ -121,6 +135,13 @@ export async function withRateLimiting<TProps extends Props>(
   const { count, timestamp } = record
   const elapsed = Date.now() - timestamp
   const windowHasPassed = elapsed > dur(limit.window, 'milliseconds')
+
+  const headers = {
+    'X-RateLimit-Limit': `${limit.max}`,
+    'X-RateLimit-Remaining': `${limit.max - count}`,
+    'X-RateLimit-Reset': `${dur(limit.window, 'milliseconds') - elapsed}`
+  }
+
   if (windowHasPassed) {
     await store.reset(key)
   } else {
@@ -132,13 +153,29 @@ export async function withRateLimiting<TProps extends Props>(
         max: limit.max,
         window: limit.window
       })
-      throw new TooManyRequestsError({
-        message: 'Too Many Requests',
-        key: 'exo.rate-limit.exceeded'
-      })
+      throw new ApiError(
+        {
+          message: 'Too Many Requests',
+          status: 429,
+          key: 'exo.rate-limit.exceeded'
+        },
+        {
+          status: 429,
+          headers
+        }
+      )
     }
   }
-  return await func(props)
+  const [error, result] = await tryit(func)(props)
+  const res = response(error, result)
+  const responseWithHeaders: Response = {
+    ...res,
+    headers: {
+      ...res.headers,
+      ...headers
+    }
+  }
+  return responseWithHeaders
 }
 
 export const useRateLimit: <

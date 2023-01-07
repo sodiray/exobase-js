@@ -75,12 +75,13 @@ redis.connect()
 // implementation but makes for a simple
 // example.
 export const store = {
-  inc: async (key: string, timestamp: number) => {
-    const created = await redis.setnx(`${key}:start`, `${timestamp}`)
+  inc: async (key: string) => {
+    const now = Date.now()
+    const created = await redis.setnx(`${key}:start`, `${now}`)
     await redis.setnx(`${key}:count`, 1)
-    if (!created)
+    if (created)
       return {
-        timestamp,
+        timestamp: now,
         count: 1
       }
     return {

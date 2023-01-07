@@ -1,4 +1,4 @@
-import { defaultResponse } from '@exobase/core'
+import { defaultResponse, Response } from '@exobase/core'
 import { describe, expect, jest, test } from '@jest/globals'
 import { useRateLimit } from '../index'
 
@@ -18,7 +18,7 @@ describe('useRateLimit hook', () => {
       count: 1
     }))
     const mockReset = jest.fn()
-    const result = await sut(endpointMock as any)({
+    const result = (await sut(endpointMock as any)({
       request: {
         ip: 'x.x.x.x'
       },
@@ -29,10 +29,12 @@ describe('useRateLimit hook', () => {
         }
       },
       response: defaultResponse
-    } as any)
+    } as any)) as Response
     expect(mockInc).toHaveBeenCalledTimes(1)
     expect(mockReset).not.toHaveBeenCalled()
     expect(endpointMock).toHaveBeenCalledTimes(1)
-    expect(result).toEqual({ message: 'success' })
+    expect(result.body).toEqual({ message: 'success' })
+    expect(result.headers['X-RateLimit-Limit']).toEqual('100')
+    expect(result.headers['X-RateLimit-Remaining']).toEqual('99')
   })
 })

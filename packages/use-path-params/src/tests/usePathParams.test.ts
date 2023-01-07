@@ -41,7 +41,7 @@ describe('usePathParams hooks', () => {
       props as any
     )) as unknown as [ApiError]
     expect(error).not.toBeNull()
-    expect(error.status).toBe(400)
+    expect(error.options.status).toBe(400)
     expect(error.properties.info).toBe('name: required')
   })
 })

@@ -37,8 +37,12 @@ export const responseFromError = (error: any): t.Response => {
   if (isError(error))
     return {
       ...defaultResponse,
-      status: error.status,
-      body: error.properties
+      status: error.options.status,
+      body: error.properties,
+      headers: {
+        ...defaultResponse.headers,
+        ...error.options.headers
+      }
     }
   // Else its an error we're not equipped to handle
   // return an unknown to the user.
