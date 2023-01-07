@@ -20,8 +20,9 @@ const Tokens = (
     elapsed: (unit: 's' | 'ms' = 'ms') =>
       unit === 'ms' ? `${milliseconds}ms` : `${seconds}s`,
     date: (format: 'iso' | 'timestamp' = 'timestamp') => {
-      if (format === 'iso') return new Date(milliseconds).toISOString()
-      return `${milliseconds}`
+      const now = new Date()
+      if (format === 'iso') return now.toISOString()
+      return `${now}`
     },
     status: () => `${response.status}`,
     referrer: () => `${request.headers.referer || request.headers.referrer}`,
