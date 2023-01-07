@@ -164,10 +164,13 @@ export async function withLogging<TProps extends Props>(
 }
 
 export const useLogging: <TProps extends Props>(
-  template: string,
+  template?: string,
   options?: UseLoggingOptions
 ) => (func: Handler<TProps>) => Handler<TProps> =
-  (template, options = defaults) =>
+  (
+    template = '[:method] :path at :date(iso) -> :status in :ms-elapsed',
+    options = defaults
+  ) =>
   func =>
   props =>
     withLogging(func, template, { ...defaults, ...options }, props)
