@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-logging",
-  "version": "1.0.0-rc.13",
+  "version": "1.0.0-rc.14",
   "description": "Exobase hook to log info about requests",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
