@@ -1,4 +1,3 @@
-
 export type Request = {
   headers: Record<string, string | string[]>
   url: string
@@ -21,6 +20,7 @@ export type Response = {
   headers: Record<string, string | string[]>
   status: number
   body: any
+  error: null | Error
 }
 
 export type Props<

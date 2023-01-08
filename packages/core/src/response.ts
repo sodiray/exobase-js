@@ -14,7 +14,8 @@ export const defaultResponse: t.Response = {
   type: '@response',
   status: 200,
   headers: {},
-  body: {}
+  body: {},
+  error: null
 }
 
 export const responseFromResult = (result: any): t.Response => {
@@ -39,6 +40,7 @@ export const responseFromError = (error: any): t.Response => {
       ...defaultResponse,
       status: error.options.status,
       body: error.properties,
+      error,
       headers: {
         ...defaultResponse.headers,
         ...error.options.headers
@@ -49,6 +51,7 @@ export const responseFromError = (error: any): t.Response => {
   return {
     ...defaultResponse,
     status: 500,
+    error,
     body: {
       status: 500,
       message: 'Unknown Error'
