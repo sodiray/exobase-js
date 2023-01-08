@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-express",
-  "version": "1.0.0-rc.18",
+  "version": "1.0.0-rc.19",
   "description": "Exobase root hook to handle function running on Express",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -33,7 +33,7 @@
     "sinon": "^14.0.2"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.18",
+    "@exobase/core": "^1.0.0-rc.19",
     "compression": "^1.7.4",
     "radash": "^10.3.0"
   },

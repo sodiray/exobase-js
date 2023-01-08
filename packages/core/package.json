@@ -1,6 +1,6 @@
 {
   "name": "@exobase/core",
-  "version": "1.0.0-rc.18",
+  "version": "1.0.0-rc.19",
   "description": "Exobase types and hook helper functions",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
