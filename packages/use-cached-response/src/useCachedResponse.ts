@@ -1,7 +1,7 @@
 import type { Handler, Props, Request } from '@exobase/core'
 import type { Duration } from 'durhuman'
 import dur from 'durhuman'
-import { mapValues, tryit } from 'radash'
+import { crush, mapValues, tryit } from 'radash'
 import * as uuid from 'uuid'
 
 export interface ICache {
@@ -74,30 +74,17 @@ const defaults: Required<
   toResponse: c => JSON.parse(c)
 }
 
-const hash = (obj: object) =>
+const hash = <TObject extends object>(obj: TObject) =>
   uuid.v5(
     JSON.stringify(
-      mapValues(obj, (value: any) => {
-        if (value === null) return 'h.__null__'
-        if (value === undefined) return 'h.__undefined__'
+      mapValues(crush(obj), (value: any) => {
+        if (value === null) return '__null__'
+        if (value === undefined) return '__undefined__'
         return value
       })
     ),
     uuid.v5.DNS
   )
-
-const flatten = (
-  obj: any,
-  prefix: string | null = null
-): Record<string, string> =>
-  !obj
-    ? {}
-    : Object.keys(obj).reduce((acc, key) => {
-        const k = !prefix ? key : `${prefix}.${key}`
-        return !obj[key] || typeof obj[key] !== 'object'
-          ? { ...acc, [k]: obj[key] }
-          : { ...acc, ...flatten(obj[key], k) }
-      }, {})
 
 export async function withCachedResponse<
   TArgs extends {},
@@ -130,7 +117,7 @@ export async function withCachedResponse<
       return await func(props)
     }
   }
-  const key = `${prefix}.${hash(flatten(toIdentity(props.args)))}`
+  const key = `${prefix}.${hash(toIdentity(props.args))}`
   const [getErr, cached] = await tryit(props.services.cache.get)(key)
   if (getErr) {
     logger?.error(
