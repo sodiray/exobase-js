@@ -1,6 +1,6 @@
 import type { Handler, Props } from '@exobase/core'
 import { NotAuthenticatedError, NotAuthorizedError } from '@exobase/core'
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import { isFunction, tryit } from 'radash'
 import { Token } from './token'
 
