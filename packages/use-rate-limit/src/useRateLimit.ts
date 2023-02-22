@@ -1,7 +1,8 @@
 import {
-  ApiError,
   Handler,
+  InternalServerError,
   Props,
+  RateLimitError,
   Request,
   Response,
   response
@@ -101,11 +102,12 @@ export async function withRateLimiting<TProps extends Props>(
         services: { store: services.store }
       }
     )
-    throw new ApiError({
-      status: 500,
-      message: 'Server error',
-      key: 'exo.rate-limit.misconfig'
-    })
+    throw new InternalServerError(
+      'useRateLimit hook requires a store to persist activity',
+      {
+        key: 'exo.rate-limit.misconfig'
+      }
+    )
   }
   const limit = await Promise.resolve(
     isFunction(limitFn) ? limitFn(props) : limitFn
@@ -117,20 +119,23 @@ export async function withRateLimiting<TProps extends Props>(
   if (err) {
     logger?.error('[useRateLimit] Error on store.inc', { err, key })
     if (strict === false) return await func(props)
-    throw new ApiError({
-      status: 500,
-      message: 'Server error',
-      key: 'exo.rate-limit.inc-issue'
-    })
+    throw new InternalServerError(
+      'useRateLimit store threw an error while executing incrament operation',
+      {
+        key: 'exo.rate-limit.misconfig',
+        cause: err
+      }
+    )
   }
   if (!record) {
     logger?.error('[useRateLimit] Store.inc returned nothing', { key })
     if (strict === false) return await func(props)
-    throw new ApiError({
-      status: 500,
-      message: 'Server error',
-      key: 'exo.rate-limit.inc-empty'
-    })
+    throw new InternalServerError(
+      'useRateLimit did not return a valid record',
+      {
+        key: 'exo.rate-limit.misconfig'
+      }
+    )
   }
   const { count, timestamp } = record
   const elapsed = Date.now() - timestamp
@@ -153,17 +158,9 @@ export async function withRateLimiting<TProps extends Props>(
         max: limit.max,
         window: limit.window
       })
-      throw new ApiError(
-        {
-          message: 'Too Many Requests',
-          status: 429,
-          key: 'exo.rate-limit.exceeded'
-        },
-        {
-          status: 429,
-          headers
-        }
-      )
+      throw new RateLimitError('Too Many Requests', {
+        key: 'exo.rate-limit.exceeded'
+      })
     }
   }
   const [error, result] = await tryit(func)(props)

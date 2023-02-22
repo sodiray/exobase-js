@@ -1,5 +1,4 @@
-import type { Handler, Props } from '@exobase/core'
-import { NotAuthenticatedError } from '@exobase/core'
+import { Handler, NotAuthenticatedError, Props } from '@exobase/core'
 import { isFunction, tryit } from 'radash'
 
 export type ApiKeyAuth = {
@@ -13,8 +12,7 @@ export async function withApiKey<TProps extends Props>(
 ) {
   const header = props.request.headers['x-api-key'] as string
   if (!header) {
-    throw new NotAuthenticatedError({
-      info: 'This function requires an api key',
+    throw new NotAuthenticatedError('This function requires an api key', {
       key: 'exo.api-key.missing-header'
     })
   }
@@ -22,8 +20,7 @@ export async function withApiKey<TProps extends Props>(
   // If a `Key ` prefix exists, remove it
   const providedKey = header.replace(/^[Kk]ey\s/, '')
   if (!providedKey) {
-    throw new NotAuthenticatedError({
-      info: 'Invalid api key',
+    throw new NotAuthenticatedError('Invalid api key', {
       key: 'exo.api-key.missing-key'
     })
   }
@@ -33,22 +30,19 @@ export async function withApiKey<TProps extends Props>(
   })()
 
   if (err) {
-    throw new NotAuthenticatedError({
-      info: 'Server cannot authenticate',
+    throw new NotAuthenticatedError('Server cannot authenticate', {
       key: 'exo.api-key.key-error'
     })
   }
 
   if (!key) {
-    throw new NotAuthenticatedError({
-      info: 'Server cannot authenticate',
+    throw new NotAuthenticatedError('Server cannot authenticate', {
       key: 'exo.api-key.key-not-found'
     })
   }
 
   if (providedKey !== key) {
-    throw new NotAuthenticatedError({
-      info: 'Invalid api key',
+    throw new NotAuthenticatedError('Invalid api key', {
       key: 'exo.api-key.mismatch'
     })
   }

@@ -1,5 +1,4 @@
-import type { Handler, Props } from '@exobase/core'
-import { NotAuthorizedError } from '@exobase/core'
+import { Handler, NotAuthorizedError, Props } from '@exobase/core'
 import { isArray, isFunction, isString, sift } from 'radash'
 import cani, { CaniServices } from './cani'
 import * as perm from './permission'
@@ -53,10 +52,12 @@ export async function withPermissionAuthorization<TProps extends Props>(
       const key = isString(required)
         ? required
         : required.name ?? perm.stringify(required)
-      throw new NotAuthorizedError({
-        info: `Missing required permission (${key}) to call this function`,
-        key: 'exo.err.pauthz.failed'
-      })
+      throw new NotAuthorizedError(
+        `Missing required permission (${key}) to call this function`,
+        {
+          key: 'exo.err.pauthz.failed'
+        }
+      )
     }
   }
   return await func({

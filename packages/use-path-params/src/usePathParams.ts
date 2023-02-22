@@ -1,5 +1,4 @@
-import type { Handler, Props } from '@exobase/core'
-import { BadRequestError } from '@exobase/core'
+import { BadRequestError, Handler, Props } from '@exobase/core'
 import { isFunction, tryit } from 'radash'
 import zod, { AnyZodObject, ZodArray, ZodError } from 'zod'
 
@@ -16,13 +15,16 @@ export const withPathParams = async (
     props.request.params
   )) as unknown as [ZodError, any]
   if (zerr) {
-    throw new BadRequestError({
-      message: 'Path parameter validation failed',
-      info: zerr.issues
-        .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
-        .join(', '),
-      key: 'err.path-params.invalid'
-    })
+    throw new BadRequestError(
+      'Path parameter validation failed: ' +
+        zerr.issues
+          .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
+          .join(', '),
+      {
+        key: 'err.path-params.failed',
+        cause: zerr
+      }
+    )
   }
   return await func({
     ...props,

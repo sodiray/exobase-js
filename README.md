@@ -40,6 +40,7 @@ yarn add @exobase/use-lambda
 yarn add @exobase/use-express
 yarn add @exobase/use-next
 ```
+
 ## Getting Started
 
 Using our [Express example project](./examples/callback-api-express) you can have an API running in a few minutes. Here's a simple health check endpoint.

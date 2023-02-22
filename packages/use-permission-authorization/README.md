@@ -5,7 +5,7 @@ group: 'Hooks'
 badge: 'Auth'
 ---
 
-Exobase hook to check if a request is authorized given the permissions that are attatched to it. 
+Exobase hook to check if a request is authorized given the permissions that are attatched to it.
 
 ## Install
 

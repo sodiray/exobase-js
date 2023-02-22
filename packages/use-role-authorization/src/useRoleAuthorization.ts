@@ -1,5 +1,4 @@
-import type { Handler, Props } from '@exobase/core'
-import { NotAuthorizedError } from '@exobase/core'
+import { Handler, NotAuthorizedError, Props } from '@exobase/core'
 import { isArray, isFunction, sift } from 'radash'
 
 export type UseRoleAuthorizationOptions<TProps extends Props> = {
@@ -36,10 +35,12 @@ export async function withRoleAuthorization<TProps extends Props>(
   const requires = sift(isArray(raw) ? raw : [raw])
   for (const required of requires) {
     if (!has.includes(required)) {
-      throw new NotAuthorizedError({
-        info: `Missing required role (${required}) to call this function`,
-        key: 'exo.err.rauthz.failed'
-      })
+      throw new NotAuthorizedError(
+        `Missing required role (${required}) to call this function`,
+        {
+          key: 'exo.err.rauthz.failed'
+        }
+      )
     }
   }
   return await func(props)

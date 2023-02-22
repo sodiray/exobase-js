@@ -1,4 +1,3 @@
-import { isError } from './error'
 import * as t from './types'
 
 /**
@@ -33,19 +32,6 @@ export const responseFromResult = (result: any): t.Response => {
 
 export const responseFromError = (error: any): t.Response => {
   if (isResponse(error)) return error
-  // If the error is an ApiError then return it's
-  // specified properties and status
-  if (isError(error))
-    return {
-      ...defaultResponse,
-      status: error.options.status,
-      body: error.properties,
-      error,
-      headers: {
-        ...defaultResponse.headers,
-        ...error.options.headers
-      }
-    }
   // Else its an error we're not equipped to handle
   // return an unknown to the user.
   return {

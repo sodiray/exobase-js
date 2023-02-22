@@ -1,5 +1,4 @@
-import type { Handler, Props } from '@exobase/core'
-import { BadRequestError } from '@exobase/core'
+import { BadRequestError, Handler, Props } from '@exobase/core'
 import { isFunction, tryit } from 'radash'
 import zod, { AnyZodObject, ZodArray, ZodError } from 'zod'
 
@@ -16,13 +15,16 @@ export const withJsonBody = async (
     props.request.body
   )) as unknown as [ZodError, any]
   if (zerr) {
-    throw new BadRequestError({
-      message: 'Json body validation failed',
-      info: zerr.issues
-        .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
-        .join(', '),
-      key: 'err.json-body.failed'
-    })
+    throw new BadRequestError(
+      'Json body validation failed: ' +
+        zerr.issues
+          .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
+          .join(', '),
+      {
+        key: 'err.json-body.failed',
+        cause: zerr
+      }
+    )
   }
   return await func({
     ...props,

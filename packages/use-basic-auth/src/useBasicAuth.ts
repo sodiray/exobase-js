@@ -1,5 +1,4 @@
-import type { Handler, Props } from '@exobase/core'
-import { NotAuthenticatedError } from '@exobase/core'
+import { Handler, NotAuthenticatedError, Props } from '@exobase/core'
 
 export type BasicAuth = {
   clientId: string
@@ -12,18 +11,22 @@ export async function withBasicAuth<TProps extends Props>(
 ) {
   const header = props.request.headers['authorization'] as string
   if (!header) {
-    throw new NotAuthenticatedError({
-      info: 'This function requires authentication via a token',
-      key: 'exo.err.basic.noheader'
-    })
+    throw new NotAuthenticatedError(
+      'This function requires authentication via a token',
+      {
+        key: 'exo.err.basic.noheader'
+      }
+    )
   }
 
   const basicToken = header.startsWith('Basic ') && header.replace('Basic ', '')
   if (!basicToken) {
-    throw new NotAuthenticatedError({
-      info: 'This function requires authentication via a token',
-      key: 'exo.err.basic.nobasic'
-    })
+    throw new NotAuthenticatedError(
+      'This function requires authentication via a token',
+      {
+        key: 'exo.err.basic.nobasic'
+      }
+    )
   }
 
   const [clientId, clientSecret] = Buffer.from(basicToken, 'base64')
@@ -31,10 +34,12 @@ export async function withBasicAuth<TProps extends Props>(
     .split(':')
 
   if (!clientId || !clientSecret) {
-    throw new NotAuthenticatedError({
-      info: 'Cannot call this function without a valid authentication token',
-      key: 'exo.err.basic.misformat'
-    })
+    throw new NotAuthenticatedError(
+      'Cannot call this function without a valid authentication token',
+      {
+        key: 'exo.err.basic.misformat'
+      }
+    )
   }
 
   return await func({

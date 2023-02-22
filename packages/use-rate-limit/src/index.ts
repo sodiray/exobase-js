@@ -1,6 +1,6 @@
 export { useRateLimit } from './useRateLimit'
 export type {
-  IRateLimitStore,
   IRateLimitLogger,
+  IRateLimitStore,
   UseRateLimitOption
 } from './useRateLimit'

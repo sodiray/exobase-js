@@ -1,5 +1,4 @@
-import type { Handler, Props } from '@exobase/core'
-import { BadRequestError } from '@exobase/core'
+import { BadRequestError, Handler, Props } from '@exobase/core'
 import { isFunction, tryit } from 'radash'
 import zod, { AnyZodObject, ZodError } from 'zod'
 
@@ -16,13 +15,16 @@ export const withQueryString = async (
     props.request.query
   )) as unknown as [ZodError, any]
   if (zerr) {
-    throw new BadRequestError({
-      message: 'Query string validation failed',
-      info: zerr.issues
-        .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
-        .join(', '),
-      key: 'err.query-string.failed'
-    })
+    throw new BadRequestError(
+      'Query string validation failed: ' +
+        zerr.issues
+          .map(e => `${e.path.join('.')}: ${e.message.toLowerCase()}`)
+          .join(', '),
+      {
+        key: 'err.query-string.failed',
+        cause: zerr
+      }
+    )
   }
   return await func({
     ...props,

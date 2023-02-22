@@ -21,6 +21,7 @@ import { useCors } from '@exobase/use-cors'
 // or
 import { useCors } from '@exobase/hooks'
 ```
+
 ## Usage
 
 Add the `useCors` hook anywhere before your endpoint. When an `OPTIONS` request is handled the `useCors` hook will resopnd with the configured (or default) CORS headers and will not call your endpoint function.

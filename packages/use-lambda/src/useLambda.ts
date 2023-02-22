@@ -79,8 +79,8 @@ export const makeRequest = (
       (event.requestContext as any)?.http?.sourceIp ??
       event.requestContext?.identity?.sourceIp,
     startedAt: Date.now(),
-    protocol: event.requestContext.protocol,
-    httpVersion: (event.requestContext.protocol.split('/')[1] as string) ?? '',
+    protocol: event.requestContext?.protocol,
+    httpVersion: (event.requestContext?.protocol.split('/')[1] as string) ?? '',
     params: event.pathParameters as Record<string, string>
   }
 }

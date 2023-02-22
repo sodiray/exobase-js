@@ -44,16 +44,16 @@ export default compose(
     console.error(error)
     switch (error.name) {
       'EntityNotFound':
-        return { 
-          ...props.response, 
-          status: 404, 
-          body: { message: 'The item was not found' } 
+        return {
+          ...props.response,
+          status: 404,
+          body: { message: 'The item was not found' }
         }
     }
-    return { 
-      ...props.response, 
-      status: 500, 
-      body: { message: 'Unknown error' } 
+    return {
+      ...props.response,
+      status: 500,
+      body: { message: 'Unknown error' }
     }
   })
   useCors(),
