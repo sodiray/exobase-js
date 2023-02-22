@@ -24,10 +24,10 @@
   "devDependencies": {
     "@types/node": "^18.7.23",
     "@types/react-dom": "^18.0.6",
-    "next": "^12.2.3"
+    "next": "^13.1.6"
   },
   "peerDependencies": {
-    "next": "^12.2.3"
+    "next": "^13.1.6"
   },
   "dependencies": {
     "@exobase/core": "^1.0.0-rc.21"
