@@ -13,7 +13,7 @@ export type ExobaseBuilder<
     init: (
       func: (...args: any[]) => Promise<any>
     ) => (...args: any[]) => Promise<any>
-  ) => Omit<ExobaseBuilder, 'init'>
+  ) => Pick<ExobaseBuilder, 'init' | 'root'>
   root: <
     TInitArgs extends any[],
     TCurrentArgs extends {},
@@ -33,13 +33,16 @@ export type ExobaseBuilder<
         >
       ) => Promise<any>
     ) => (...args: TInitArgs) => Promise<any>
-  ) => ExobaseBuilder<
-    TInitArgs,
-    TCurrentArgs,
-    TCurrentServices,
-    TCurrentAuth,
-    TCurrentRequest,
-    TCurrentFramework
+  ) => Pick<
+    ExobaseBuilder<
+      TInitArgs,
+      TCurrentArgs,
+      TCurrentServices,
+      TCurrentAuth,
+      TCurrentRequest,
+      TCurrentFramework
+    >,
+    'hook' | 'endpoint'
   >
   hook: <
     TNextArgs extends {},
@@ -83,7 +86,7 @@ export type ExobaseBuilder<
         TRequiredFramework
       >
     ) => Promise<any>
-  ) => Omit<
+  ) => Pick<
     ExobaseBuilder<
       KInitArgs,
       TNextArgs & KCurrentArgs,
@@ -92,7 +95,7 @@ export type ExobaseBuilder<
       TNextRequest & KCurrentRequest,
       TNextFramework & KCurrentFramework
     >,
-    'init' | 'root'
+    'hook' | 'endpoint'
   >
   endpoint: <
     TResult,
@@ -155,7 +158,7 @@ export const chain = <
       func: (...args: any[]) => Promise<any>
     ) => (...args: any[]) => Promise<any>
   ) => {
-    return { ...chain([init]), init: undefined } as Omit<ExobaseBuilder, 'init'>
+    return chain([...funcs, init]) as Pick<ExobaseBuilder, 'init' | 'root'>
   },
   root: <
     TInitArgs extends any[],
@@ -177,13 +180,16 @@ export const chain = <
       ) => Promise<any>
     ) => (...args: TInitArgs) => Promise<any>
   ) => {
-    return chain([...funcs, root]) as ExobaseBuilder<
-      TInitArgs,
-      TCurrentArgs,
-      TCurrentServices,
-      TCurrentAuth,
-      TCurrentRequest,
-      TCurrentFramework
+    return chain([...funcs, root]) as Pick<
+      ExobaseBuilder<
+        TInitArgs,
+        TCurrentArgs,
+        TCurrentServices,
+        TCurrentAuth,
+        TCurrentRequest,
+        TCurrentFramework
+      >,
+      'hook' | 'endpoint'
     >
   },
   hook: <
@@ -239,7 +245,17 @@ export const chain = <
         TNextFramework & KCurrentFramework
       >([...funcs, hook]),
       ['init', 'root']
-    )
+    ) as Pick<
+      ExobaseBuilder<
+        KInitArgs,
+        TNextArgs & KCurrentArgs,
+        TNextServices & KCurrentServices,
+        TNextAuth & KCurrentAuth,
+        TNextRequest & KCurrentRequest,
+        TNextFramework & KCurrentFramework
+      >,
+      'hook' | 'endpoint'
+    >
   },
   endpoint: <
     TResult,
