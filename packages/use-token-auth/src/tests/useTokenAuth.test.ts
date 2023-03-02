@@ -1,12 +1,12 @@
+import { ExobaseError } from '@exobase/core'
 import { describe, expect, test } from '@jest/globals'
 import { sleep } from 'radash'
 import { createToken, useTokenAuth } from '../index'
-import { withTokenAuth } from '../useTokenAuth'
 
 const SECRET = 'unknown'
 
 describe('useTokenAuth hook function', () => {
-  test('executes withTokenAuth function', async () => {
+  test('executes useTokenAuth function', async () => {
     const token = createToken(SECRET, {
       sub: 'test',
       type: 'id',
@@ -26,7 +26,7 @@ describe('useTokenAuth hook function', () => {
   })
 })
 
-describe('withTokenAuth function', () => {
+describe('useTokenAuth function', () => {
   test('returns func result for success', async () => {
     const token = createToken(SECRET, {
       sub: 'test',
@@ -35,7 +35,8 @@ describe('withTokenAuth function', () => {
       iss: 'test',
       ttl: '3 hours'
     })
-    const result = await withTokenAuth(async () => 'success', SECRET, {}, {
+    const sut = useTokenAuth(SECRET, {})
+    const result = await sut(async () => 'success')({
       request: {
         headers: {
           authorization: `Bearer ${token}`
@@ -52,22 +53,18 @@ describe('withTokenAuth function', () => {
       iss: 'test',
       ttl: '3 hours'
     })
-    const result = await withTokenAuth(
-      async () => 'success',
-      SECRET,
-      {
-        type: 'id',
-        aud: 'test',
-        iss: 'test'
-      },
-      {
-        request: {
-          headers: {
-            authorization: `Bearer ${token}`
-          }
-        } as any
+    const sut = useTokenAuth(SECRET, {
+      type: 'id',
+      aud: 'test',
+      iss: 'test'
+    })
+    const result = await sut(async () => 'success')({
+      request: {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
       } as any
-    )
+    } as any)
     expect(result).toBe('success')
   })
   test('throws error when token is expired', async () => {
@@ -80,28 +77,25 @@ describe('withTokenAuth function', () => {
     })
     await sleep(100)
     try {
-      await withTokenAuth(
-        async () => 'success',
-        SECRET,
-        {
-          type: 'id',
-          aud: 'test',
-          iss: 'test'
-        },
-        {
-          request: {
-            headers: {
-              authorization: `Bearer ${token}`
-            }
-          } as any
+      const sut = useTokenAuth(SECRET, {
+        type: 'id',
+        aud: 'test',
+        iss: 'test'
+      })
+      await sut(async () => 'success')({
+        request: {
+          headers: {
+            authorization: `Bearer ${token}`
+          }
         } as any
-      )
+      } as any)
     } catch (err: any) {
-      expect(err.properties.key).toBe('exo.err.jwt.expired')
+      const e = err as ExobaseError
+      expect(e.key).toBe('exo.err.jwt.expired')
       return
     }
     throw new Error(
-      'Expected withTokenAuth to throw exception for timeout but it did not'
+      'Expected useTokenAuth to throw exception for timeout but it did not'
     )
   })
 })

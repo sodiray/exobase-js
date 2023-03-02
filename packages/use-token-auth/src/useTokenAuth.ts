@@ -1,10 +1,10 @@
 import {
-  Handler,
+  hook,
   NotAuthenticatedError,
   NotAuthorizedError,
   Props
 } from '@exobase/core'
-import jwt from 'jsonwebtoken'
+import * as jwt from 'jsonwebtoken'
 import { isFunction, tryit } from 'radash'
 import { Token } from './token'
 
@@ -60,69 +60,58 @@ const verifyToken = async (token: string, secret: string): Promise<Token> => {
   })
 }
 
-export async function withTokenAuth<TProps extends Props>(
-  func: Handler<TProps & { auth: TProps['auth'] & TokenAuth }>,
+export const useTokenAuth = (
   secret: string | ((props: Props) => string | Promise<string>),
-  options: UseTokenAuthOptions,
-  props: TProps
-) {
-  const header = props.request.headers['authorization'] as string
-  if (!header) {
-    throw new NotAuthenticatedError(
-      'This function requires authentication via a token',
-      {
-        key: 'exo.err.jwt.canes-venatici'
-      }
-    )
-  }
-
-  if (!header.startsWith('Bearer ')) {
-    throw new NotAuthenticatedError(
-      'This function requires an authentication via a token',
-      {
-        key: 'exo.err.jwt.canes-veeticar'
-      }
-    )
-  }
-
-  const bearerToken = header.replace('Bearer ', '')
-
-  const s = isFunction(secret) ? await Promise.resolve(secret(props)) : secret
-  const [err, decoded] = await tryit(verifyToken)(bearerToken, s)
-
-  if (err) {
-    console.error('Inavlid token', { err }, 'r.log.jwt.beiyn')
-    if (err.name === 'TokenExpiredError') {
-      throw new NotAuthorizedError('Provided token is expired', {
-        key: 'exo.err.jwt.expired'
-      })
+  options: UseTokenAuthOptions = {}
+) =>
+  hook<Props, Props<{}, {}, TokenAuth>>(func => async props => {
+    const header = props.request.headers['authorization'] as string
+    if (!header) {
+      throw new NotAuthenticatedError(
+        'This function requires authentication via a token',
+        {
+          key: 'exo.err.jwt.canes-venatici'
+        }
+      )
     }
-    throw new NotAuthorizedError(
-      'Cannot call this function without a valid authentication token',
-      {
-        key: 'exo.err.jwt.canis-major'
-      }
-    )
-  }
 
-  validateClaims(decoded, options)
-
-  return await func({
-    ...props,
-    auth: {
-      ...props.auth,
-      token: decoded
+    if (!header.startsWith('Bearer ')) {
+      throw new NotAuthenticatedError(
+        'This function requires an authentication via a token',
+        {
+          key: 'exo.err.jwt.canes-veeticar'
+        }
+      )
     }
+
+    const bearerToken = header.replace('Bearer ', '')
+
+    const s = isFunction(secret) ? await Promise.resolve(secret(props)) : secret
+    const [err, decoded] = await tryit(verifyToken)(bearerToken, s)
+
+    if (err) {
+      if (err.name === 'TokenExpiredError') {
+        throw new NotAuthorizedError('Provided token is expired', {
+          key: 'exo.err.jwt.expired',
+          cause: err
+        })
+      }
+      throw new NotAuthorizedError(
+        'Cannot call this function without a valid authentication token',
+        {
+          key: 'exo.err.jwt.canis-major',
+          cause: err
+        }
+      )
+    }
+
+    validateClaims(decoded, options)
+
+    return await func({
+      ...props,
+      auth: {
+        ...props.auth,
+        token: decoded
+      }
+    })
   })
-}
-
-export const useTokenAuth: <TProps extends Props>(
-  secret: string | ((props: Props) => string | Promise<string>),
-  options?: UseTokenAuthOptions
-) => (
-  func: Handler<TProps & { auth: TProps['auth'] & TokenAuth }>
-) => Handler<TProps> =
-  (secret, options = {}) =>
-  func =>
-  props =>
-    withTokenAuth(func, secret, options, props)
