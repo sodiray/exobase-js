@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-path-parser",
-  "version": "1.0.0-rc.9",
+  "version": "1.0.0-rc.10",
   "description": "Exobase path param parsing hook",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -25,6 +25,6 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.23"
+    "@exobase/core": "^1.0.0-rc.24"
   }
 }
