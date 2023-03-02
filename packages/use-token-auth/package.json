@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-token-auth",
-  "version": "1.0.0-rc.25",
+  "version": "1.0.0-rc.26",
   "description": "Exobase authentication hook for JWTs",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
