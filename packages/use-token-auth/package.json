@@ -26,7 +26,9 @@
   },
   "dependencies": {
     "@exobase/core": "^1.0.0-rc.24",
-    "durhuman": "^0.0.0-alpha.1",
+    "durhuman": "^0.0.0-alpha.1"
+  },
+  "peerDependencies": {
     "jsonwebtoken": "^9.0.0"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
