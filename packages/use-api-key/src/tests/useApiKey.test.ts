@@ -1,7 +1,6 @@
 import { Props, Request } from '@exobase/core'
 import { describe, test } from '@jest/globals'
 import { useApiKey } from '../index'
-import { withApiKey } from '../useApiKey'
 
 describe('useApiKey hook', () => {
   test('calls withApiKey function', async () => {
@@ -28,7 +27,8 @@ describe('withApiKey function', () => {
         }
       } as unknown as Request
     }
-    await withApiKey(mockFn, 'mock-secret', mockProps as Props)
+    const sut = useApiKey('mock-secret')
+    await sut(mockFn)(mockProps as Props)
   })
 
   test('throws error when api key is missing', async () => {
@@ -40,8 +40,9 @@ describe('withApiKey function', () => {
         }
       } as unknown as Request
     }
+    const sut = useApiKey('mock-secret')
     try {
-      await withApiKey(mockFn, 'mock-secret', mockProps as Props)
+      await sut(mockFn)(mockProps as Props)
     } catch (err) {
       return
     }
@@ -57,8 +58,9 @@ describe('withApiKey function', () => {
         }
       } as unknown as Request
     }
+    const sut = useApiKey('mock-secret')
     try {
-      await withApiKey(mockFn, 'mock-secret', mockProps as Props)
+      await sut(mockFn)(mockProps as Props)
     } catch (err) {
       return
     }

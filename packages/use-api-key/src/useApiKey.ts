@@ -5,17 +5,10 @@ export type ApiKeyAuth = {
   apiKey: string
 }
 
-// export const useApiKey: <TProps extends Props>(
-//   keyOrFunc: string | ((props: TProps) => Promise<string>)
-// ) => (
-//   func: Handler<TProps & { auth: TProps['auth'] & ApiKeyAuth }>
-// ) => Handler<TProps> = keyOrFunc => func => props =>
-//   withApiKey(func, keyOrFunc, props)
-
 export const useApiKey = (
   keyOrFunc: string | ((props: Props) => Promise<string>)
 ) =>
-  hook(async (func, props) => {
+  hook<Props, Props<{}, {}, ApiKeyAuth>>(func => async props => {
     const header = props.request.headers['x-api-key'] as string
     if (!header) {
       throw new NotAuthenticatedError('This function requires an api key', {

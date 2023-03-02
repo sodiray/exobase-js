@@ -1,6 +1,5 @@
 import { describe, expect, test } from '@jest/globals'
 import { useBasicAuth } from '../index'
-import { withBasicAuth } from '../useBasicAuth'
 
 describe('useBasicAuth function', () => {
   test('returns hook function that calls withBasicAuth', async () => {
@@ -20,7 +19,8 @@ describe('useBasicAuth function', () => {
 describe('withBasicAuth function', () => {
   test('does not fail with correct client id and secret', async () => {
     const token = Buffer.from('client:secret').toString('base64')
-    const result = await withBasicAuth(async () => 'success', {
+    const sut = useBasicAuth()
+    const result = await sut(async () => 'success')({
       request: {
         headers: {
           authorization: `Basic ${token}`
@@ -31,7 +31,8 @@ describe('withBasicAuth function', () => {
   })
   test('applies parsed client id and secret', async () => {
     const token = Buffer.from('client:secret').toString('base64')
-    const result = await withBasicAuth(async ({ auth }) => auth, {
+    const sut = useBasicAuth()
+    const result = await sut(async ({ auth }) => auth)({
       request: {
         headers: {
           authorization: `Basic ${token}`
@@ -42,8 +43,9 @@ describe('withBasicAuth function', () => {
     expect(result.clientSecret).toBe('secret')
   })
   test('throws if authorization header is not provided', async () => {
+    const sut = useBasicAuth()
     try {
-      await withBasicAuth(async ({ auth }) => auth, {
+      await sut(async ({ auth }) => auth)({
         request: {
           headers: {}
         }
@@ -55,8 +57,9 @@ describe('withBasicAuth function', () => {
     throw new Error('Expected withBasicAuth to throw error')
   })
   test('throws if authorization header does not begin with Basic', async () => {
+    const sut = useBasicAuth()
     try {
-      await withBasicAuth(async ({ auth }) => auth, {
+      await sut(async ({ auth }) => auth)({
         request: {
           headers: {
             authorization: 'Invalid value'
@@ -71,8 +74,9 @@ describe('withBasicAuth function', () => {
   })
   test('throws if authorization header does not contain a client id and secret', async () => {
     const token = Buffer.from('invalid_value').toString('base64')
+    const sut = useBasicAuth()
     try {
-      await withBasicAuth(async ({ auth }) => auth, {
+      await sut(async ({ auth }) => auth)({
         request: {
           headers: {
             authorization: `Basic ${token}`

@@ -1,4 +1,4 @@
-import type { Handler, Props, Request } from '@exobase/core'
+import { hook, Props } from '@exobase/core'
 import type { Duration } from 'durhuman'
 import dur from 'durhuman'
 import { crush, mapValues, tryit } from 'radash'
@@ -86,78 +86,59 @@ const hash = <TObject extends object>(obj: TObject) =>
     uuid.v5.DNS
   )
 
-export async function withCachedResponse<
-  TArgs extends {},
-  TServices extends {
-    cache: ICache
-  },
-  TAuth extends {},
-  TRequest extends Request,
-  TFramework extends {}
->(
-  func: Handler<Props<TArgs, TServices, TAuth, TRequest, TFramework>>,
-  {
-    key: prefix,
-    toIdentity,
-    toResponse,
-    toCache,
-    skipping,
-    logger,
-    ttl
-  }: Required<Omit<UseCachedResponseOptions, 'logger' | 'skipping'>> &
-    Pick<UseCachedResponseOptions, 'logger' | 'skipping'>,
-  props: Props<TArgs, TServices, TAuth, TRequest, TFramework>
-) {
-  if (skipping) {
-    const value = props.request.headers[skipping.header]
-    if (value === skipping.value) {
-      logger?.log(
-        `[useCachedResponse] Skipping cache ${skipping.header}=${value}`
-      )
-      return await func(props)
+export const useCachedResponse = (options: UseCachedResponseOptions) =>
+  hook<
+    Props<
+      {},
+      {
+        cache: ICache
+      }
+    >,
+    Props
+  >(func => async props => {
+    const {
+      key: prefix,
+      toIdentity,
+      toResponse,
+      toCache,
+      skipping,
+      logger,
+      ttl
+    } = { ...defaults, ...options }
+    if (skipping) {
+      const value = props.request.headers[skipping.header]
+      if (value === skipping.value) {
+        logger?.log(
+          `[useCachedResponse] Skipping cache ${skipping.header}=${value}`
+        )
+        return await func(props)
+      }
     }
-  }
-  const key = `${prefix}.${hash(toIdentity(props.args))}`
-  const [getErr, cached] = await tryit(props.services.cache.get)(key)
-  if (getErr) {
-    logger?.error(
-      '[useCachedResponse] Error on GET, falling back to function',
-      getErr
+    const key = `${prefix}.${hash(toIdentity(props.args))}`
+    const [getErr, cached] = await tryit(props.services.cache.get)(key)
+    if (getErr) {
+      logger?.error(
+        '[useCachedResponse] Error on GET, falling back to function',
+        getErr
+      )
+    }
+    if (cached) {
+      logger?.log(`[useCachedResponse] Cache hit for key: ${key}`)
+      return toResponse(cached)
+    } else {
+      logger?.log(`[useCachedResponse] Cache miss key: ${key}`)
+    }
+    const response = await func(props)
+    const [setErr] = await tryit(props.services.cache.set)(
+      key,
+      toCache(response),
+      dur(ttl, 'seconds')
     )
-  }
-  if (cached) {
-    logger?.log(`[useCachedResponse] Cache hit for key: ${key}`)
-    return toResponse(cached)
-  } else {
-    logger?.log(`[useCachedResponse] Cache miss key: ${key}`)
-  }
-  const response = await func(props)
-  const [setErr] = await tryit(props.services.cache.set)(
-    key,
-    toCache(response),
-    dur(ttl, 'seconds')
-  )
-  if (setErr) {
-    logger?.error(
-      '[useCachedResponse] Error on SET, the function result was not persisted.',
-      setErr
-    )
-  }
-  return response
-}
-
-export const useCachedResponse: <
-  TArgs extends {},
-  TServices extends {
-    cache: ICache
-  },
-  TAuth extends {},
-  TRequest extends Request,
-  TFramework extends {}
->(
-  options: UseCachedResponseOptions
-) => (
-  func: Handler<Props<TArgs, TServices, TAuth, TRequest, TFramework>>
-) => Handler<Props<TArgs, TServices, TAuth, TRequest, TFramework>> =
-  options => func => props =>
-    withCachedResponse(func, { ...defaults, ...options }, props)
+    if (setErr) {
+      logger?.error(
+        '[useCachedResponse] Error on SET, the function result was not persisted.',
+        setErr
+      )
+    }
+    return response
+  })
