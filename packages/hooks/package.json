@@ -1,6 +1,6 @@
 {
   "name": "@exobase/hooks",
-  "version": "1.0.0-rc.37",
+  "version": "1.0.0-rc.38",
   "description": "All the Exobase hooks",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -44,7 +44,7 @@
     "@exobase/use-role-authorization": "^1.0.0-rc.7",
     "@exobase/use-router": "^1.0.0-rc.13",
     "@exobase/use-services": "^1.0.0-rc.23",
-    "@exobase/use-token-auth": "^1.0.0-rc.28"
+    "@exobase/use-token-auth": "^1.0.0-rc.29"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
 }
