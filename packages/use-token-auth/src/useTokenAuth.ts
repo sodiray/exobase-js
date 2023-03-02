@@ -4,9 +4,11 @@ import {
   NotAuthorizedError,
   Props
 } from '@exobase/core'
-import * as jwt from 'jsonwebtoken'
 import { isFunction, tryit } from 'radash'
 import { Token } from './token'
+// TODO: Import, sadly import currently breaks
+// with the jsonwebtoken
+const jwt = require('jsonwebtoken')
 
 export interface UseTokenAuthOptions {
   type?: 'id' | 'access'
@@ -54,7 +56,7 @@ const validateClaims = (decoded: Token, options: UseTokenAuthOptions) => {
 
 const verifyToken = async (token: string, secret: string): Promise<Token> => {
   return await new Promise((resolve, reject) => {
-    jwt.verify(token, secret, (err, decoded) =>
+    jwt.verify(token, secret, (err: Error, decoded: object) =>
       err ? reject(err) : resolve(decoded as Token)
     )
   })
