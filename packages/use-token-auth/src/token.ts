@@ -1,5 +1,5 @@
 import dur, { Duration } from 'durhuman'
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 /**
  * See [RFC 7519](https://www.rfc-editor.org/rfc/rfc7519.html#section-4.1.6) for details on
