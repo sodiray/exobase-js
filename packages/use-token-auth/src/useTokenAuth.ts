@@ -60,11 +60,11 @@ const verifyToken = async (token: string, secret: string): Promise<Token> => {
   })
 }
 
-export const useTokenAuth = (
+export const useTokenAuth = <TExtraData extends {} = {}>(
   secret: string | ((props: Props) => string | Promise<string>),
   options: UseTokenAuthOptions = {}
 ) =>
-  hook<Props, Props<{}, {}, TokenAuth>>(func => async props => {
+  hook<Props, Props<{}, {}, TokenAuth<TExtraData>>>(func => async props => {
     const header = props.request.headers['authorization'] as string
     if (!header) {
       throw new NotAuthenticatedError(
@@ -111,7 +111,7 @@ export const useTokenAuth = (
       ...props,
       auth: {
         ...props.auth,
-        token: decoded
+        token: decoded as Token<TExtraData>
       }
     })
   })
