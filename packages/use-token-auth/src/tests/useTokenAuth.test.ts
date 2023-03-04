@@ -35,7 +35,10 @@ describe('useTokenAuth function', () => {
       iss: 'test',
       ttl: '3 hours'
     })
-    const sut = useTokenAuth(SECRET, {})
+    const sut = useTokenAuth(SECRET, {
+      getToken: r =>
+        (r.headers['authorization'] as string).replace('Bearer ', '')
+    })
     const result = await sut(async () => 'success')({
       request: {
         headers: {

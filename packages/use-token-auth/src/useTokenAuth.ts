@@ -2,16 +2,18 @@ import {
   hook,
   NotAuthenticatedError,
   NotAuthorizedError,
-  Props
+  Props,
+  Request
 } from '@exobase/core'
 import jwt from 'jsonwebtoken'
-import { isFunction, tryit } from 'radash'
+import { isArray, isFunction, tryit } from 'radash'
 import { Token } from './token'
 
 export interface UseTokenAuthOptions {
   type?: 'id' | 'access'
   iss?: string
   aud?: string
+  getToken?: (req: Request) => string | null
 }
 
 export type TokenAuth<TExtraData = {}> = {
@@ -60,13 +62,28 @@ const verifyToken = async (token: string, secret: string): Promise<Token> => {
   })
 }
 
+const getTokenFromHeader = (req: Request) => {
+  const header = req.headers['authorization']
+  if (isArray(header)) {
+    throw new NotAuthenticatedError(
+      'Multiple authorization headers are not allowed',
+      {
+        key: 'exo.err.jwt.multi'
+      }
+    )
+  }
+  return header?.replace(/^Bearer\s/, '') ?? null
+}
+
 export const useTokenAuth = <TExtraData extends {} = {}>(
   secret: string | ((props: Props) => string | Promise<string>),
   options: UseTokenAuthOptions = {}
 ) =>
   hook<Props, Props<{}, {}, TokenAuth<TExtraData>>>(func => async props => {
-    const header = props.request.headers['authorization'] as string
-    if (!header) {
+    const bearerToken = options.getToken
+      ? options.getToken(props.request)
+      : getTokenFromHeader(props.request)
+    if (!bearerToken) {
       throw new NotAuthenticatedError(
         'This function requires authentication via a token',
         {
@@ -74,17 +91,6 @@ export const useTokenAuth = <TExtraData extends {} = {}>(
         }
       )
     }
-
-    if (!header.startsWith('Bearer ')) {
-      throw new NotAuthenticatedError(
-        'This function requires an authentication via a token',
-        {
-          key: 'exo.err.jwt.canes-veeticar'
-        }
-      )
-    }
-
-    const bearerToken = header.replace('Bearer ', '')
 
     const s = isFunction(secret) ? await Promise.resolve(secret(props)) : secret
     const [err, decoded] = await tryit(verifyToken)(bearerToken, s)
