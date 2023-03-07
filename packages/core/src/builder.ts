@@ -125,7 +125,9 @@ export type ExobaseBuilder<
         TRequiredFramework
       >
     ) => Promise<TResult>
-  ) => (...args: KInitArgs) => Promise<TResult>
+  ) => ((...args: KInitArgs) => Promise<TResult>) & {
+    hooks: string[]
+  }
   raw: {
     init: KInitArgs
     args: KCurrentArgs
@@ -286,9 +288,15 @@ export const chain = <
       >
     ) => Promise<TResult>
   ) => {
-    return [...funcs, endpoint].reverse().reduce((acc, fn) => fn(acc)) as (
+    const func = [...funcs, endpoint]
+      .reverse()
+      .reduce((acc, fn) => fn(acc)) as ((
       ...args: KInitArgs
-    ) => Promise<TResult>
+    ) => Promise<TResult>) & {
+      hooks: string[]
+    }
+    func.hooks = funcs.map(f => f.name)
+    return func
   },
   raw: {
     init: {} as KInitArgs,
