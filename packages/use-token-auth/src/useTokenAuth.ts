@@ -79,45 +79,51 @@ export const useTokenAuth = <TExtraData extends {} = {}>(
   secret: string | ((props: Props) => string | Promise<string>),
   options: UseTokenAuthOptions = {}
 ) =>
-  hook<Props, Props<{}, {}, TokenAuth<TExtraData>>>(func => async props => {
-    const bearerToken = options.getToken
-      ? options.getToken(props.request)
-      : getTokenFromHeader(props.request)
-    if (!bearerToken) {
-      throw new NotAuthenticatedError(
-        'This function requires authentication via a token',
-        {
-          key: 'exo.err.jwt.canes-venatici'
-        }
-      )
-    }
-
-    const s = isFunction(secret) ? await Promise.resolve(secret(props)) : secret
-    const [err, decoded] = await tryit(verifyToken)(bearerToken, s)
-
-    if (err) {
-      if (err.name === 'TokenExpiredError') {
-        throw new NotAuthorizedError('Provided token is expired', {
-          key: 'exo.err.jwt.expired',
-          cause: err
-        })
+  hook<Props, Props<{}, {}, TokenAuth<TExtraData>>>(function useTokenAuth(
+    func
+  ) {
+    return async props => {
+      const bearerToken = options.getToken
+        ? options.getToken(props.request)
+        : getTokenFromHeader(props.request)
+      if (!bearerToken) {
+        throw new NotAuthenticatedError(
+          'This function requires authentication via a token',
+          {
+            key: 'exo.err.jwt.canes-venatici'
+          }
+        )
       }
-      throw new NotAuthorizedError(
-        'Cannot call this function without a valid authentication token',
-        {
-          key: 'exo.err.jwt.canis-major',
-          cause: err
+
+      const s = isFunction(secret)
+        ? await Promise.resolve(secret(props))
+        : secret
+      const [err, decoded] = await tryit(verifyToken)(bearerToken, s)
+
+      if (err) {
+        if (err.name === 'TokenExpiredError') {
+          throw new NotAuthorizedError('Provided token is expired', {
+            key: 'exo.err.jwt.expired',
+            cause: err
+          })
         }
-      )
-    }
-
-    validateClaims(decoded, options)
-
-    return await func({
-      ...props,
-      auth: {
-        ...props.auth,
-        token: decoded as Token<TExtraData>
+        throw new NotAuthorizedError(
+          'Cannot call this function without a valid authentication token',
+          {
+            key: 'exo.err.jwt.canis-major',
+            cause: err
+          }
+        )
       }
-    })
+
+      validateClaims(decoded, options)
+
+      return await func({
+        ...props,
+        auth: {
+          ...props.auth,
+          token: decoded as Token<TExtraData>
+        }
+      })
+    }
   })
