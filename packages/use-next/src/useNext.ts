@@ -10,26 +10,20 @@ export type NextFramework = {
   res: NextApiResponse
 }
 
-export async function withNext(
-  func: Handler<Props & { framework: NextFramework }>,
-  options: UseNextOptions,
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const [error, result] = await tryit(func)({
-    ...props(makeReq(req)),
-    framework: { req, res }
-  })
-  setResponse(res, response(error, result))
-}
-
 export const useNext: (
   options?: UseNextOptions
 ) => (
   func: Handler<Props & { framework: NextFramework }>
 ) => (req: NextApiRequest, res: NextApiResponse) => Promise<any> =
-  options => func => (req, res) =>
-    withNext(func, options ?? {}, req, res)
+  options => func => async (req, res) => {
+    const [error, result] = await tryit(func)({
+      ...props(makeReq(req)),
+      framework: { req, res }
+    })
+    const finalResponse = response(error, result)
+    setResponse(res, finalResponse)
+    return finalResponse
+  }
 
 export function setResponse(res: NextApiResponse, response: Response) {
   const { body, status = 200, headers = {} } = response as Response
