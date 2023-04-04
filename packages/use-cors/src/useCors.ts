@@ -45,25 +45,25 @@ export type UseCorsConfig = {
   strict?: boolean
 }
 
-const origins = (config: UseCorsConfig) => {
+const origins = (config: UseCorsConfig): string => {
   if (!config.origins) return '*'
   if (config.origins === '*') return '*'
   return config.origins.join(', ')
 }
 
-const headers = (config: UseCorsConfig) => {
+const headers = (config: UseCorsConfig): string => {
   if (!config.headers) return DEFAULT_HEADERS.join(', ')
   if (config.headers === '*') return '*'
   return config.strict === true
-    ? config.headers
-    : unique([...DEFAULT_HEADERS, ...config.headers])
+    ? config.headers.join(', ')
+    : unique([...DEFAULT_HEADERS, ...config.headers]).join(', ')
 }
 
-const methods = (config: UseCorsConfig) => {
+const methods = (config: UseCorsConfig): string => {
   if (!config.methods) return DEFAULT_METHODS.join(', ')
   if (config.methods === '*') return '*'
   return config.strict === true
-    ? config.methods
+    ? config.methods.join(', ')
     : unique([...DEFAULT_METHODS, ...config.methods]).join(', ')
 }
 
