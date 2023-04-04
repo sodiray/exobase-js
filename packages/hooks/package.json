@@ -1,6 +1,6 @@
 {
   "name": "@exobase/hooks",
-  "version": "1.0.0-rc.47",
+  "version": "1.0.0-rc.48",
   "description": "All the Exobase hooks",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -31,7 +31,7 @@
     "@exobase/use-cached-response": "^1.0.0-rc.19",
     "@exobase/use-catch": "^1.0.0-rc.13",
     "@exobase/use-console-intercept": "^1.0.0-rc.15",
-    "@exobase/use-cors": "^1.0.0-rc.27",
+    "@exobase/use-cors": "^1.0.0-rc.28",
     "@exobase/use-headers": "^1.0.0-rc.16",
     "@exobase/use-json-body": "^1.0.0-rc.17",
     "@exobase/use-lambda-tracer": "^1.0.0-rc.19",
