@@ -1,6 +1,6 @@
 {
   "name": "@exobase/hooks",
-  "version": "1.0.0-rc.44",
+  "version": "1.0.0-rc.45",
   "description": "All the Exobase hooks",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -29,7 +29,7 @@
     "@exobase/use-api-key": "^1.0.0-rc.24",
     "@exobase/use-basic-auth": "^1.0.0-rc.25",
     "@exobase/use-cached-response": "^1.0.0-rc.19",
-    "@exobase/use-catch": "^1.0.0-rc.12",
+    "@exobase/use-catch": "^1.0.0-rc.13",
     "@exobase/use-console-intercept": "^1.0.0-rc.15",
     "@exobase/use-cors": "^1.0.0-rc.25",
     "@exobase/use-headers": "^1.0.0-rc.16",
