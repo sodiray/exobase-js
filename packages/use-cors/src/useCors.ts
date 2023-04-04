@@ -1,44 +1,94 @@
-import type { Handler, Props } from '@exobase/core'
-import { response } from '@exobase/core'
-import { tryit } from 'radash'
+import { hook, response } from '@exobase/core'
+import { tryit, unique } from 'radash'
 
-export const DEFAULT_CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-  'Access-Control-Allow-Headers':
-    'X-CSRF-Token, X-Requested-With, Authorization, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-}
+const DEFAULT_METHODS = ['GET', 'OPTIONS', 'PATCH', 'DELETE', 'POST', 'PUT']
+const DEFAULT_HEADERS = [
+  'X-CSRF-Token',
+  'X-Requested-With',
+  'Authorization',
+  'Accept',
+  'Accept-Version',
+  'Content-Length',
+  'Content-MD5',
+  'Content-Type',
+  'Date',
+  'X-Api-Version'
+]
 
-export async function withCors<TProps extends Props>(
-  func: Handler<TProps>,
-  headers: Partial<typeof DEFAULT_CORS_HEADERS> | undefined,
-  props: TProps
-) {
-  const headersToApply = {
-    ...DEFAULT_CORS_HEADERS,
-    ...(headers ?? {})
-  }
-  if (props.request.method.toLowerCase() === 'options') {
+export const useCors = (config: {
+  /**
+   * List of headers the browser should allow in a request
+   * made to access the resource you're securing.
+   *
+   * @deafult X-CSRF-Token, X-Requested-With, Authorization, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version
+   */
+  headers?: '*' | string[]
+  /**
+   * List of origins the browser should allow to make a
+   * request to access the resource you're securing.
+   *
+   * @default *
+   */
+  origins?: '*' | string[]
+  /**
+   * List of HTTP methods the browser should allow to
+   * make a request to the resource you're securing.
+   *
+   * @default GET, OPTIONS, PATCH, DELETE, POST, PUT
+   */
+  methods?: '*' | string[]
+  /**
+   * If true your provided options will be used exclusivly
+   * If false (default) your provided options, when possible
+   * will be appended to the default list of values
+   */
+  strict?: boolean
+}) =>
+  hook(func => async props => {
+    const isStrict = config.strict ?? false
+
+    const origins = () => {
+      return config.origins === '*' ? '*' : config.origins?.join(', ')
+    }
+
+    const headers = () => {
+      if (!config.headers) return DEFAULT_HEADERS.join(', ')
+      if (config.headers === '*') return '*'
+      return isStrict
+        ? config.headers
+        : unique([...DEFAULT_HEADERS, ...config.headers])
+    }
+
+    const methods = () => {
+      if (!config.methods) return DEFAULT_METHODS.join(', ')
+      if (config.methods === '*') return '*'
+      return isStrict
+        ? config.methods
+        : unique([...DEFAULT_METHODS, ...config.methods])
+    }
+
+    const headersToApply = {
+      'Access-Control-Allow-Origin': origins(),
+      'Access-Control-Allow-Methods': methods(),
+      'Access-Control-Allow-Headers': headers()
+    }
+
+    if (props.request.method.toLowerCase() === 'options') {
+      return {
+        ...props.response,
+        headers: {
+          ...props.response.headers,
+          ...headersToApply
+        }
+      }
+    }
+    const [err, result] = await tryit(func)(props)
+    const r = response(err, result)
     return {
-      ...props.response,
+      ...r,
       headers: {
-        ...props.response.headers,
+        ...r.headers,
         ...headersToApply
       }
     }
-  }
-  const [err, result] = await tryit(func)(props)
-  const r = response(err, result)
-  return {
-    ...r,
-    headers: {
-      ...r.headers,
-      ...headersToApply
-    }
-  }
-}
-
-export const useCors: <TProps extends Props>(
-  headers?: Partial<typeof DEFAULT_CORS_HEADERS>
-) => (func: Handler<TProps>) => Handler<TProps> = headers => func => props =>
-  withCors(func, headers, props)
+  })
