@@ -38,7 +38,7 @@ export type UseCorsConfig = {
    */
   methods?: '*' | string[]
   /**
-   * If true your provided options will be used exclusivly
+   * If true your provided options will be used exclusively
    * If false (default) your provided options, when possible
    * will be appended to the default list of values
    */
@@ -46,7 +46,9 @@ export type UseCorsConfig = {
 }
 
 const origins = (config: UseCorsConfig) => {
-  return config.origins === '*' ? '*' : config.origins?.join(', ')
+  if (!config.origins) return '*'
+  if (config.origins === '*') return '*'
+  return config.origins.join(', ')
 }
 
 const headers = (config: UseCorsConfig) => {
