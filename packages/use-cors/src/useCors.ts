@@ -15,35 +15,37 @@ const DEFAULT_HEADERS = [
   'X-Api-Version'
 ]
 
-export const useCors = (config: {
-  /**
-   * List of headers the browser should allow in a request
-   * made to access the resource you're securing.
-   *
-   * @deafult X-CSRF-Token, X-Requested-With, Authorization, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version
-   */
-  headers?: '*' | string[]
-  /**
-   * List of origins the browser should allow to make a
-   * request to access the resource you're securing.
-   *
-   * @default *
-   */
-  origins?: '*' | string[]
-  /**
-   * List of HTTP methods the browser should allow to
-   * make a request to the resource you're securing.
-   *
-   * @default GET, OPTIONS, PATCH, DELETE, POST, PUT
-   */
-  methods?: '*' | string[]
-  /**
-   * If true your provided options will be used exclusivly
-   * If false (default) your provided options, when possible
-   * will be appended to the default list of values
-   */
-  strict?: boolean
-}) =>
+export const useCors = (
+  config: {
+    /**
+     * List of headers the browser should allow in a request
+     * made to access the resource you're securing.
+     *
+     * @deafult X-CSRF-Token, X-Requested-With, Authorization, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version
+     */
+    headers?: '*' | string[]
+    /**
+     * List of origins the browser should allow to make a
+     * request to access the resource you're securing.
+     *
+     * @default *
+     */
+    origins?: '*' | string[]
+    /**
+     * List of HTTP methods the browser should allow to
+     * make a request to the resource you're securing.
+     *
+     * @default GET, OPTIONS, PATCH, DELETE, POST, PUT
+     */
+    methods?: '*' | string[]
+    /**
+     * If true your provided options will be used exclusivly
+     * If false (default) your provided options, when possible
+     * will be appended to the default list of values
+     */
+    strict?: boolean
+  } = {}
+) =>
   hook(func => async props => {
     const isStrict = config.strict ?? false
 
