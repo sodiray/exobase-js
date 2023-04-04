@@ -64,7 +64,7 @@ const methods = (config: UseCorsConfig) => {
   if (config.methods === '*') return '*'
   return config.strict === true
     ? config.methods
-    : unique([...DEFAULT_METHODS, ...config.methods])
+    : unique([...DEFAULT_METHODS, ...config.methods]).join(', ')
 }
 
 export const useCors = (config: UseCorsConfig = {}) =>
