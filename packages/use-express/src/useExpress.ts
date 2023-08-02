@@ -88,7 +88,7 @@ const makeRequest = (req: ExpressRequest): Request => ({
   startedAt: Date.now(),
   protocol: req.protocol,
   httpVersion: req.httpVersion,
-  params: {}
+  params: req.params
 })
 
 /**
