@@ -57,7 +57,9 @@ export async function withExpress(
       res
     }
   })
-  setResponse(res, response(error, result))
+  const finalResponse = response(error, result)
+  setResponse(res, finalResponse)
+  return finalResponse
 }
 
 export const useExpress: (
