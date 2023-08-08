@@ -1,5 +1,5 @@
 import { hook, response } from '@exobase/core'
-import { tryit, unique } from 'radash'
+import { shake, tryit, unique } from 'radash'
 
 const DEFAULT_METHODS = ['GET', 'OPTIONS', 'PATCH', 'DELETE', 'POST', 'PUT']
 const DEFAULT_HEADERS = [
@@ -43,6 +43,11 @@ export type UseCorsConfig = {
    * will be appended to the default list of values
    */
   strict?: boolean
+  /**
+   * If true, the Access-Control-Allow-Credentials will
+   * be set to true. Defaults to false.
+   */
+  credentials?: boolean
 }
 
 const origins = (config: UseCorsConfig): string => {
@@ -67,13 +72,19 @@ const methods = (config: UseCorsConfig): string => {
     : unique([...DEFAULT_METHODS, ...config.methods]).join(', ')
 }
 
+const credentials = (config: UseCorsConfig): string | undefined => {
+  if (!config.credentials) return undefined
+  return 'true'
+}
+
 export const useCors = (config: UseCorsConfig = {}) =>
   hook(func => {
-    const corsHeaders = {
+    const corsHeaders = shake({
       'Access-Control-Allow-Origin': origins(config),
       'Access-Control-Allow-Methods': methods(config),
-      'Access-Control-Allow-Headers': headers(config)
-    }
+      'Access-Control-Allow-Headers': headers(config),
+      'Access-Control-Allow-Credentials': credentials(config)
+    })
     return async props => {
       if (props.request.method.toLowerCase() === 'options') {
         return {
