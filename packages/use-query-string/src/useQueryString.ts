@@ -1,9 +1,11 @@
 import { BadRequestError, Handler, Props } from '@exobase/core'
-import { isFunction, tryit } from 'radash'
+import { isArray, isFunction, tryit } from 'radash'
 import zod, { AnyZodObject, ZodError } from 'zod'
 
 type Zod = typeof zod
 type KeyOfType<T, Value> = { [P in keyof T]: Value }
+
+const isZodError = (e: any): e is ZodError => e && e.issues && isArray(e.issues)
 
 export const withQueryString = async (
   func: Handler,
@@ -11,10 +13,17 @@ export const withQueryString = async (
   mapper: (validatedData: any) => any,
   props: Props
 ) => {
-  const [zerr, args] = (await tryit(model.parseAsync)(
-    props.request.query
-  )) as unknown as [ZodError, any]
+  const [zerr, args] = await tryit(model.parseAsync)(props.request.query)
   if (zerr) {
+    if (!isZodError(zerr)) {
+      throw new BadRequestError(
+        'Query string validation failed: ' + zerr.message ?? 'Parse error',
+        {
+          key: 'err.query-string.parsing',
+          cause: zerr
+        }
+      )
+    }
     throw new BadRequestError(
       'Query string validation failed: ' +
         zerr.issues
