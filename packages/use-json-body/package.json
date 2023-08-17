@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-json-body",
-  "version": "1.0.0-rc.17",
+  "version": "1.0.0-rc.18",
   "description": "Exobase hook to parse and validate json body arguments",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
