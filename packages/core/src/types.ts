@@ -56,3 +56,12 @@ export type Hook<
     >
   >
 ) => (props: TGivenProps) => Promise<any>
+
+export type SerializableJson =
+  | string
+  | number
+  | boolean
+  | null
+  | Date
+  | SerializableJson[]
+  | { [key: string]: SerializableJson }

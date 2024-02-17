@@ -1,3 +1,4 @@
+import { isNumber } from 'radash'
 import * as t from './types'
 
 /**
@@ -47,4 +48,36 @@ export const responseFromError = (error: any): t.Response => {
 
 export const response = (error: any, result: any) => {
   return error ? responseFromError(error) : responseFromResult(result)
+}
+
+/**
+ * Generate a response object
+ *
+ * @example
+ * ```ts
+ * const { res } from '@exobase/core'
+ *
+ * const handler = async () => {
+ *   return res(401, {
+ *     message: 'Not Authorized'
+ *   })
+ * }
+ *
+ * compose(useNext(), handler)
+ * ```
+ */
+export function res(): t.Response
+export function res(body: t.SerializableJson): t.Response
+export function res(status: number): t.Response
+export function res(status: number, body: t.SerializableJson): t.Response
+export function res(
+  statusOrBody?: number | t.SerializableJson,
+  body?: t.SerializableJson
+): t.Response {
+  if (!statusOrBody && !body) return defaultResponse
+  return {
+    ...defaultResponse,
+    status: isNumber(statusOrBody) ? statusOrBody : 200,
+    body: !!body ? body : isNumber(statusOrBody) ? {} : statusOrBody
+  }
 }
