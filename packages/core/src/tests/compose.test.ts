@@ -5,12 +5,12 @@ import { Props, Request } from '../types'
 
 const useMockRootHook =
   () =>
-  <R>(
+  (
     func: (
       props: Props<{}, {}, {}, Request, { name: 'next'; startedAt: 100 }>
-    ) => Promise<R>
+    ) => Promise<any>
   ) => {
-    const handler = async (): Promise<R> => {
+    const handler = async (): Promise<any> => {
       return await func({
         ...props({} as unknown as Request),
         framework: {
@@ -23,13 +23,10 @@ const useMockRootHook =
     return handler
   }
 
-const func = useMockRootHook()
-const result = func(() => ({} as any))
-
 const useMockServicesHook =
   <TServices extends {}>(services: TServices) =>
-  <R>(func: (props: Props<{}, TServices>) => Promise<R>) => {
-    const handler = async (props: Props): Promise<R> => {
+  (func: (props: Props<{}, TServices>) => Promise<any>) => {
+    const handler = async (props: Props): Promise<any> => {
       return await func({
         ...props,
         services: {
@@ -44,8 +41,8 @@ const useMockServicesHook =
 
 const useMockArgsHook =
   <TArgs extends {}>(args: TArgs) =>
-  <R>(func: (props: Props<TArgs>) => Promise<R>) => {
-    const handler = async (props: Props): Promise<R> => {
+  (func: (props: Props<TArgs>) => Promise<any>) => {
+    const handler = async (props: Props): Promise<any> => {
       return await func({
         ...props,
         args: {
@@ -60,8 +57,8 @@ const useMockArgsHook =
 
 const useMockAuthHook =
   <TAuth extends {}>(auth: TAuth) =>
-  <R>(func: (props: Props<{}, {}, TAuth>) => Promise<R>) => {
-    const handler = async (props: Props): Promise<R> => {
+  (func: (props: Props<{}, {}, TAuth>) => Promise<any>) => {
+    const handler = async (props: Props): Promise<any> => {
       return await func({
         ...props,
         auth: {
@@ -97,11 +94,11 @@ describe('compose function types', () => {
       return 'success'
     })
     const result = await func()
-    expect()
+    expect(func.root).toBe('next')
     expect(result).toBe('success')
   })
   test('it supports 1 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       async props => {
@@ -109,11 +106,14 @@ describe('compose function types', () => {
         expect(props.args.id).toBe('first')
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('id')
     expect(result).toBe('success')
   })
   test('it supports 2 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -123,11 +123,14 @@ describe('compose function types', () => {
         expect(props.auth.token).toBe('secret')
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('id')
     expect(result).toBe('success')
   })
   test('it supports 3 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -139,11 +142,14 @@ describe('compose function types', () => {
         expect(props.services.db.users()).toBeNull()
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('id')
     expect(result).toBe('success')
   })
   test('it supports 4 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -157,11 +163,14 @@ describe('compose function types', () => {
         expect(props.args.query).toBe('alto')
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('query')
     expect(result).toBe('success')
   })
   test('it supports 5 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -177,11 +186,15 @@ describe('compose function types', () => {
         expect(props.auth.secret).toBe('shh')
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('query')
+    expect(func.services).toContain('db')
     expect(result).toBe('success')
   })
   test('it supports 6 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -189,7 +202,7 @@ describe('compose function types', () => {
       useMockArgsHook({ query: 'alto' }),
       useMockAuthHook({ secret: 'shh' }),
       useMockServicesHook({ redis: { users: () => 9 } }),
-      async props => {
+      async function endpointSixe(props) {
         expect(props.framework.name).toBe('next')
         expect(props.args.id).toBe('first')
         expect(props.auth.token).toBe('secret')
@@ -199,11 +212,14 @@ describe('compose function types', () => {
         expect(props.services.redis.users()).toBe(9)
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('query')
     expect(result).toBe('success')
   })
   test('it supports 7 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -223,11 +239,16 @@ describe('compose function types', () => {
         expect(props.args.name).toBe('ray')
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('name')
+    expect(func.services).toContain('redis')
+    expect(func.auth).toContain('secret')
     expect(result).toBe('success')
   })
   test('it supports 8 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -249,11 +270,14 @@ describe('compose function types', () => {
         expect(props.auth.provider).toBe('google')
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('name')
     expect(result).toBe('success')
   })
   test('it supports 9 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -277,11 +301,14 @@ describe('compose function types', () => {
         expect(props.services.temporal.users()).toBe(21)
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('name')
     expect(result).toBe('success')
   })
   test('it supports 10 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -307,11 +334,14 @@ describe('compose function types', () => {
         expect(props.args.location).toBe('arc/tn')
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('location')
     expect(result).toBe('success')
   })
   test('it supports 11 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -339,11 +369,15 @@ describe('compose function types', () => {
         expect(props.auth.strategy).toBe('jwt')
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('location')
+    expect(func.auth).toContain('strategy')
     expect(result).toBe('success')
   })
   test('it supports 12 hooks', async () => {
-    const result = await compose(
+    const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
@@ -373,24 +407,11 @@ describe('compose function types', () => {
         expect(props.services.s3.users()).toBe(32)
         return 'success'
       }
-    )()
+    )
+    const result = await func()
+    expect(func.root).toBe('next')
+    expect(func.args).toContain('location')
+    expect(func.services).toContain('s3')
     expect(result).toBe('success')
-  })
-})
-
-describe('compose function property aggregation', () => {
-  test('aggregates properties from all hooks', async () => {
-    const composed = compose(
-      useMockRootHook(),
-      useMockArgsHook({ id: 1 }),
-      useMockServicesHook({ db: 1 }),
-      useMockAuthHook({ token: 1 }),
-      async () => 'success'
-    ) as any
-    expect(await composed()).toBe('success')
-    expect(composed.root).toBe('next')
-    expect(composed.args).toEqual(['id'])
-    expect(composed.services).toEqual(['db'])
-    expect(composed.auth).toEqual(['token'])
   })
 })

@@ -32,6 +32,6 @@ describe('usePermissionAuthorization function', () => {
       } as any)
     )()
     expect(err).not.toBeNull()
-    expect(err!.message).toBe('Not Authorized')
+    expect(err!.message).toContain('Missing required permission (allow::write::com.github/rayepps/exobase-js/settings)')
   })
 })

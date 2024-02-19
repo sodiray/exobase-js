@@ -1,4 +1,4 @@
-import type { Handler, Props, Request, Response } from '@exobase/core'
+import type { NextFunc, Props, Request, Response } from '@exobase/core'
 import { props, response } from '@exobase/core'
 import type { IncomingMessage, ServerResponse } from 'http'
 import qs from 'querystring'
@@ -15,7 +15,7 @@ export type HttpFramework = {
 }
 
 export async function withHttp(
-  func: Handler<Props & { framework: HttpFramework }>,
+  func: NextFunc<Props & { framework: HttpFramework }>,
   options: UseHttpOptions,
   req: IncomingMessage,
   res: ServerResponse<IncomingMessage> & {
@@ -38,7 +38,7 @@ export async function withHttp(
 }
 
 export const useHttp: (options?: UseHttpOptions) => (
-  func: Handler<Props & { framework: HttpFramework }>
+  func: NextFunc<Props & { framework: HttpFramework }>
 ) => (
   req: IncomingMessage,
   res: ServerResponse<IncomingMessage> & {
@@ -79,6 +79,7 @@ const makeRequest = (req: IncomingMessage, data: string): Request => {
     })(),
     path: req.url ?? '/',
     method: req.method ?? 'ANY',
+    params: {},
     query: url.parse(req.url ?? '', true).query as Record<string, string>,
     ip: req.socket.remoteAddress ?? '',
     startedAt: Date.now(),

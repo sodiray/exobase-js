@@ -1,8 +1,8 @@
 import { Props, Request } from './types'
 
-type StripFunctionType<T> = {
-  [P in keyof T as P extends 'prototype' ? never : P]: T[P];
-};
+type AttributesOnly<T> = {
+  [P in keyof T as P extends 'prototype' ? never : P]: T[P]
+}
 
 type MergeProps<T extends Props[]> = Props<
   UnionToIntersection<T[number]['args']> extends infer A
@@ -51,6 +51,7 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 // A = Arg
 // P = Props
 // R = Return
+// F = Function
 //
 // RA = Root Args
 // ROP = Root Output Props
@@ -58,12 +59,12 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 // H1IP = Hook 1 Input Props
 // ER = Endpoint Result
 // H3R = Hook 3 Result
+// H3RF = Hook 3 Return Function
 
 export function compose<
-  RA extends Array<any>, 
-  ROP extends Props, 
-  RR, 
-  RRF extends (...args: RA) => Promise<RR>,
+  RA extends Array<any>,
+  ROP extends Props,
+  RRF extends { (...args: RA): Promise<any> },
   ER
 >(
   r: (func: (props: ROP) => Promise<ER>) => RRF,
@@ -73,609 +74,511 @@ export function compose<
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
-  RRF extends (...args: RA) => Promise<RR>,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
   H1R,
   ER
 >(
-  // TODO: Change Promise<any> to actual type. For some unknown 
-  // reason setting it to the expected type Promise<H1R> causes 
-  // the composision types to break. As it is now, the return 
-  // types don't work but the composition types work
   r: (func: (props: ROP) => Promise<any>) => RRF,
-  h1: (func: (props: H1OP) => Promise<ER>) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
+  h1: (func: (props: H1OP) => Promise<ER>) => H1RF,
   e: (props: MergeProps<[ROP, H1OP]>) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF & AttributesOnly<H1RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
   e: (props: MergeProps<[ROP, H1OP, H2OP]>) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF & AttributesOnly<H1RF> & AttributesOnly<H2RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
   e: (props: MergeProps<[ROP, H1OP, H2OP, H3OP]>) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF & AttributesOnly<H1RF> & AttributesOnly<H2RF> & AttributesOnly<H3RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   H4IP extends Props,
   H4OP extends Props,
-  H4R,
+  H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
-  h4: (
-    func: (props: H4OP) => any
-  ) => (props: H3OP extends H4IP ? H4IP : never) => Promise<H4R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
   e: (props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP]>) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> &
+  AttributesOnly<H4RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   H4IP extends Props,
   H4OP extends Props,
-  H4R,
+  H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
   H5IP extends Props,
   H5OP extends Props,
-  H5R,
+  H5RF extends (props: H4IP extends H5IP ? H5IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
-  h4: (
-    func: (props: H4OP) => any
-  ) => (props: H3OP extends H4IP ? H4IP : never) => Promise<H4R>,
-  h5: (
-    func: (props: H5OP) => any
-  ) => (props: H4OP extends H5IP ? H5IP : never) => Promise<H5R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
+  h5: (func: (props: H5OP) => any) => H5RF,
   e: (props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP]>) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> &
+  AttributesOnly<H4RF> &
+  AttributesOnly<H5RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   H4IP extends Props,
   H4OP extends Props,
-  H4R,
+  H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
   H5IP extends Props,
   H5OP extends Props,
-  H5R,
+  H5RF extends (props: H4IP extends H5IP ? H5IP : never) => Promise<any>,
   H6IP extends Props,
   H6OP extends Props,
-  H6R,
+  H6RF extends (props: H5IP extends H6IP ? H6IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
-  h4: (
-    func: (props: H4OP) => any
-  ) => (props: H3OP extends H4IP ? H4IP : never) => Promise<H4R>,
-  h5: (
-    func: (props: H5OP) => any
-  ) => (props: H4OP extends H5IP ? H5IP : never) => Promise<H5R>,
-  h6: (
-    func: (props: H6OP) => any
-  ) => (props: H5OP extends H6IP ? H6IP : never) => Promise<H6R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
+  h5: (func: (props: H5OP) => any) => H5RF,
+  h6: (func: (props: H6OP) => any) => H6RF,
   e: (
     props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP]>
   ) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> &
+  AttributesOnly<H4RF> &
+  AttributesOnly<H5RF> &
+  AttributesOnly<H6RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   H4IP extends Props,
   H4OP extends Props,
-  H4R,
+  H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
   H5IP extends Props,
   H5OP extends Props,
-  H5R,
+  H5RF extends (props: H4IP extends H5IP ? H5IP : never) => Promise<any>,
   H6IP extends Props,
   H6OP extends Props,
-  H6R,
+  H6RF extends (props: H5IP extends H6IP ? H6IP : never) => Promise<any>,
   H7IP extends Props,
   H7OP extends Props,
-  H7R,
+  H7RF extends (props: H6IP extends H7IP ? H7IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
-  h4: (
-    func: (props: H4OP) => any
-  ) => (props: H3OP extends H4IP ? H4IP : never) => Promise<H4R>,
-  h5: (
-    func: (props: H5OP) => any
-  ) => (props: H4OP extends H5IP ? H5IP : never) => Promise<H5R>,
-  h6: (
-    func: (props: H6OP) => any
-  ) => (props: H5OP extends H6IP ? H6IP : never) => Promise<H6R>,
-  h7: (
-    func: (props: H7OP) => any
-  ) => (props: H6OP extends H7IP ? H7IP : never) => Promise<H7R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
+  h5: (func: (props: H5OP) => any) => H5RF,
+  h6: (func: (props: H6OP) => any) => H6RF,
+  h7: (func: (props: H7OP) => any) => H7RF,
   e: (
     props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP]>
   ) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> &
+  AttributesOnly<H4RF> &
+  AttributesOnly<H5RF> &
+  AttributesOnly<H6RF> &
+  AttributesOnly<H7RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   H4IP extends Props,
   H4OP extends Props,
-  H4R,
+  H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
   H5IP extends Props,
   H5OP extends Props,
-  H5R,
+  H5RF extends (props: H4IP extends H5IP ? H5IP : never) => Promise<any>,
   H6IP extends Props,
   H6OP extends Props,
-  H6R,
+  H6RF extends (props: H5IP extends H6IP ? H6IP : never) => Promise<any>,
   H7IP extends Props,
   H7OP extends Props,
-  H7R,
+  H7RF extends (props: H6IP extends H7IP ? H7IP : never) => Promise<any>,
   H8IP extends Props,
   H8OP extends Props,
-  H8R,
+  H8RF extends (props: H7IP extends H8IP ? H8IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
-  h4: (
-    func: (props: H4OP) => any
-  ) => (props: H3OP extends H4IP ? H4IP : never) => Promise<H4R>,
-  h5: (
-    func: (props: H5OP) => any
-  ) => (props: H4OP extends H5IP ? H5IP : never) => Promise<H5R>,
-  h6: (
-    func: (props: H6OP) => any
-  ) => (props: H5OP extends H6IP ? H6IP : never) => Promise<H6R>,
-  h7: (
-    func: (props: H7OP) => any
-  ) => (props: H6OP extends H7IP ? H7IP : never) => Promise<H7R>,
-  h8: (
-    func: (props: H8OP) => any
-  ) => (props: H7OP extends H8IP ? H8IP : never) => Promise<H8R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
+  h5: (func: (props: H5OP) => any) => H5RF,
+  h6: (func: (props: H6OP) => any) => H6RF,
+  h7: (func: (props: H7OP) => any) => H7RF,
+  h8: (func: (props: H8OP) => any) => H8RF,
   e: (
     props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP]>
   ) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> &
+  AttributesOnly<H4RF> &
+  AttributesOnly<H5RF> &
+  AttributesOnly<H6RF> &
+  AttributesOnly<H7RF> &
+  AttributesOnly<H8RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   H4IP extends Props,
   H4OP extends Props,
-  H4R,
+  H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
   H5IP extends Props,
   H5OP extends Props,
-  H5R,
+  H5RF extends (props: H4IP extends H5IP ? H5IP : never) => Promise<any>,
   H6IP extends Props,
   H6OP extends Props,
-  H6R,
+  H6RF extends (props: H5IP extends H6IP ? H6IP : never) => Promise<any>,
   H7IP extends Props,
   H7OP extends Props,
-  H7R,
+  H7RF extends (props: H6IP extends H7IP ? H7IP : never) => Promise<any>,
   H8IP extends Props,
   H8OP extends Props,
-  H8R,
+  H8RF extends (props: H7IP extends H8IP ? H8IP : never) => Promise<any>,
   H9IP extends Props,
   H9OP extends Props,
-  H9R,
+  H9RF extends (props: H8IP extends H9IP ? H9IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
-  h4: (
-    func: (props: H4OP) => any
-  ) => (props: H3OP extends H4IP ? H4IP : never) => Promise<H4R>,
-  h5: (
-    func: (props: H5OP) => any
-  ) => (props: H4OP extends H5IP ? H5IP : never) => Promise<H5R>,
-  h6: (
-    func: (props: H6OP) => any
-  ) => (props: H5OP extends H6IP ? H6IP : never) => Promise<H6R>,
-  h7: (
-    func: (props: H7OP) => any
-  ) => (props: H6OP extends H7IP ? H7IP : never) => Promise<H7R>,
-  h8: (
-    func: (props: H8OP) => any
-  ) => (props: H7OP extends H8IP ? H8IP : never) => Promise<H8R>,
-  h9: (
-    func: (props: H9OP) => any
-  ) => (props: H8OP extends H9IP ? H9IP : never) => Promise<H9R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
+  h5: (func: (props: H5OP) => any) => H5RF,
+  h6: (func: (props: H6OP) => any) => H6RF,
+  h7: (func: (props: H7OP) => any) => H7RF,
+  h8: (func: (props: H8OP) => any) => H8RF,
+  h9: (func: (props: H9OP) => any) => H9RF,
   e: (
     props: MergeProps<
       [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP]
     >
   ) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> &
+  AttributesOnly<H4RF> &
+  AttributesOnly<H5RF> &
+  AttributesOnly<H6RF> &
+  AttributesOnly<H7RF> &
+  AttributesOnly<H8RF> &
+  AttributesOnly<H9RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   H4IP extends Props,
   H4OP extends Props,
-  H4R,
+  H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
   H5IP extends Props,
   H5OP extends Props,
-  H5R,
+  H5RF extends (props: H4IP extends H5IP ? H5IP : never) => Promise<any>,
   H6IP extends Props,
   H6OP extends Props,
-  H6R,
+  H6RF extends (props: H5IP extends H6IP ? H6IP : never) => Promise<any>,
   H7IP extends Props,
   H7OP extends Props,
-  H7R,
+  H7RF extends (props: H6IP extends H7IP ? H7IP : never) => Promise<any>,
   H8IP extends Props,
   H8OP extends Props,
-  H8R,
+  H8RF extends (props: H7IP extends H8IP ? H8IP : never) => Promise<any>,
   H9IP extends Props,
   H9OP extends Props,
-  H9R,
+  H9RF extends (props: H8IP extends H9IP ? H9IP : never) => Promise<any>,
   H10IP extends Props,
   H10OP extends Props,
-  H10R,
+  H10RF extends (props: H9IP extends H10IP ? H10IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
-  h4: (
-    func: (props: H4OP) => any
-  ) => (props: H3OP extends H4IP ? H4IP : never) => Promise<H4R>,
-  h5: (
-    func: (props: H5OP) => any
-  ) => (props: H4OP extends H5IP ? H5IP : never) => Promise<H5R>,
-  h6: (
-    func: (props: H6OP) => any
-  ) => (props: H5OP extends H6IP ? H6IP : never) => Promise<H6R>,
-  h7: (
-    func: (props: H7OP) => any
-  ) => (props: H6OP extends H7IP ? H7IP : never) => Promise<H7R>,
-  h8: (
-    func: (props: H8OP) => any
-  ) => (props: H7OP extends H8IP ? H8IP : never) => Promise<H8R>,
-  h9: (
-    func: (props: H9OP) => any
-  ) => (props: H8OP extends H9IP ? H9IP : never) => Promise<H9R>,
-  h10: (
-    func: (props: H10OP) => any
-  ) => (props: H9OP extends H10IP ? H10IP : never) => Promise<H10R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
+  h5: (func: (props: H5OP) => any) => H5RF,
+  h6: (func: (props: H6OP) => any) => H6RF,
+  h7: (func: (props: H7OP) => any) => H7RF,
+  h8: (func: (props: H8OP) => any) => H8RF,
+  h9: (func: (props: H9OP) => any) => H9RF,
+  h10: (func: (props: H10OP) => any) => H10RF,
   e: (
     props: MergeProps<
       [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP, H10OP]
     >
   ) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> &
+  AttributesOnly<H4RF> &
+  AttributesOnly<H5RF> &
+  AttributesOnly<H6RF> &
+  AttributesOnly<H7RF> &
+  AttributesOnly<H8RF> &
+  AttributesOnly<H9RF> &
+  AttributesOnly<H10RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   H4IP extends Props,
   H4OP extends Props,
-  H4R,
+  H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
   H5IP extends Props,
   H5OP extends Props,
-  H5R,
+  H5RF extends (props: H4IP extends H5IP ? H5IP : never) => Promise<any>,
   H6IP extends Props,
   H6OP extends Props,
-  H6R,
+  H6RF extends (props: H5IP extends H6IP ? H6IP : never) => Promise<any>,
   H7IP extends Props,
   H7OP extends Props,
-  H7R,
+  H7RF extends (props: H6IP extends H7IP ? H7IP : never) => Promise<any>,
   H8IP extends Props,
   H8OP extends Props,
-  H8R,
+  H8RF extends (props: H7IP extends H8IP ? H8IP : never) => Promise<any>,
   H9IP extends Props,
   H9OP extends Props,
-  H9R,
+  H9RF extends (props: H8IP extends H9IP ? H9IP : never) => Promise<any>,
   H10IP extends Props,
   H10OP extends Props,
-  H10R,
+  H10RF extends (props: H9IP extends H10IP ? H10IP : never) => Promise<any>,
   H11IP extends Props,
   H11OP extends Props,
-  H11R,
+  H11RF extends (props: H10IP extends H11IP ? H11IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
-  h4: (
-    func: (props: H4OP) => any
-  ) => (props: H3OP extends H4IP ? H4IP : never) => Promise<H4R>,
-  h5: (
-    func: (props: H5OP) => any
-  ) => (props: H4OP extends H5IP ? H5IP : never) => Promise<H5R>,
-  h6: (
-    func: (props: H6OP) => any
-  ) => (props: H5OP extends H6IP ? H6IP : never) => Promise<H6R>,
-  h7: (
-    func: (props: H7OP) => any
-  ) => (props: H6OP extends H7IP ? H7IP : never) => Promise<H7R>,
-  h8: (
-    func: (props: H8OP) => any
-  ) => (props: H7OP extends H8IP ? H8IP : never) => Promise<H8R>,
-  h9: (
-    func: (props: H9OP) => any
-  ) => (props: H8OP extends H9IP ? H9IP : never) => Promise<H9R>,
-  h10: (
-    func: (props: H10OP) => any
-  ) => (props: H9OP extends H10IP ? H10IP : never) => Promise<H10R>,
-  h11: (
-    func: (props: H11OP) => any
-  ) => (props: H10OP extends H11IP ? H11IP : never) => Promise<H11R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
+  h5: (func: (props: H5OP) => any) => H5RF,
+  h6: (func: (props: H6OP) => any) => H6RF,
+  h7: (func: (props: H7OP) => any) => H7RF,
+  h8: (func: (props: H8OP) => any) => H8RF,
+  h9: (func: (props: H9OP) => any) => H9RF,
+  h10: (func: (props: H10OP) => any) => H10RF,
+  h11: (func: (props: H11OP) => any) => H11RF,
   e: (
     props: MergeProps<
       [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP, H10OP, H11OP]
     >
   ) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> &
+  AttributesOnly<H4RF> &
+  AttributesOnly<H5RF> &
+  AttributesOnly<H6RF> &
+  AttributesOnly<H7RF> &
+  AttributesOnly<H8RF> &
+  AttributesOnly<H9RF> &
+  AttributesOnly<H10RF> &
+  AttributesOnly<H11RF>
 
 export function compose<
   RA extends Array<any>,
   ROP extends Props,
-  RR,
+  RRF extends { (...args: RA): Promise<any> },
   H1IP extends Props,
   H1OP extends Props,
-  H1R,
+  H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<any>,
   H2IP extends Props,
   H2OP extends Props,
-  H2R,
+  H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
   H3IP extends Props,
   H3OP extends Props,
-  H3R,
+  H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
   H4IP extends Props,
   H4OP extends Props,
-  H4R,
+  H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
   H5IP extends Props,
   H5OP extends Props,
-  H5R,
+  H5RF extends (props: H4IP extends H5IP ? H5IP : never) => Promise<any>,
   H6IP extends Props,
   H6OP extends Props,
-  H6R,
+  H6RF extends (props: H5IP extends H6IP ? H6IP : never) => Promise<any>,
   H7IP extends Props,
   H7OP extends Props,
-  H7R,
+  H7RF extends (props: H6IP extends H7IP ? H7IP : never) => Promise<any>,
   H8IP extends Props,
   H8OP extends Props,
-  H8R,
+  H8RF extends (props: H7IP extends H8IP ? H8IP : never) => Promise<any>,
   H9IP extends Props,
   H9OP extends Props,
-  H9R,
+  H9RF extends (props: H8IP extends H9IP ? H9IP : never) => Promise<any>,
   H10IP extends Props,
   H10OP extends Props,
-  H10R,
+  H10RF extends (props: H9IP extends H10IP ? H10IP : never) => Promise<any>,
   H11IP extends Props,
   H11OP extends Props,
-  H11R,
+  H11RF extends (props: H10IP extends H11IP ? H11IP : never) => Promise<any>,
   H12IP extends Props,
   H12OP extends Props,
-  H12R,
+  H12RF extends (props: H11IP extends H12IP ? H12IP : never) => Promise<any>,
   ER
 >(
-  r: (func: (props: ROP) => Promise<ER>) => (...args: RA) => Promise<RR>,
-  h1: (
-    func: (props: H1OP) => any
-  ) => (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
-  h2: (
-    func: (props: H2OP) => any
-  ) => (props: H1OP extends H2IP ? H2IP : never) => Promise<H2R>,
-  h3: (
-    func: (props: H3OP) => any
-  ) => (props: H2OP extends H3IP ? H3IP : never) => Promise<H3R>,
-  h4: (
-    func: (props: H4OP) => any
-  ) => (props: H3OP extends H4IP ? H4IP : never) => Promise<H4R>,
-  h5: (
-    func: (props: H5OP) => any
-  ) => (props: H4OP extends H5IP ? H5IP : never) => Promise<H5R>,
-  h6: (
-    func: (props: H6OP) => any
-  ) => (props: H5OP extends H6IP ? H6IP : never) => Promise<H6R>,
-  h7: (
-    func: (props: H7OP) => any
-  ) => (props: H6OP extends H7IP ? H7IP : never) => Promise<H7R>,
-  h8: (
-    func: (props: H8OP) => any
-  ) => (props: H7OP extends H8IP ? H8IP : never) => Promise<H8R>,
-  h9: (
-    func: (props: H9OP) => any
-  ) => (props: H8OP extends H9IP ? H9IP : never) => Promise<H9R>,
-  h10: (
-    func: (props: H10OP) => any
-  ) => (props: H9OP extends H10IP ? H10IP : never) => Promise<H10R>,
-  h11: (
-    func: (props: H11OP) => any
-  ) => (props: H10OP extends H11IP ? H11IP : never) => Promise<H11R>,
-  h12: (
-    func: (props: H12OP) => any
-  ) => (props: H11OP extends H12IP ? H12IP : never) => Promise<H12R>,
+  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
+  h5: (func: (props: H5OP) => any) => H5RF,
+  h6: (func: (props: H6OP) => any) => H6RF,
+  h7: (func: (props: H7OP) => any) => H7RF,
+  h8: (func: (props: H8OP) => any) => H8RF,
+  h9: (func: (props: H9OP) => any) => H9RF,
+  h10: (func: (props: H10OP) => any) => H10RF,
+  h11: (func: (props: H11OP) => any) => H11RF,
+  h12: (func: (props: H12OP) => any) => H12RF,
   e: (
     props: MergeProps<
       [
@@ -695,7 +598,19 @@ export function compose<
       ]
     >
   ) => Promise<ER>
-): (...args: RA) => Promise<RR>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> &
+  AttributesOnly<H4RF> &
+  AttributesOnly<H5RF> &
+  AttributesOnly<H6RF> &
+  AttributesOnly<H7RF> &
+  AttributesOnly<H8RF> &
+  AttributesOnly<H9RF> &
+  AttributesOnly<H10RF> &
+  AttributesOnly<H11RF> &
+  AttributesOnly<H12RF>
 
 export function compose(...funcs: Function[]): Function {
   return funcs.reverse().reduce((acc, fn) => {

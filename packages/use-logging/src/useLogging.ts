@@ -1,4 +1,4 @@
-import type { Handler, Props, Response } from '@exobase/core'
+import type { NextFunc, Props, Response } from '@exobase/core'
 import { response as toResponse } from '@exobase/core'
 import { sort, tryit, unique } from 'radash'
 import URL from 'url'
@@ -148,7 +148,7 @@ export const LogEngine = {
 }
 
 export async function withLogging<TProps extends Props>(
-  func: Handler<TProps>,
+  func: NextFunc<TProps>,
   template: string,
   options: Required<UseLoggingOptions>,
   props: TProps
@@ -170,14 +170,11 @@ export async function withLogging<TProps extends Props>(
   return response
 }
 
-export const useLogging: <TProps extends Props>(
-  template?: string,
-  options?: UseLoggingOptions
-) => (func: Handler<TProps>) => Handler<TProps> =
-  (
-    template = '[:method] :path at :date(iso) -> :status in :elapsed(ms)',
-    options = defaults
+export const useLogging =
+  <TProps extends Props>(
+    template: string = '[:method] :path at :date(iso) -> :status in :elapsed(ms)',
+    options: UseLoggingOptions
   ) =>
-  func =>
+  (func: NextFunc<TProps>): NextFunc<TProps> =>
   props =>
     withLogging(func, template, { ...defaults, ...options }, props)

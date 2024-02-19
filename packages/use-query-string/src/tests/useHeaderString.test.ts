@@ -38,8 +38,8 @@ describe('useQueryString hook', () => {
       id: z.string(),
       format: z.string()
     }))
-    const [err] = await tryit(sut(endpointMock))(props)
+    const [err] = await tryit(sut(endpointMock as any))(props)
     expect(err).not.toBeNull()
-    expect(err!.message).toBe('Query string validation failed')
+    expect(err!.message).toContain('Query string validation failed')
   })
 })

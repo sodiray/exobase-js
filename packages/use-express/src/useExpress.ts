@@ -1,4 +1,4 @@
-import type { Handler, Props, Request, Response } from '@exobase/core'
+import type { NextFunc, Props, Request, Response } from '@exobase/core'
 import { props, response } from '@exobase/core'
 import makeCompressionMiddleware from 'compression'
 import type {
@@ -43,7 +43,7 @@ const makeMiddleware = (options: UseExpressOptions) => {
 }
 
 export async function withExpress(
-  func: Handler<Props & { framework: ExpressFramework }>,
+  func: NextFunc<Props & { framework: ExpressFramework }>,
   options: UseExpressOptions,
   req: ExpressRequest,
   res: ExpressResponse
@@ -65,7 +65,7 @@ export async function withExpress(
 export const useExpress: (
   options?: UseExpressOptions
 ) => (
-  func: Handler<Props & { framework: ExpressFramework }>
+  func: NextFunc<Props & { framework: ExpressFramework }>
 ) => (req: ExpressRequest, res: ExpressResponse) => Promise<any> =
   options => func => (req, res) =>
     withExpress(func, options ?? {}, req, res)

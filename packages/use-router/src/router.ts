@@ -1,4 +1,4 @@
-import type { Handler } from '@exobase/core'
+import type { NextFunc } from '@exobase/core'
 import { isString } from 'radash'
 import type { Trie } from './trie'
 import { addNode, search } from './trie'
@@ -8,17 +8,17 @@ export type Router = {
   on: (
     method: HttpMethod | HttpMethod[],
     path: HttpPath,
-    handler: Handler
+    handler: NextFunc
   ) => Router
-  get: (path: HttpPath, handler: Handler) => Router
-  put: (path: HttpPath, handler: Handler) => Router
-  post: (path: HttpPath, handler: Handler) => Router
-  patch: (path: HttpPath, handler: Handler) => Router
-  delete: (path: HttpPath, handler: Handler) => Router
-  options: (path: HttpPath, handler: Handler) => Router
-  head: (path: HttpPath, handler: Handler) => Router
+  get: (path: HttpPath, handler: NextFunc) => Router
+  put: (path: HttpPath, handler: NextFunc) => Router
+  post: (path: HttpPath, handler: NextFunc) => Router
+  patch: (path: HttpPath, handler: NextFunc) => Router
+  delete: (path: HttpPath, handler: NextFunc) => Router
+  options: (path: HttpPath, handler: NextFunc) => Router
+  head: (path: HttpPath, handler: NextFunc) => Router
   lookup: (req: { method: HttpMethod; path: HttpPath }) => {
-    handler: Handler | null
+    handler: NextFunc | null
     params: Record<string, string>
   }
 }
@@ -27,7 +27,7 @@ export const router = (current?: Trie): Router => {
   const on = (
     method: HttpMethod | HttpMethod[],
     path: HttpPath,
-    handler: Handler
+    handler: NextFunc
   ) => {
     const methods = isString(method) ? [method] : method
     const newTrie = methods.reduce(
@@ -54,7 +54,7 @@ export const router = (current?: Trie): Router => {
       if (!current) return { handler: null, params: {} }
       const result = search(current, req.method, req.path)
       return {
-        handler: result.handler as Handler | null,
+        handler: result.handler as NextFunc | null,
         params: result.parser?.parse(req.path) ?? {}
       }
     }

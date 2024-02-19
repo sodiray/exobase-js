@@ -1,5 +1,5 @@
 import {
-  Handler,
+  NextFunc,
   InternalServerError,
   Props,
   RateLimitError,
@@ -81,7 +81,7 @@ export type UseRateLimitOption<TProps extends Props = Props> = {
 }
 
 export async function withRateLimiting<TProps extends Props>(
-  func: Handler<TProps>,
+  func: NextFunc<TProps>,
   {
     key: prefix,
     limit: limitFn,
@@ -188,7 +188,7 @@ export const useRateLimit: <
     Props<TArgs, TServices, TAuth, TRequest, TFramework>
   >
 ) => (
-  func: Handler<Props<TArgs, TServices, TAuth, TRequest, TFramework>>
-) => Handler<Props<TArgs, TServices, TAuth, TRequest, TFramework>> =
+  func: NextFunc<Props<TArgs, TServices, TAuth, TRequest, TFramework>>
+) => NextFunc<Props<TArgs, TServices, TAuth, TRequest, TFramework>> =
   options => func => props =>
     withRateLimiting(func, options, props)

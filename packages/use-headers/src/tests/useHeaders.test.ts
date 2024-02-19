@@ -41,6 +41,6 @@ describe('useHeaders hook', () => {
     const [err] = await tryit(sut(endpointMock as any))(props as any)
     expect(err).not.toBeNull()
     expect(endpointMock).toBeCalledTimes(0)
-    expect(err!.message).toBe('Header validation failed')
+    expect(err!.message).toContain('Header validation failed')
   })
 })

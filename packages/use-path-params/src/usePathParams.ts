@@ -1,4 +1,4 @@
-import { BadRequestError, Handler, Props } from '@exobase/core'
+import { BadRequestError, NextFunc, Props } from '@exobase/core'
 import { isArray, isFunction, tryit } from 'radash'
 import zod, { AnyZodObject, ZodArray, ZodError } from 'zod'
 
@@ -8,7 +8,7 @@ type KeyOfType<T, Value> = { [P in keyof T]: Value }
 const isZodError = (e: any): e is ZodError => e && e.issues && isArray(e.issues)
 
 export const withPathParams = async (
-  func: Handler,
+  func: NextFunc,
   model: AnyZodObject | ZodArray<any>,
   mapper: (validatedData: any) => any,
   props: Props
@@ -44,20 +44,20 @@ export const withPathParams = async (
   })
 }
 
-export const usePathParams: <TArgs extends {}, TProps extends Props = Props>(
+export const usePathParams = <TArgs extends {}, TProps extends Props = Props>(
   shapeMaker: AnyZodObject | ((z: Zod) => KeyOfType<TArgs, any>),
-  mapper?: (validatedData: TArgs) => any
-) => (
-  func: Handler<
-    TProps & {
-      args: TProps['args'] & TArgs
-    }
-  >
-) => Handler<TProps> =
-  (shapeMaker, mapper = x => x) =>
-  func => {
-    const model = isFunction(shapeMaker)
-      ? zod.object(shapeMaker(zod))
-      : shapeMaker
-    return props => withPathParams(func as Handler, model, mapper, props)
-  }
+  mapper: (validatedData: TArgs) => any = x => x
+) => {
+  const model = isFunction(shapeMaker)
+    ? zod.object(shapeMaker(zod))
+    : shapeMaker
+  return (
+      func: NextFunc<
+        TProps & {
+          args: TProps['args'] & TArgs
+        }
+      >
+    ): NextFunc<TProps> =>
+    props =>
+      withPathParams(func as NextFunc, model, mapper, props)
+}

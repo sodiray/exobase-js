@@ -32,6 +32,6 @@ describe('useRoleAuthorization function', () => {
       } as any)
     )()
     expect(err).not.toBeNull()
-    expect(err!.message).toBe('Not Authorized')
+    expect(err!.message).toContain('Missing required role (admin)')
   })
 })

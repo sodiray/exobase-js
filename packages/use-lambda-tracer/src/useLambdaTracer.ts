@@ -1,5 +1,5 @@
 import { Tracer } from '@aws-lambda-powertools/tracer'
-import type { Handler, Props } from '@exobase/core'
+import type { NextFunc, Props } from '@exobase/core'
 import type { Segment } from 'aws-xray-sdk-core'
 import { isFunction, tryit } from 'radash'
 
@@ -9,7 +9,9 @@ export type UseLambdaTracerOptions<TProps extends Props = Props> = {
 }
 
 export async function withLambdaTracer<TProps extends Props>(
-  func: Handler<TProps & { services: TProps['services'] & { tracer: Tracer } }>,
+  func: NextFunc<
+    TProps & { services: TProps['services'] & { tracer: Tracer } }
+  >,
   options: UseLambdaTracerOptions<TProps> | undefined,
   props: TProps
 ) {
@@ -64,10 +66,10 @@ export async function withLambdaTracer<TProps extends Props>(
   return response
 }
 
-export const useLambdaTracer: <TProps extends Props>(
-  options?: UseLambdaTracerOptions<TProps>
-) => (
-  func: Handler<TProps>
-) => Handler<TProps & { services: TProps['services'] & { tracer: Tracer } }> =
-  options => func => props =>
+export const useLambdaTracer =
+  <TProps extends Props>(options?: UseLambdaTracerOptions<TProps>) =>
+  (
+    func: NextFunc<TProps>
+  ): NextFunc<TProps & { services: TProps['services'] & { tracer: Tracer } }> =>
+  props =>
     withLambdaTracer(func, options, props)

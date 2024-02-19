@@ -1,4 +1,4 @@
-import type { Handler, Props, Request, Response } from '@exobase/core'
+import type { NextFunc, Props, Request, Response } from '@exobase/core'
 import { props, response } from '@exobase/core'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { tryit } from 'radash'
@@ -13,17 +13,27 @@ export type NextFramework = {
 export const useNext: (
   options?: UseNextOptions
 ) => (
-  func: Handler<Props & { framework: NextFramework }>
+  func: NextFunc<Props & { framework: NextFramework }>
 ) => (req: NextApiRequest, res: NextApiResponse) => Promise<any> =
-  options => func => async (req, res) => {
-    const [error, result] = await tryit(func)({
-      ...props(makeReq(req)),
-      framework: { req, res }
-    })
-    const finalResponse = response(error, result)
-    setResponse(res, finalResponse)
-    return finalResponse
-  }
+  (options = {}) =>
+  func =>
+  async (req, res) =>
+    withNext(func, options, req, res)
+
+export const withNext = async (
+  func: NextFunc<Props & { framework: NextFramework }>,
+  options: UseNextOptions,
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
+  const [error, result] = await tryit(func)({
+    ...props(makeReq(req)),
+    framework: { req, res }
+  })
+  const finalResponse = response(error, result)
+  setResponse(res, finalResponse)
+  return finalResponse
+}
 
 export function setResponse(res: NextApiResponse, response: Response) {
   const { body, status = 200, headers = {} } = response as Response

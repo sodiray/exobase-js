@@ -1,4 +1,4 @@
-import { Handler, NotAuthorizedError, Props } from '@exobase/core'
+import { NextFunc, NotAuthorizedError, Props } from '@exobase/core'
 import { isArray, isFunction, sift } from 'radash'
 
 export type UseRoleAuthorizationOptions<TProps extends Props> = {
@@ -22,7 +22,7 @@ export type UseRoleAuthorizationOptions<TProps extends Props> = {
 }
 
 export async function withRoleAuthorization<TProps extends Props>(
-  func: Handler<TProps>,
+  func: NextFunc<TProps>,
   options: UseRoleAuthorizationOptions<TProps>,
   props: TProps
 ) {
@@ -48,5 +48,5 @@ export async function withRoleAuthorization<TProps extends Props>(
 
 export const useRoleAuthorization: <TProps extends Props>(
   options: UseRoleAuthorizationOptions<TProps>
-) => (func: Handler<TProps>) => Handler<TProps> = options => func => props =>
+) => (func: NextFunc<TProps>) => NextFunc<TProps> = options => func => props =>
   withRoleAuthorization(func, options, props)

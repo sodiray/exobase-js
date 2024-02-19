@@ -1,4 +1,4 @@
-import { Handler, NotAuthorizedError, Props } from '@exobase/core'
+import { NextFunc, NotAuthorizedError, Props } from '@exobase/core'
 import { isArray, isFunction, isString, sift } from 'radash'
 import cani, { CaniServices } from './cani'
 import * as perm from './permission'
@@ -35,7 +35,7 @@ export type UsePermissionAuthorizationOptions<TProps extends Props> = {
 }
 
 export async function withPermissionAuthorization<TProps extends Props>(
-  func: Handler<TProps & { auth: TProps['auth'] & CaniServices }>,
+  func: NextFunc<TProps & { auth: TProps['auth'] & CaniServices }>,
   options: UsePermissionAuthorizationOptions<TProps>,
   props: TProps
 ) {
@@ -72,6 +72,6 @@ export async function withPermissionAuthorization<TProps extends Props>(
 export const usePermissionAuthorization: <TProps extends Props>(
   options: UsePermissionAuthorizationOptions<TProps>
 ) => (
-  func: Handler<TProps & { auth: TProps['auth'] & CaniServices }>
-) => Handler<TProps> = options => func => props =>
+  func: NextFunc<TProps & { auth: TProps['auth'] & CaniServices }>
+) => NextFunc<TProps> = options => func => props =>
   withPermissionAuthorization(func, options, props)

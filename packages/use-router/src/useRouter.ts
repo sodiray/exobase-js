@@ -1,10 +1,10 @@
-import type { Handler, Props } from '@exobase/core'
+import type { NextFunc, Props } from '@exobase/core'
 import type { Router } from './router'
 import { router } from './router'
 import type { HttpMethod, HttpPath } from './types'
 
 export async function withRouter<TProps extends Props>(
-  func: Handler<TProps>,
+  func: NextFunc<TProps>,
   r: Router,
   props: TProps
 ) {
@@ -28,7 +28,7 @@ export async function withRouter<TProps extends Props>(
 
 export const useRouter: <TProps extends Props>(
   routing: (router: Router) => Router
-) => (func: Handler<TProps>) => Handler<TProps> = routing => {
+) => (func: NextFunc<TProps>) => NextFunc<TProps> = routing => {
   const r = routing(router())
   return func => props => withRouter(func, r, props)
 }

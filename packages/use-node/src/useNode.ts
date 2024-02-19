@@ -1,4 +1,4 @@
-import type { Handler, Props, Request, Response } from '@exobase/core'
+import type { NextFunc, Props, Request, Response } from '@exobase/core'
 import { props, response } from '@exobase/core'
 import type { IncomingMessage, ServerResponse } from 'http'
 import qs from 'querystring'
@@ -14,7 +14,7 @@ export type NodeFramework = {
 }
 
 export async function withNode(
-  func: Handler<Props & { framework: NodeFramework }>,
+  func: NextFunc<Props & { framework: NodeFramework }>,
   options: UseNodeOptions,
   req: IncomingMessage,
   res: ServerResponse<IncomingMessage> & {
@@ -34,7 +34,7 @@ export async function withNode(
 }
 
 export const useNode: (options?: UseNodeOptions) => (
-  func: Handler<Props & { framework: NodeFramework }>
+  func: NextFunc<Props & { framework: NodeFramework }>
 ) => (
   req: IncomingMessage,
   res: ServerResponse<IncomingMessage> & {

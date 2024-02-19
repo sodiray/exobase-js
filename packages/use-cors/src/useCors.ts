@@ -1,8 +1,15 @@
 import { hook, response } from '@exobase/core'
 import { shake, tryit, unique } from 'radash'
 
-const DEFAULT_METHODS = ['GET', 'OPTIONS', 'PATCH', 'DELETE', 'POST', 'PUT']
-const DEFAULT_HEADERS = [
+export const DEFAULT_METHODS = [
+  'GET',
+  'OPTIONS',
+  'PATCH',
+  'DELETE',
+  'POST',
+  'PUT'
+]
+export const DEFAULT_HEADERS = [
   'X-CSRF-Token',
   'X-Requested-With',
   'Authorization',

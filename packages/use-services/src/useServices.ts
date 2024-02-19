@@ -1,4 +1,4 @@
-import type { Handler, Props } from '@exobase/core'
+import type { NextFunc, Props } from '@exobase/core'
 import { isFunction, objectify, parallel } from 'radash'
 
 type ServiceMap<TServices> = {
@@ -10,7 +10,7 @@ type ServiceMap<TServices> = {
 }
 
 export async function withServices<TServices, TProps extends Props>(
-  func: Handler<TProps & { services: TProps['services'] & TServices }>,
+  func: NextFunc<TProps & { services: TProps['services'] & TServices }>,
   serviceFunctionsByKey: ServiceMap<TServices>,
   props: TProps
 ) {
@@ -47,6 +47,6 @@ export async function withServices<TServices, TProps extends Props>(
 export const useServices: <TServices, TProps extends Props = Props>(
   serviceFunctionsByKey: ServiceMap<TServices>
 ) => (
-  func: Handler<TProps & { services: TProps['services'] & TServices }>
-) => Handler<TProps> = serviceFunctionsByKey => func => props =>
+  func: NextFunc<TProps & { services: TProps['services'] & TServices }>
+) => NextFunc<TProps> = serviceFunctionsByKey => func => props =>
   withServices(func, serviceFunctionsByKey, props)

@@ -1,8 +1,8 @@
-import type { Handler, Props } from '@exobase/core'
+import type { NextFunc, Props } from '@exobase/core'
 import { ParamParser } from './param-parser'
 
 export async function withPathParser<TProps extends Props>(
-  func: Handler<TProps & { args: TProps['args'] & Record<string, string> }>,
+  func: NextFunc<TProps & { args: TProps['args'] & Record<string, string> }>,
   parser: ParamParser,
   props: TProps
 ) {
@@ -19,11 +19,11 @@ export async function withPathParser<TProps extends Props>(
   })
 }
 
-export const usePathParser: <TProps extends Props>(
-  template: string
-) => (
-  func: Handler<TProps & { args: TProps['args'] & Record<string, string> }>
-) => Handler<TProps> = template => {
+export const usePathParser = <TProps extends Props>(template: string) => {
   const parser = ParamParser(template)
-  return func => props => withPathParser(func, parser, props)
+  return (
+    func: NextFunc<TProps & { args: TProps['args'] & Record<string, string> }>
+  ): NextFunc<TProps> => {
+    return props => withPathParser(func, parser, props)
+  }
 }

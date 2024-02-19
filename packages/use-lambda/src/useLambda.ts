@@ -1,4 +1,4 @@
-import type { Handler, Props, Request } from '@exobase/core'
+import type { NextFunc, Props, Request } from '@exobase/core'
 import { props, response } from '@exobase/core'
 import { isString, lowerize, try as tryit } from 'radash'
 
@@ -10,7 +10,7 @@ export type LambdaFramework = {
 }
 
 export async function withLambda(
-  func: Handler<Props & { framework: LambdaFramework }>,
+  func: NextFunc<Props & { framework: LambdaFramework }>,
   options: UseLambdaOptions,
   event: AWSLambda.APIGatewayEvent,
   context: AWSLambda.Context
@@ -38,7 +38,7 @@ export async function withLambda(
 export const useLambda: (
   options?: UseLambdaOptions
 ) => (
-  func: Handler<Props & { framework: LambdaFramework }>
+  func: NextFunc<Props & { framework: LambdaFramework }>
 ) => (
   event: AWSLambda.APIGatewayProxyEvent,
   context: AWSLambda.Context

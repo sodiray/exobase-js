@@ -12,16 +12,14 @@ describe('useCatch hook', () => {
     expect(result).toBe('ok')
   })
   test('passes props and error to callback', async () => {
-    const sut = useCatch((props, error) => {
-      return { props, error }
+    const sut = useCatch((props, response) => {
+      return { props, response }
     })
     const result = await sut(async () => {
       throw { id: 'error' }
     })({ id: 'props' } as any)
-    expect(result).toStrictEqual({
-      props: { id: 'props' },
-      error: { id: 'error' }
-    })
+    expect(result.props).toStrictEqual({ id: 'props' })
+    expect(result.response.error).toStrictEqual({ id: 'error' })
   })
   test('returns result when no error is thrown', async () => {
     const sut = useCatch((p, e) => {
@@ -30,6 +28,7 @@ describe('useCatch hook', () => {
     const result = await sut(async () => {
       return 'hello'
     })({} as any)
-    expect(result).toBe('hello')
+    expect(result.status).toBe(200)
+    expect(result.body).toBe('hello')
   })
 })
