@@ -22,12 +22,12 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "devDependencies": {
-    "@types/node": "^18.7.23",
-    "@types/react-dom": "^18.0.6",
-    "next": "^13.1.6"
+    "@types/node": "^20.11.19",
+    "@types/react-dom": "^18.2.19",
+    "next": "^14.1.0"
   },
   "peerDependencies": {
-    "next": "^13.1.6"
+    "next": "^14.1.0"
   },
   "dependencies": {
     "@exobase/core": "^1.0.0-rc.26"

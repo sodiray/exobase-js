@@ -1,3 +1,11 @@
+export type InitHook = <TRequiredProps extends Props = Props>(
+  func: Handler<TRequiredProps>
+) => (...args: any[]) => Promise<any>
+
+export type RootHook = <TRequiredProps extends Props = Props>(
+  func: Handler<TRequiredProps>
+) => (...args: any[]) => Promise<any>
+
 export type Request = {
   headers: Record<string, string | string[]>
   url: string
@@ -42,20 +50,20 @@ export type Handler<TProps extends Props = Props, TResult = any> = (
   props: TProps
 ) => Promise<TResult>
 
-export type Hook<
-  TGivenProps extends Props = Props,
-  TProducedProps extends Props = Props
-> = (
-  func: Handler<
-    Props<
-      TGivenProps['args'] & TProducedProps['args'],
-      TGivenProps['services'] & TProducedProps['services'],
-      TGivenProps['auth'] & TProducedProps['auth'],
-      TGivenProps['request'] & TProducedProps['request'],
-      TGivenProps['framework'] & TProducedProps['framework']
-    >
-  >
-) => (props: TGivenProps) => Promise<any>
+// export type Hook<
+//   TGivenProps extends Props = Props,
+//   TProducedProps extends Props = Props
+// > = (
+//   func: Handler<
+//     Props<
+//       TGivenProps['args'] & TProducedProps['args'],
+//       TGivenProps['services'] & TProducedProps['services'],
+//       TGivenProps['auth'] & TProducedProps['auth'],
+//       TGivenProps['request'] & TProducedProps['request'],
+//       TGivenProps['framework'] & TProducedProps['framework']
+//     >
+//   >
+// ) => (props: TGivenProps) => Promise<any>
 
 export type SerializableJson =
   | string

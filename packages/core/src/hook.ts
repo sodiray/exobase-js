@@ -1,4 +1,4 @@
-import { Hook, Props } from './types'
+import { Props } from './types'
 
 /**
  * A helper function to more easily create hook
@@ -12,7 +12,12 @@ import { Hook, Props } from './types'
  */
 export function hook<
   TGivenProps extends Props = Props,
-  TProducedProps extends Props = Props
->(fn: Hook<TGivenProps, TProducedProps>) {
+  TProducedProps extends Props = Props,
+  TReturn = any
+>(
+  fn: (
+    func: (props: TProducedProps) => any
+  ) => (props: TGivenProps) => Promise<TReturn>
+) {
   return fn
 }
