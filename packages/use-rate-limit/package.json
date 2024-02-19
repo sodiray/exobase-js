@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-rate-limit",
-  "version": "1.0.0-rc.11",
+  "version": "1.0.0-rc.12",
   "description": "A hook to do request rate limiting",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -25,7 +25,7 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.26",
+    "@exobase/core": "^1.0.0-rc.27",
     "durhuman": "^0.0.0-alpha.1",
     "uuid": "^9.0.0"
   },

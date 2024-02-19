@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-console-intercept",
-  "version": "1.0.0-rc.16",
+  "version": "1.0.0-rc.17",
   "description": "Exobase init hook to proxy all console log calls to a logger",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -22,7 +22,7 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.26",
+    "@exobase/core": "^1.0.0-rc.27",
     "radash": "^10.3.0"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
