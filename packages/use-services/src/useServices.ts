@@ -1,7 +1,7 @@
 import type { NextFunc, Props } from '@exobase/core'
 import { isFunction, objectify, parallel } from 'radash'
 
-type ServiceMap<TServices> = {
+type ServiceMap<TServices extends {} = {}> = {
   -readonly [Key in keyof TServices]:
     | TServices[Key]
     | Promise<TServices[Key]>
@@ -9,14 +9,24 @@ type ServiceMap<TServices> = {
     | ((props: Props) => TServices[Key])
 }
 
-export async function withServices<TServices, TProps extends Props>(
-  func: NextFunc<TProps & { services: TProps['services'] & TServices }>,
-  serviceFunctionsByKey: ServiceMap<TServices>,
-  props: TProps
+type ResolveServiceMap<TServiceMap> = {
+  [Key in keyof TServiceMap]: TServiceMap[Key] extends Promise<infer R>
+    ? R
+    : TServiceMap[Key] extends (props: Props) => Promise<infer R>
+    ? R
+    : TServiceMap[Key] extends (props: Props) => infer R
+    ? R
+    : TServiceMap[Key]
+}
+
+export async function withServices(
+  func: NextFunc<Props>,
+  serviceFunctionsByKey: Record<string, any>,
+  props: Props
 ) {
   const serviceList = await parallel(
     10,
-    Object.keys(serviceFunctionsByKey) as (keyof ServiceMap<TServices>)[],
+    Object.keys(serviceFunctionsByKey),
     async key => {
       const serviceOrFunction = serviceFunctionsByKey[key]
       return {
@@ -33,7 +43,7 @@ export async function withServices<TServices, TProps extends Props>(
     serviceList,
     s => s.key,
     s => s.value
-  ) as unknown as TServices
+  )
 
   return await func({
     ...props,
@@ -44,9 +54,9 @@ export async function withServices<TServices, TProps extends Props>(
   })
 }
 
-export const useServices: <TServices, TProps extends Props = Props>(
-  serviceFunctionsByKey: ServiceMap<TServices>
+export const useServices: <TServiceMap extends ServiceMap<{}>>(
+  serviceFunctionsByKey: TServiceMap
 ) => (
-  func: NextFunc<TProps & { services: TProps['services'] & TServices }>
-) => NextFunc<TProps> = serviceFunctionsByKey => func => props =>
-  withServices(func, serviceFunctionsByKey, props)
+  func: NextFunc<Props<{}, ResolveServiceMap<TServiceMap>>>
+) => NextFunc<Props> = serviceFunctionsByKey => func => props =>
+  withServices(func as NextFunc<Props>, serviceFunctionsByKey, props)
