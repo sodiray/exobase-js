@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-headers",
-  "version": "1.0.0-rc.22",
+  "version": "1.0.0-rc.23",
   "description": "Exobase hook to parse and validate header values in a request",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -22,7 +22,7 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.28",
+    "@exobase/core": "^1.0.0-rc.29",
     "zod": "^3.19.1"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac"
