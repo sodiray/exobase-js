@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-query-string",
-  "version": "1.0.0-rc.21",
+  "version": "1.0.0-rc.22",
   "description": "Exobase hook to parse and validate query string values in a request",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",

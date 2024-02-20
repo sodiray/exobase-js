@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-rate-limit",
-  "version": "1.0.0-rc.13",
+  "version": "1.0.0-rc.14",
   "description": "A hook to do request rate limiting",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
