@@ -1,9 +1,8 @@
 import {
-  NextFunc,
   InternalServerError,
+  NextFunc,
   Props,
   RateLimitError,
-  Request,
   Response,
   response
 } from '@exobase/core'
@@ -175,20 +174,22 @@ export async function withRateLimiting<TProps extends Props>(
   return responseWithHeaders
 }
 
-export const useRateLimit: <
-  TArgs extends {},
-  TServices extends {
-    store?: IRateLimitStore
-  },
-  TAuth extends {},
-  TRequest extends Request,
-  TFramework extends {}
->(
+export const useRateLimit: <TProps extends Props>(
   options: UseRateLimitOption<
-    Props<TArgs, TServices, TAuth, TRequest, TFramework>
+    TProps & {
+      services: {
+        store?: IRateLimitStore
+      }
+    }
   >
 ) => (
-  func: NextFunc<Props<TArgs, TServices, TAuth, TRequest, TFramework>>
-) => NextFunc<Props<TArgs, TServices, TAuth, TRequest, TFramework>> =
-  options => func => props =>
-    withRateLimiting(func, options, props)
+  func: NextFunc<
+    Props<
+      {},
+      {
+        store?: IRateLimitStore
+      }
+    >
+  >
+) => NextFunc<TProps> = options => func => props =>
+  withRateLimiting(func, options, props)

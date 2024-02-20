@@ -1,16 +1,18 @@
 import { BadRequestError, NextFunc, Props } from '@exobase/core'
 import { isArray, isFunction, tryit } from 'radash'
-import zod, { AnyZodObject, ZodArray, ZodError } from 'zod'
-
-type Zod = typeof zod
-type KeyOfType<T, Value> = { [P in keyof T]: Value }
+import zod, {
+  AnyZodObject,
+  ZodArray,
+  ZodError,
+  ZodObject,
+  ZodRawShape
+} from 'zod'
 
 const isZodError = (e: any): e is ZodError => e && e.issues && isArray(e.issues)
 
 export const withHeaders = async (
   func: NextFunc,
   model: AnyZodObject | ZodArray<any>,
-  mapper: (validatedData: any) => any,
   props: Props
 ) => {
   const [zerr, args] = await tryit(model.parseAsync)(props.request.headers)
@@ -39,25 +41,22 @@ export const withHeaders = async (
     ...props,
     args: {
       ...props.args,
-      ...mapper(args)
+      ...args
     }
   })
 }
 
-export const useHeaders =
-  <TArgs extends {}, TProps extends Props = Props>(
-    shapeMaker: AnyZodObject | ((z: Zod) => KeyOfType<TArgs, any>),
-    mapper: (validatedData: TArgs) => any = x => x
-  ) =>
-  (
-    func: NextFunc<
-      TProps & {
-        args: TProps['args'] & TArgs
-      }
-    >
-  ): NextFunc<TProps> => {
-    const model = isFunction(shapeMaker)
-      ? zod.object(shapeMaker(zod))
-      : shapeMaker
-    return props => withHeaders(func as NextFunc, model, mapper, props)
-  }
+export const useHeaders: <TRawShape extends ZodRawShape>(
+  shapeMaker: ZodObject<TRawShape> | ((z: typeof zod) => TRawShape)
+) => (
+  func: NextFunc<
+    Props<{
+      args: ZodObject<TRawShape>['_output']
+    }>
+  >
+) => NextFunc<Props> = shapeMaker => func => {
+  const model = isFunction(shapeMaker)
+    ? zod.object(shapeMaker(zod))
+    : shapeMaker
+  return props => withHeaders(func as NextFunc, model, props)
+}
