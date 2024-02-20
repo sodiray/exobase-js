@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-next-action",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "Exobase root hook to handle server functions in Next.js 13+ actions",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
