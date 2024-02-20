@@ -69,7 +69,7 @@ export function compose<
 >(
   r: (func: (props: ROP) => Promise<ER>) => RRF,
   e: (props: ROP) => Promise<ER>
-): RRF
+): RRF & { _props: ROP }
 
 export function compose<
   RA extends Array<any>,
@@ -84,7 +84,7 @@ export function compose<
   r: (func: (props: ROP) => Promise<any>) => RRF,
   h1: (func: (props: H1OP) => Promise<ER>) => H1RF,
   e: (props: MergeProps<[ROP, H1OP]>) => Promise<ER>
-): RRF & AttributesOnly<H1RF>
+): RRF & AttributesOnly<H1RF> & { _props: MergeProps<[ROP, H1OP]> }
 
 export function compose<
   RA extends Array<any>,
@@ -102,7 +102,9 @@ export function compose<
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   e: (props: MergeProps<[ROP, H1OP, H2OP]>) => Promise<ER>
-): RRF & AttributesOnly<H1RF> & AttributesOnly<H2RF>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> & { _props: MergeProps<[ROP, H1OP, H2OP]> }
 
 export function compose<
   RA extends Array<any>,
@@ -124,7 +126,10 @@ export function compose<
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
   e: (props: MergeProps<[ROP, H1OP, H2OP, H3OP]>) => Promise<ER>
-): RRF & AttributesOnly<H1RF> & AttributesOnly<H2RF> & AttributesOnly<H3RF>
+): RRF &
+  AttributesOnly<H1RF> &
+  AttributesOnly<H2RF> &
+  AttributesOnly<H3RF> & { _props: MergeProps<[ROP, H1OP, H2OP, H3OP]> }
 
 export function compose<
   RA extends Array<any>,
@@ -154,7 +159,7 @@ export function compose<
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
-  AttributesOnly<H4RF>
+  AttributesOnly<H4RF> & { _props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP]> }
 
 export function compose<
   RA extends Array<any>,
@@ -189,7 +194,9 @@ export function compose<
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
   AttributesOnly<H4RF> &
-  AttributesOnly<H5RF>
+  AttributesOnly<H5RF> & {
+    _props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP]>
+  }
 
 export function compose<
   RA extends Array<any>,
@@ -231,7 +238,9 @@ export function compose<
   AttributesOnly<H3RF> &
   AttributesOnly<H4RF> &
   AttributesOnly<H5RF> &
-  AttributesOnly<H6RF>
+  AttributesOnly<H6RF> & {
+    _props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP]>
+  }
 
 export function compose<
   RA extends Array<any>,
@@ -278,7 +287,9 @@ export function compose<
   AttributesOnly<H4RF> &
   AttributesOnly<H5RF> &
   AttributesOnly<H6RF> &
-  AttributesOnly<H7RF>
+  AttributesOnly<H7RF> & {
+    _props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP]>
+  }
 
 export function compose<
   RA extends Array<any>,
@@ -330,7 +341,9 @@ export function compose<
   AttributesOnly<H5RF> &
   AttributesOnly<H6RF> &
   AttributesOnly<H7RF> &
-  AttributesOnly<H8RF>
+  AttributesOnly<H8RF> & {
+    _props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP]>
+  }
 
 export function compose<
   RA extends Array<any>,
@@ -389,7 +402,11 @@ export function compose<
   AttributesOnly<H6RF> &
   AttributesOnly<H7RF> &
   AttributesOnly<H8RF> &
-  AttributesOnly<H9RF>
+  AttributesOnly<H9RF> & {
+    _props: MergeProps<
+      [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP]
+    >
+  }
 
 export function compose<
   RA extends Array<any>,
@@ -453,7 +470,11 @@ export function compose<
   AttributesOnly<H7RF> &
   AttributesOnly<H8RF> &
   AttributesOnly<H9RF> &
-  AttributesOnly<H10RF>
+  AttributesOnly<H10RF> & {
+    _props: MergeProps<
+      [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP, H10OP]
+    >
+  }
 
 export function compose<
   RA extends Array<any>,
@@ -522,7 +543,11 @@ export function compose<
   AttributesOnly<H8RF> &
   AttributesOnly<H9RF> &
   AttributesOnly<H10RF> &
-  AttributesOnly<H11RF>
+  AttributesOnly<H11RF> & {
+    _props: MergeProps<
+      [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP, H10OP, H11OP]
+    >
+  }
 
 export function compose<
   RA extends Array<any>,
@@ -610,7 +635,25 @@ export function compose<
   AttributesOnly<H9RF> &
   AttributesOnly<H10RF> &
   AttributesOnly<H11RF> &
-  AttributesOnly<H12RF>
+  AttributesOnly<H12RF> & {
+    _props: MergeProps<
+      [
+        ROP,
+        H1OP,
+        H2OP,
+        H3OP,
+        H4OP,
+        H5OP,
+        H6OP,
+        H7OP,
+        H8OP,
+        H9OP,
+        H10OP,
+        H11OP,
+        H12OP
+      ]
+    >
+  }
 
 export function compose(...funcs: Function[]): Function {
   return funcs.reverse().reduce((acc, fn) => {

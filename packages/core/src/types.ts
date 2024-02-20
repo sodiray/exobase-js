@@ -1,4 +1,3 @@
-
 export type Request = {
   headers: Record<string, string | string[]>
   url: string
@@ -51,3 +50,6 @@ export type SerializableJson =
   | Date
   | SerializableJson[]
   | { [key: string]: SerializableJson }
+
+export type InferProps<TFunc extends { (...args: any[]): any; _props: any }> =
+  TFunc['_props']
