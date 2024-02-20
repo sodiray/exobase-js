@@ -1,6 +1,6 @@
 import type { NextFunc, Props } from '@exobase/core'
 import { isResponse, props } from '@exobase/core'
-import { headers } from 'next/headers'
+// import { headers } from 'next/headers'
 import { tryit } from 'radash'
 
 /**
@@ -21,9 +21,9 @@ export const useNextAction =
   async (body: TBody) =>
     withNextAction(func, body, () => {
       let headerObject: Record<string, string> = {}
-      headers().forEach(
-        (value: string, key: string) => (headerObject[key] = value)
-      )
+      // xxxxxxxx().forEach(
+      //   (value: string, key: string) => (headerObject[key] = value)
+      // )
       return headerObject
     })
 
