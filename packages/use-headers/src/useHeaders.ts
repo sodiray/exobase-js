@@ -50,9 +50,7 @@ export const useHeaders: <TRawShape extends ZodRawShape>(
   shapeMaker: ZodObject<TRawShape> | ((z: typeof zod) => TRawShape)
 ) => (
   func: NextFunc<
-    Props<{
-      args: ZodObject<TRawShape>['_output']
-    }>
+    Props<ZodObject<TRawShape>['_output']>
   >
 ) => NextFunc<Props> = shapeMaker => func => {
   const model = isFunction(shapeMaker)
