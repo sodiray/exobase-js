@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-path-params",
-  "version": "1.0.0-rc.29",
+  "version": "1.0.0-rc.30",
   "description": "Exobase path param parsing hook",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
