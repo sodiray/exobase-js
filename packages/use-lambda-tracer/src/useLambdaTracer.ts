@@ -36,11 +36,11 @@ export async function withLambdaTracer<TProps extends Props>(
 
   const close = () => {
     const subsegment = tracer.getSegment()
-    subsegment.close()
+    subsegment?.close()
     tracer.setSegment(segment as Segment)
   }
 
-  tracer.setSegment(segment.addNewSubsegment(`## ${process.env._HANDLER}`))
+  if (segment) tracer.setSegment(segment.addNewSubsegment(`## ${process.env._HANDLER}`))
   tracer.annotateColdStart()
   tracer.addServiceNameAnnotation()
 
