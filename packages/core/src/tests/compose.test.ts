@@ -113,18 +113,21 @@ describe('compose function types', () => {
     expect(result).toBe('success')
   })
   test('it supports 2 hooks', async () => {
+    const endpoint = async (props: any) => {
+      expect(props.framework.name).toBe('next')
+      expect(props.args.id).toBe('first')
+      expect(props.auth.token).toBe('secret')
+      return 'success'
+    }
+    endpoint.route = '/api/v1/user'
     const func = compose(
       useMockRootHook(),
       useMockArgsHook({ id: 'first' }),
       useMockAuthHook({ token: 'secret' }),
-      async props => {
-        expect(props.framework.name).toBe('next')
-        expect(props.args.id).toBe('first')
-        expect(props.auth.token).toBe('secret')
-        return 'success'
-      }
+      endpoint
     )
     const result = await func()
+    expect(func.route).toBe('/api/v1/user')
     expect(func.root).toBe('next')
     expect(func.args).toContain('id')
     expect(result).toBe('success')

@@ -65,11 +65,12 @@ export function compose<
   RA extends Array<any>,
   ROP extends Props,
   RRF extends { (...args: RA): Promise<any> },
-  ER
+  ER,
+  EF extends (props: ROP) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
-  e: (props: ROP) => Promise<ER>
-): RRF & { _props: ROP }
+  r: (func: (props: ROP) => any) => RRF,
+  e: EF
+): RRF & AttributesOnly<EF> & { _props: ROP }
 
 export function compose<
   RA extends Array<any>,
@@ -79,12 +80,15 @@ export function compose<
   H1OP extends Props,
   H1RF extends (props: ROP extends H1IP ? H1IP : never) => Promise<H1R>,
   H1R,
-  ER
+  ER,
+  EF extends (props: MergeProps<[ROP, H1OP]>) => any
 >(
   r: (func: (props: ROP) => Promise<any>) => RRF,
-  h1: (func: (props: H1OP) => Promise<ER>) => H1RF,
-  e: (props: MergeProps<[ROP, H1OP]>) => Promise<ER>
-): RRF & AttributesOnly<H1RF> & { _props: MergeProps<[ROP, H1OP]> }
+  h1: (func: (props: H1OP) => Promise<any>) => H1RF,
+  e: EF
+): RRF &
+  AttributesOnly<EF> &
+  AttributesOnly<H1RF> & { _props: MergeProps<[ROP, H1OP]> }
 
 export function compose<
   RA extends Array<any>,
@@ -96,13 +100,15 @@ export function compose<
   H2IP extends Props,
   H2OP extends Props,
   H2RF extends (props: H1IP extends H2IP ? H2IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (props: MergeProps<[ROP, H1OP, H2OP]>) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
-  e: (props: MergeProps<[ROP, H1OP, H2OP]>) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> & { _props: MergeProps<[ROP, H1OP, H2OP]> }
 
@@ -119,14 +125,16 @@ export function compose<
   H3IP extends Props,
   H3OP extends Props,
   H3RF extends (props: H2IP extends H3IP ? H3IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (props: MergeProps<[ROP, H1OP, H2OP, H3OP]>) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
-  e: (props: MergeProps<[ROP, H1OP, H2OP, H3OP]>) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> & { _props: MergeProps<[ROP, H1OP, H2OP, H3OP]> }
@@ -147,15 +155,17 @@ export function compose<
   H4IP extends Props,
   H4OP extends Props,
   H4RF extends (props: H3IP extends H4IP ? H4IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP]>) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
   h4: (func: (props: H4OP) => any) => H4RF,
-  e: (props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP]>) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -180,16 +190,18 @@ export function compose<
   H5IP extends Props,
   H5OP extends Props,
   H5RF extends (props: H4IP extends H5IP ? H5IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP]>) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
   h4: (func: (props: H4OP) => any) => H4RF,
   h5: (func: (props: H5OP) => any) => H5RF,
-  e: (props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP]>) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -220,19 +232,21 @@ export function compose<
   H6IP extends Props,
   H6OP extends Props,
   H6RF extends (props: H5IP extends H6IP ? H6IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (
+    props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP]>
+  ) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
   h4: (func: (props: H4OP) => any) => H4RF,
   h5: (func: (props: H5OP) => any) => H5RF,
   h6: (func: (props: H6OP) => any) => H6RF,
-  e: (
-    props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP]>
-  ) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -267,9 +281,12 @@ export function compose<
   H7IP extends Props,
   H7OP extends Props,
   H7RF extends (props: H6IP extends H7IP ? H7IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (
+    props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP]>
+  ) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
@@ -277,10 +294,9 @@ export function compose<
   h5: (func: (props: H5OP) => any) => H5RF,
   h6: (func: (props: H6OP) => any) => H6RF,
   h7: (func: (props: H7OP) => any) => H7RF,
-  e: (
-    props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP]>
-  ) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -319,9 +335,12 @@ export function compose<
   H8IP extends Props,
   H8OP extends Props,
   H8RF extends (props: H7IP extends H8IP ? H8IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (
+    props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP]>
+  ) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
@@ -330,10 +349,9 @@ export function compose<
   h6: (func: (props: H6OP) => any) => H6RF,
   h7: (func: (props: H7OP) => any) => H7RF,
   h8: (func: (props: H8OP) => any) => H8RF,
-  e: (
-    props: MergeProps<[ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP]>
-  ) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -376,9 +394,14 @@ export function compose<
   H9IP extends Props,
   H9OP extends Props,
   H9RF extends (props: H8IP extends H9IP ? H9IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (
+    props: MergeProps<
+      [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP]
+    >
+  ) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
@@ -388,12 +411,9 @@ export function compose<
   h7: (func: (props: H7OP) => any) => H7RF,
   h8: (func: (props: H8OP) => any) => H8RF,
   h9: (func: (props: H9OP) => any) => H9RF,
-  e: (
-    props: MergeProps<
-      [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP]
-    >
-  ) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -442,9 +462,14 @@ export function compose<
   H10IP extends Props,
   H10OP extends Props,
   H10RF extends (props: H9IP extends H10IP ? H10IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (
+    props: MergeProps<
+      [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP, H10OP]
+    >
+  ) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
@@ -455,12 +480,9 @@ export function compose<
   h8: (func: (props: H8OP) => any) => H8RF,
   h9: (func: (props: H9OP) => any) => H9RF,
   h10: (func: (props: H10OP) => any) => H10RF,
-  e: (
-    props: MergeProps<
-      [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP, H10OP]
-    >
-  ) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -513,9 +535,14 @@ export function compose<
   H11IP extends Props,
   H11OP extends Props,
   H11RF extends (props: H10IP extends H11IP ? H11IP : never) => Promise<any>,
-  ER
+  ER,
+  EF extends (
+    props: MergeProps<
+      [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP, H10OP, H11OP]
+    >
+  ) => any
 >(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
+  r: (func: (props: ROP) => any) => RRF,
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
@@ -527,12 +554,9 @@ export function compose<
   h9: (func: (props: H9OP) => any) => H9RF,
   h10: (func: (props: H10OP) => any) => H10RF,
   h11: (func: (props: H11OP) => any) => H11RF,
-  e: (
-    props: MergeProps<
-      [ROP, H1OP, H2OP, H3OP, H4OP, H5OP, H6OP, H7OP, H8OP, H9OP, H10OP, H11OP]
-    >
-  ) => Promise<ER>
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -589,22 +613,8 @@ export function compose<
   H12IP extends Props,
   H12OP extends Props,
   H12RF extends (props: H11IP extends H12IP ? H12IP : never) => Promise<any>,
-  ER
->(
-  r: (func: (props: ROP) => Promise<ER>) => RRF,
-  h1: (func: (props: H1OP) => any) => H1RF,
-  h2: (func: (props: H2OP) => any) => H2RF,
-  h3: (func: (props: H3OP) => any) => H3RF,
-  h4: (func: (props: H4OP) => any) => H4RF,
-  h5: (func: (props: H5OP) => any) => H5RF,
-  h6: (func: (props: H6OP) => any) => H6RF,
-  h7: (func: (props: H7OP) => any) => H7RF,
-  h8: (func: (props: H8OP) => any) => H8RF,
-  h9: (func: (props: H9OP) => any) => H9RF,
-  h10: (func: (props: H10OP) => any) => H10RF,
-  h11: (func: (props: H11OP) => any) => H11RF,
-  h12: (func: (props: H12OP) => any) => H12RF,
-  e: (
+  ER,
+  EF extends (
     props: MergeProps<
       [
         ROP,
@@ -622,8 +632,24 @@ export function compose<
         H12OP
       ]
     >
-  ) => Promise<ER>
+  ) => any
+>(
+  r: (func: (props: ROP) => any) => RRF,
+  h1: (func: (props: H1OP) => any) => H1RF,
+  h2: (func: (props: H2OP) => any) => H2RF,
+  h3: (func: (props: H3OP) => any) => H3RF,
+  h4: (func: (props: H4OP) => any) => H4RF,
+  h5: (func: (props: H5OP) => any) => H5RF,
+  h6: (func: (props: H6OP) => any) => H6RF,
+  h7: (func: (props: H7OP) => any) => H7RF,
+  h8: (func: (props: H8OP) => any) => H8RF,
+  h9: (func: (props: H9OP) => any) => H9RF,
+  h10: (func: (props: H10OP) => any) => H10RF,
+  h11: (func: (props: H11OP) => any) => H11RF,
+  h12: (func: (props: H12OP) => any) => H12RF,
+  e: EF
 ): RRF &
+  AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
