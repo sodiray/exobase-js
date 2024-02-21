@@ -1,0 +1,27 @@
+{
+  "name": "@exobase/use-metadata",
+  "version": "1.0.0-rc.0",
+  "description": "Exobase hook for attaching properties to a composed function",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.mjs",
+    "require": "./dist/cjs/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "rayepps",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn tsc --noEmit && yarn rollup -c",
+    "test": "jest --coverage",
+    "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
+  },
+  "dependencies": {
+    "@exobase/core": "^1.0.0-rc.29"
+  }
+}
