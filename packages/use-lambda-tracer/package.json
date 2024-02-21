@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-lambda-tracer",
-  "version": "1.0.0-rc.23",
+  "version": "1.0.0-rc.24",
   "description": "Exobase hook to capture tracing data in an AWS Lambda function",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@aws-lambda-powertools/tracer": "^1.4.1",
-    "@exobase/core": "^1.0.0-rc.29",
+    "@exobase/core": "^1.0.0-rc.30",
     "aws-xray-sdk-core": "^3.4.0"
   },
   "gitHead": "b73cf284b078ef2eb7cc4de29fc1b2c1459828ac",
