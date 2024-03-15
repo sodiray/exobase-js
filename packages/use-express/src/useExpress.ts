@@ -49,14 +49,21 @@ export async function withExpress(
   res: ExpressResponse
 ) {
   const middleware = composeMiddleware(...makeMiddleware(options))
-  const requestAfterMiddlware = await middleware(req, res)
-  const [error, result] = await tryit(func)({
-    ...props(makeRequest(requestAfterMiddlware)),
-    framework: {
-      req,
-      res
-    }
-  })
+
+  const [error, result] = await tryit(async () => {
+    const requestAfterMiddlware = await middleware(req, res)
+    return await func({
+      ...props(makeRequest(requestAfterMiddlware)),
+      framework: {
+        req,
+        res
+      }
+    })
+  })()
+
+  if (error) {
+    console.error(error)
+  }
   const finalResponse = response(error, result)
   setResponse(res, finalResponse)
   return finalResponse
