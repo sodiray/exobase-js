@@ -70,7 +70,7 @@ export function compose<
 >(
   r: (func: (props: ROP) => any) => RRF,
   e: EF
-): RRF & AttributesOnly<EF> & { _props: ROP }
+): RRF & { endpoint: EF } & AttributesOnly<EF> & { _props: ROP }
 
 export function compose<
   RA extends Array<any>,
@@ -86,8 +86,7 @@ export function compose<
   r: (func: (props: ROP) => Promise<any>) => RRF,
   h1: (func: (props: H1OP) => Promise<any>) => H1RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> & { _props: MergeProps<[ROP, H1OP]> }
 
 export function compose<
@@ -107,8 +106,7 @@ export function compose<
   h1: (func: (props: H1OP) => any) => H1RF,
   h2: (func: (props: H2OP) => any) => H2RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> & { _props: MergeProps<[ROP, H1OP, H2OP]> }
 
@@ -133,8 +131,7 @@ export function compose<
   h2: (func: (props: H2OP) => any) => H2RF,
   h3: (func: (props: H3OP) => any) => H3RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> & { _props: MergeProps<[ROP, H1OP, H2OP, H3OP]> }
@@ -164,8 +161,7 @@ export function compose<
   h3: (func: (props: H3OP) => any) => H3RF,
   h4: (func: (props: H4OP) => any) => H4RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -200,8 +196,7 @@ export function compose<
   h4: (func: (props: H4OP) => any) => H4RF,
   h5: (func: (props: H5OP) => any) => H5RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -245,8 +240,7 @@ export function compose<
   h5: (func: (props: H5OP) => any) => H5RF,
   h6: (func: (props: H6OP) => any) => H6RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -295,8 +289,7 @@ export function compose<
   h6: (func: (props: H6OP) => any) => H6RF,
   h7: (func: (props: H7OP) => any) => H7RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -350,8 +343,7 @@ export function compose<
   h7: (func: (props: H7OP) => any) => H7RF,
   h8: (func: (props: H8OP) => any) => H8RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -412,8 +404,7 @@ export function compose<
   h8: (func: (props: H8OP) => any) => H8RF,
   h9: (func: (props: H9OP) => any) => H9RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -481,8 +472,7 @@ export function compose<
   h9: (func: (props: H9OP) => any) => H9RF,
   h10: (func: (props: H10OP) => any) => H10RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -555,8 +545,7 @@ export function compose<
   h10: (func: (props: H10OP) => any) => H10RF,
   h11: (func: (props: H11OP) => any) => H11RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -648,8 +637,7 @@ export function compose<
   h11: (func: (props: H11OP) => any) => H11RF,
   h12: (func: (props: H12OP) => any) => H12RF,
   e: EF
-): RRF &
-  AttributesOnly<EF> &
+): RRF & { endpoint: EF } & AttributesOnly<EF> &
   AttributesOnly<H1RF> &
   AttributesOnly<H2RF> &
   AttributesOnly<H3RF> &
@@ -682,11 +670,13 @@ export function compose<
   }
 
 export function compose(...funcs: Function[]): Function {
-  return funcs.reverse().reduce((acc, fn) => {
+  const result: any = funcs.reverse().reduce((acc, fn) => {
     const next = fn(acc)
     Object.keys(acc).forEach(key => {
       next[key] = (acc as any)[key]
     })
     return next
   })
+  result.endpoint = funcs[0]
+  return result
 }

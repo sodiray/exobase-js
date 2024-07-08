@@ -89,7 +89,7 @@ const useMockAuthHook =
  */
 describe('compose function types', () => {
   test('it supports 0 hooks', async () => {
-    const func = compose(useMockRootHook(), async props => {
+    const func = compose(useMockRootHook(), async function theEndpoint(props) {
       expect(props.framework.name).toBe('next')
       return 'success'
     })
@@ -416,5 +416,17 @@ describe('compose function types', () => {
     expect(func.args).toContain('location')
     expect(func.services).toContain('s3')
     expect(result).toBe('success')
+  })
+})
+
+describe('compose function', () => {
+  test('it attaches endpoint fn as property', async () => {
+    const func = compose(useMockRootHook(), async function demoEndpoint() {
+      return 'success'
+    })
+    expect(func.endpoint).toBeDefined()
+    expect(typeof func.endpoint).toBe('function')
+    expect(func.endpoint.name).toBe('demoEndpoint')
+    expect(await func.endpoint()).toBe('success')
   })
 })
