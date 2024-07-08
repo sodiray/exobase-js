@@ -1,6 +1,6 @@
 {
   "name": "@exobase/use-catch",
-  "version": "1.0.0-rc.18",
+  "version": "1.0.0-rc.19",
   "description": "Exobase hook for catching and mapping errors",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -22,6 +22,6 @@
     "clean": "rm -rf ./node_modules && rm -rf ./dist && rm -rf ./coverage"
   },
   "dependencies": {
-    "@exobase/core": "^1.0.0-rc.30"
+    "@exobase/core": "^1.0.0-rc.31"
   }
 }
